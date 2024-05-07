@@ -11,7 +11,7 @@ import type { Command } from 'commander';
  * Helper functions for the Strapi CLI
  */
 const bytesPerKb = 1024;
-const sizes = ['B ', 'KB', 'MB', 'GB', 'TB', 'PB'];
+const sizes = ['B ', 'KB', 'MB', 'GB', 'TB', 'PB'] as const;
 
 /**
  * Convert bytes to a human readable formatted string, for example "1024" becomes "1KB"
@@ -21,9 +21,13 @@ const readableBytes = (bytes: number, decimals = 1, padStart = 0) => {
     return '0';
   }
   const i = Math.floor(Math.log(bytes) / Math.log(bytesPerKb));
-  const result = `${parseFloat((bytes / bytesPerKb ** i).toFixed(decimals))} ${sizes[i].padStart(
-    2
-  )}`;
+  const size = sizes[i];
+
+  if (!size) {
+    throw new Error('invalid size');
+  }
+
+  const result = `${parseFloat((bytes / bytesPerKb ** i).toFixed(decimals))} ${size.padStart(2)}`;
 
   return result.padStart(padStart);
 };
