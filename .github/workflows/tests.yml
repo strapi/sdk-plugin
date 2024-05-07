@@ -1,0 +1,60 @@
+name: 'Tests'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  lint-build:
+    name: 'lint & build'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+      - uses: actions/setup-node@v4
+        with:
+          cache: pnpm
+          node-version: lts/*
+      - run: corepack enable && pnpm --version
+      - run: pnpm install
+      - run: pnpm lint
+      - run: pnpm prettier:check
+      - run: pnpm test:ts
+      - run: pnpm build
+      - uses: actions/upload-artifact@v3
+        name: Cache build output
+        with:
+          name: build-output
+          path: |
+            bin/
+            dist/
+
+#   test-unit:
+#     needs: 'lint-build'
+#     name: 'test:unit (${{ matrix.node }})'
+#     runs-on: ubuntu-latest
+#     strategy:
+#       # A test failing on windows doesn't mean it'll fail on macos. It's useful to let all tests run to its completion to get the full picture
+#       fail-fast: false
+#       matrix:
+#         node: [18, 20]
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: pnpm/action-setup@v3
+#       - uses: actions/setup-node@v4
+#         with:
+#           cache: pnpm
+#           node-version: ${{ matrix.node }}
+#       - run: corepack enable && pnpm --version
+#       - run: pnpm install
+#       - uses: actions/download-artifact@v3
+#         name: Restore build output
+#         with:
+#           name: build-output
+#       - run: pnpm test:unit
