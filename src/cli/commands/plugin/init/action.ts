@@ -112,13 +112,13 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
         name: 'repo',
         type: 'text',
         message: 'git url',
-        validate(v) {
-          if (!v) {
+        validate(val: unknown) {
+          if (!val) {
             return true;
           }
 
           try {
-            const result = gitUrlParse(v);
+            const result = gitUrlParse(val as any);
 
             repo = { source: result.source, owner: result.owner, name: result.name };
 
@@ -133,12 +133,12 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
         type: 'text',
         message: 'plugin name',
         initial: () => repo?.name ?? '',
-        validate(v) {
-          if (!v) {
+        validate(val: unknown) {
+          if (!val || typeof val !== 'string') {
             return 'package name is required';
           }
 
-          const match = PACKAGE_NAME_REGEXP.exec(v);
+          const match = PACKAGE_NAME_REGEXP.exec(val);
 
           if (!match) {
             return 'invalid package name';
