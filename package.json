@@ -1,0 +1,110 @@
+{
+  "name": "@strapi/sdk-plugin",
+  "version": "5.0.0",
+  "description": "Simple tools for developing Strapi plugins",
+  "keywords": [
+    "strapi",
+    "plugin",
+    "build",
+    "tools"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/strapi/sdk-plugin.git"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "author": {
+    "name": "Strapi Solutions SAS",
+    "email": "hi@strapi.io",
+    "url": "https://strapi.io"
+  },
+  "maintainers": [
+    {
+      "name": "Strapi Solutions SAS",
+      "email": "hi@strapi.io",
+      "url": "https://strapi.io"
+    }
+  ],
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": "./bin/sdk-plugin.js",
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "build": "pack-up build",
+    "check": "pack-up check",
+    "lint": "eslint .",
+    "prepare": "husky",
+    "prerelease:enter": "changeset pre enter",
+    "prerelease:exit": "changeset pre exit",
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write .",
+    "release:add": "changeset add",
+    "release:publish": "changeset publish",
+    "release:version": "changeset version && pnpm install",
+    "test:ts": "tsc --noEmit",
+    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "watch": "pack-up watch"
+  },
+  "dependencies": {
+    "@strapi/pack-up": "5.0.0",
+    "boxen": "5.1.2",
+    "chalk": "4.1.2",
+    "chokidar": "3.6.0",
+    "commander": "8.3.0",
+    "concurrently": "^8.2.2",
+    "esbuild": "0.20.2",
+    "esbuild-register": "3.5.0",
+    "fsevents": "^2.3.3",
+    "get-latest-version": "5.1.0",
+    "git-url-parse": "13.1.1",
+    "ini": "4.1.2",
+    "inquirer": "8.2.5",
+    "lodash": "4.17.21",
+    "nodemon": "^3.1.0",
+    "ora": "5.4.1",
+    "outdent": "0.8.0",
+    "pkg-up": "3.1.0",
+    "prettier": "2.8.8",
+    "prettier-plugin-packagejson": "2.4.14",
+    "prompts": "2.4.2",
+    "typescript": "5.4.4",
+    "yup": "0.32.9"
+  },
+  "devDependencies": {
+    "@changesets/changelog-git": "^0.2.0",
+    "@changesets/cli": "^2.27.1",
+    "@commitlint/cli": "^19.2.1",
+    "@commitlint/config-conventional": "^19.1.0",
+    "@strapi/eslint-config": "^0.2.1",
+    "@swc/core": "^1.4.13",
+    "@swc/jest": "^0.2.36",
+    "@types/git-url-parse": "9.0.3",
+    "@types/ini": "4.1.0",
+    "@types/jest": "^29.5.12",
+    "@types/nodemon": "^1.19.6",
+    "@types/prettier": "^2.0.0",
+    "@types/prompts": "2.4.9",
+    "@typescript-eslint/eslint-plugin": "^7.6.0",
+    "@typescript-eslint/parser": "^7.6.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-rxjs": "^5.0.3",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
+    "lint-staged": "^15.2.2"
+  },
+  "packageManager": "pnpm@9.1.0",
+  "engines": {
+    "node": ">=18.0.0 <=20.x.x",
+    "npm": ">=6.0.0"
+  }
+}
