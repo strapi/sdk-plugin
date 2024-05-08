@@ -14,7 +14,11 @@ import type { InitOptions, TemplateFile } from '@strapi/pack-up';
 type ActionOptions = Pick<InitOptions, 'silent' | 'debug'>;
 
 // TODO: remove these when release versions are available
-const USE_BETA_VERSIONS: string[] = ['@strapi/design-system', '@strapi/strapi'] as const;
+const USE_BETA_VERSIONS: string[] = [
+  '@strapi/design-system',
+  '@strapi/icons',
+  '@strapi/strapi',
+] as const;
 
 export default async (
   packagePath: string,
@@ -310,7 +314,7 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
                   react: '*',
                   'react-dom': '*',
                   'react-router-dom': '*',
-                  'styled-components': '5.3.3',
+                  'styled-components': '*',
                 };
 
                 pkgJson.peerDependencies = {
@@ -318,7 +322,7 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
                   react: '^17.0.0 || ^18.0.0',
                   'react-dom': '^17.0.0 || ^18.0.0',
                   'react-router-dom': '^6.0.0',
-                  'styled-components': '^5.2.1',
+                  'styled-components': '^6.0.0',
                 };
               }
 
@@ -368,7 +372,6 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
                     ...pkgJson.devDependencies,
                     '@types/react': '*',
                     '@types/react-dom': '*',
-                    '@types/styled-components': '5.1.32',
                   };
 
                   const { adminTsconfigFiles } = await import('./files/typescript');
