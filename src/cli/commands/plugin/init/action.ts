@@ -531,9 +531,7 @@ const resolveLatestVerisonOfDeps = async (
   for (const [name, version] of Object.entries(deps)) {
     try {
       const range = USE_BETA_VERSIONS.includes(name) ? 'beta' : version;
-      const latestVersion = await getLatestVersion(name, {
-        range,
-      });
+      const latestVersion = await getLatestVersion(name, { range });
       latestDeps[name] = latestVersion ? `^${latestVersion}` : '*';
     } catch (err) {
       latestDeps[name] = '*';
