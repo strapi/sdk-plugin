@@ -29,6 +29,8 @@ npx @strapi/sdk-plugin@latest init my-plugin
 
 That will create a directory with all your plugin project files.
 
+Once your project has been installed, you will have access to the `strapi-plugin` command.
+
 Run `strapi-plugin -h` for more information on CLI usage.
 
 ## Commands
