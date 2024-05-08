@@ -13,6 +13,13 @@ import type { InitOptions, TemplateFile } from '@strapi/pack-up';
 
 type ActionOptions = Pick<InitOptions, 'silent' | 'debug'>;
 
+// TODO: remove these when release versions are available
+const USE_BETA_VERSIONS: string[] = [
+  '@strapi/design-system',
+  '@strapi/icons',
+  '@strapi/strapi',
+] as const;
+
 export default async (
   packagePath: string,
   { silent, debug }: ActionOptions,
@@ -246,7 +253,8 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
           prettier: '*',
         },
         peerDependencies: {
-          '@strapi/strapi': '^4.0.0',
+          // TODO: set this to 5.0.0 when Strapi 5 is released
+          '@strapi/strapi': '^5.0.0-beta',
         },
         strapi: {
           kind: 'plugin',
@@ -306,7 +314,7 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
                   react: '*',
                   'react-dom': '*',
                   'react-router-dom': '*',
-                  'styled-components': '5.3.3',
+                  'styled-components': '*',
                 };
 
                 pkgJson.peerDependencies = {
@@ -314,7 +322,7 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
                   react: '^17.0.0 || ^18.0.0',
                   'react-dom': '^17.0.0 || ^18.0.0',
                   'react-router-dom': '^6.0.0',
-                  'styled-components': '^5.2.1',
+                  'styled-components': '^6.0.0',
                 };
               }
 
@@ -364,7 +372,6 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
                     ...pkgJson.devDependencies,
                     '@types/react': '*',
                     '@types/react-dom': '*',
-                    '@types/styled-components': '5.1.32',
                   };
 
                   const { adminTsconfigFiles } = await import('./files/typescript');
@@ -526,7 +533,8 @@ const resolveLatestVerisonOfDeps = async (
 
   for (const [name, version] of Object.entries(deps)) {
     try {
-      const latestVersion = await getLatestVersion(name, version);
+      const range = USE_BETA_VERSIONS.includes(name) ? 'beta' : version;
+      const latestVersion = await getLatestVersion(name, { range });
       latestDeps[name] = latestVersion ? `^${latestVersion}` : '*';
     } catch (err) {
       latestDeps[name] = '*';

@@ -1,3 +1,4 @@
 bin
 dist
 pnpm-lock.yaml
+.changeset

@@ -11,19 +11,17 @@ export { PluginIcon };
 `;
 
 const APP_CODE = outdent`
-import { Page } from '@strapi/strapi/admin';
-import { Switch, Route } from 'react-router-dom';
-
-import { PLUGIN_ID } from '../pluginId';
+import { Page } from '@strapi/design-system';
+import { Routes, Route } from 'react-router-dom';
 
 import { HomePage } from './HomePage';
 
 const App = () => {
   return (
-    <Switch>
+    <Routes>
       <Route index element={<HomePage />} />
       <Route path="*" element={<Page.Error />} />
-    </Switch>
+    </Routes>
   );
 };
 
@@ -53,7 +51,7 @@ const TYPESCRIPT: TemplateFile[] = [
   {
     name: 'admin/src/index.ts',
     contents: outdent`
-        import { prefixPluginTranslations } from './utils/prefixPluginTranslations';
+        import { getTranslation } from './utils/getTranslation';
         import { PLUGIN_ID } from './pluginId';
         import { Initializer } from './components/Initializer';
         import { PluginIcon } from './components/PluginIcon';
@@ -90,7 +88,7 @@ const TYPESCRIPT: TemplateFile[] = [
                 return import(\`./translations/\${locale}.json\`)
                   .then(({ default: data }) => {
                     return {
-                      data: prefixPluginTranslations(data, PLUGIN_ID),
+                      data: getTranslation(data),
                       locale,
                     };
                   })
@@ -176,7 +174,7 @@ const JAVASCRIPT: TemplateFile[] = [
   {
     name: 'admin/src/index.js',
     contents: outdent`
-            import { prefixPluginTranslations } from './utils/prefixPluginTranslations';
+            import { getTranslation } from './utils/getTranslation';
             import { PLUGIN_ID } from './pluginId';
             import { Initializer } from './components/Initializer';
             import { PluginIcon } from './components/PluginIcon';
@@ -213,7 +211,7 @@ const JAVASCRIPT: TemplateFile[] = [
                     return import(\`./translations/\${locale}.json\`)
                       .then(({ default: data }) => {
                         return {
-                          data: prefixPluginTranslations(data, PLUGIN_ID),
+                          data: getTranslation(data),
                           locale,
                         };
                       })
