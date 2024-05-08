@@ -13,6 +13,7 @@ import type { InitOptions, TemplateFile } from '@strapi/pack-up';
 
 type ActionOptions = Pick<InitOptions, 'silent' | 'debug'>;
 
+// TODO: remove these when release versions are available
 const USE_BETA_VERSIONS: string[] = ['@strapi/design-system', '@strapi/strapi'] as const;
 
 export default async (
@@ -248,6 +249,7 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
           prettier: '*',
         },
         peerDependencies: {
+          // TODO: set this to 5.0.0 when Strapi 5 is released
           '@strapi/strapi': '^5.0.0-beta',
         },
         strapi: {
