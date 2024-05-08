@@ -13,6 +13,8 @@ import type { InitOptions, TemplateFile } from '@strapi/pack-up';
 
 type ActionOptions = Pick<InitOptions, 'silent' | 'debug'>;
 
+const USE_BETA_VERSIONS: string[] = ['@strapi/design-system', '@strapi/strapi'] as const;
+
 export default async (
   packagePath: string,
   { silent, debug }: ActionOptions,
@@ -246,7 +248,7 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
           prettier: '*',
         },
         peerDependencies: {
-          '@strapi/strapi': '^4.0.0',
+          '@strapi/strapi': '^5.0.0-beta',
         },
         strapi: {
           kind: 'plugin',
@@ -526,7 +528,10 @@ const resolveLatestVerisonOfDeps = async (
 
   for (const [name, version] of Object.entries(deps)) {
     try {
-      const latestVersion = await getLatestVersion(name, version);
+      const range = USE_BETA_VERSIONS.includes(name) ? 'beta' : version;
+      const latestVersion = await getLatestVersion(name, {
+        range,
+      });
       latestDeps[name] = latestVersion ? `^${latestVersion}` : '*';
     } catch (err) {
       latestDeps[name] = '*';
