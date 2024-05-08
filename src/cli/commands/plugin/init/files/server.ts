@@ -42,9 +42,9 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/bootstrap.ts',
     contents: outdent`
-    import type { Core } from '@strapi/strapi';
+    import type { Strapi } from '@strapi/strapi';
 
-    const bootstrap = ({ strapi }: { strapi: Core.Strapi }) => {
+    const bootstrap = ({ strapi }: { strapi: Strapi }) => {
       // bootstrap phase
     };
 
@@ -54,9 +54,9 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/destroy.ts',
     contents: outdent`
-    import type { Core } from '@strapi/strapi';
+    import type { Strapi } from '@strapi/strapi';
 
-    const destroy = ({ strapi }: { strapi: Core.Strapi }) => {
+    const destroy = ({ strapi }: { strapi: Strapi }) => {
       // destroy phase
     };
 
@@ -66,9 +66,9 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/register.ts',
     contents: outdent`
-    import type { Core } from '@strapi/strapi';
+    import type { Strapi } from '@strapi/strapi';
 
-    const register = ({ strapi }: { strapi: Core.Strapi }) => {
+    const register = ({ strapi }: { strapi: Strapi }) => {
       // register phase
     };
 
@@ -103,9 +103,9 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/controllers/controller.ts',
     contents: outdent`
-    import type { Core } from '@strapi/strapi';
+    import type { Strapi } from '@strapi/strapi';
 
-    const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
+    const controller = ({ strapi }: { strapi: Strapi }) => ({
       index(ctx) {
         ctx.body = strapi
           .plugin('${pluginName}')
@@ -159,9 +159,9 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/services/service.ts',
     contents: outdent`
-    import type { Core } from '@strapi/strapi';
+    import type { Strapi } from '@strapi/strapi';
 
-    const service = ({ strapi }: { strapi: Core.Strapi }) => ({
+    const service = ({ strapi }: { strapi: Strapi }) => ({
         getWelcomeMessage() {
             return 'Welcome to Strapi 🚀';
         },
