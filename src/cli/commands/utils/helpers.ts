@@ -6,7 +6,7 @@ const runAction =
     const { logger } = ctx;
     Promise.resolve()
       .then(() => {
-        return action(...args);
+        return action(...args, ctx);
       })
       .catch((error) => {
         logger.error(error);
