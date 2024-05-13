@@ -34,7 +34,9 @@
     },
     "./package.json": "./package.json"
   },
-  "bin": "./bin/strapi-plugin.js",
+  "bin": {
+    "strapi-plugin": "./bin/strapi-plugin.js"
+  },
   "files": [
     "bin",
     "dist"
