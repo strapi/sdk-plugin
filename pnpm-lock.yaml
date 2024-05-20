@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@strapi/pack-up':
-        specifier: 5.0.0
-        version: 5.0.0(@types/node@20.12.6)
+        specifier: '>=5.0.1-alpha.1 <6.0.0'
+        version: 5.0.1-alpha.1(@types/node@20.12.6)
       '@types/prompts':
         specifier: 2.4.9
         version: 2.4.9
@@ -21,8 +21,8 @@ importers:
         specifier: 4.1.2
         version: 4.1.2
       commander:
-        specifier: 8.3.0
-        version: 8.3.0
+        specifier: 12.1.0
+        version: 12.1.0
       concurrently:
         specifier: ^8.2.2
         version: 8.2.2
@@ -823,8 +823,8 @@ packages:
       typescript:
         optional: true
 
-  '@strapi/pack-up@5.0.0':
-    resolution: {integrity: sha512-XN00SUwiR/rFTXxA3TMyuPt6SN4r6vuhUtx3y2D0NTzgVToNi++MyspPQ/jHbolHhQxUWnet6X/2JRprtE/YpQ==}
+  '@strapi/pack-up@5.0.1-alpha.1':
+    resolution: {integrity: sha512-FEuo7jcU+YTB8Q1UZteSZ0i/ghWBccBYX57ZOrUcDK6zKuUc0GOIGp010KzqaEHLJkU5c0Us+Cz3yTN7+8omiQ==}
     engines: {node: '>=18.0.0 <=20.x.x', npm: '>=6.0.0'}
     hasBin: true
 
@@ -1457,6 +1457,10 @@ packages:
   commander@11.1.0:
     resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
     engines: {node: '>=16'}
+
+  commander@12.1.0:
+    resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
+    engines: {node: '>=18'}
 
   commander@8.3.0:
     resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
@@ -4890,7 +4894,7 @@ snapshots:
       - prettier
       - supports-color
 
-  '@strapi/pack-up@5.0.0(@types/node@20.12.6)':
+  '@strapi/pack-up@5.0.1-alpha.1(@types/node@20.12.6)':
     dependencies:
       '@vitejs/plugin-react-swc': 3.6.0(vite@5.2.8(@types/node@20.12.6))
       boxen: 5.1.2
@@ -5680,6 +5684,8 @@ snapshots:
   colorette@2.0.20: {}
 
   commander@11.1.0: {}
+
+  commander@12.1.0: {}
 
   commander@8.3.0: {}
 
