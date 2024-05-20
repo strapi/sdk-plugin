@@ -311,13 +311,13 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
                   ...pkgJson.dependencies,
                   '@strapi/design-system': '*',
                   '@strapi/icons': '*',
+                  'react-intl': '*',
                 };
 
                 pkgJson.devDependencies = {
                   ...pkgJson.devDependencies,
                   react: '*',
                   'react-dom': '*',
-                  'react-intl': '*',
                   'react-router-dom': '*',
                   'styled-components': '*',
                 };
@@ -326,7 +326,6 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
                   ...pkgJson.peerDependencies,
                   react: '^17.0.0 || ^18.0.0',
                   'react-dom': '^17.0.0 || ^18.0.0',
-                  'react-intl': '^6.6.0',
                   'react-router-dom': '^6.0.0',
                   'styled-components': '^6.0.0',
                 };
