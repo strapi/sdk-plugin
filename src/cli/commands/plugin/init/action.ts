@@ -19,6 +19,7 @@ const USE_BETA_VERSIONS: string[] = [
   '@strapi/icons',
   '@strapi/strapi',
   '@strapi/sdk-plugin',
+  '@strapi/typescript-utils',
 ] as const;
 
 export default async (
@@ -316,6 +317,7 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
                   ...pkgJson.devDependencies,
                   react: '*',
                   'react-dom': '*',
+                  'react-intl': '*',
                   'react-router-dom': '*',
                   'styled-components': '*',
                 };
@@ -324,6 +326,7 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
                   ...pkgJson.peerDependencies,
                   react: '^17.0.0 || ^18.0.0',
                   'react-dom': '^17.0.0 || ^18.0.0',
+                  'react-intl': '^6.6.0',
                   'react-router-dom': '^6.0.0',
                   'styled-components': '^6.0.0',
                 };
