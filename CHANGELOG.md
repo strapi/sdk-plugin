@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.0.0-beta.8
+
+### Patch Changes
+
+- [`6fb61d9`](https://github.com/strapi/sdk-plugin/commit/6fb61d900bb3a79c3fdbb283a19ab874b9257f19) Thanks [@joshuaellis](https://github.com/joshuaellis)! - various fixes
+
 ## 5.0.0-beta.7
 
 ### Patch Changes
