@@ -28,7 +28,10 @@ const gitIgnoreFile: TemplateFile = {
     yarn-error.log*
     
     # local env files
-    .env    
+    .env
+
+    # ts build cache
+    .tsbuildinfo
     `,
 };
 
