@@ -251,11 +251,13 @@ const PLUGIN_TEMPLATE = defineTemplate(async ({ logger, gitConfig, packagePath }
            * version, failing that we leave the fallback of *.
            */
           '@strapi/strapi': '*',
+          '@strapi/sdk-plugin': '*',
           prettier: '*',
         },
         peerDependencies: {
           // TODO: set this to 5.0.0 when Strapi 5 is released
           '@strapi/strapi': '^5.0.0-beta',
+          '@strapi/sdk-plugin': '^5.0.0',
         },
         strapi: {
           kind: 'plugin',
