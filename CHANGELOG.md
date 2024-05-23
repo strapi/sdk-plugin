@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.0.1
+
+### Patch Changes
+
+- [#20](https://github.com/strapi/sdk-plugin/pull/20) [`6c829cc`](https://github.com/strapi/sdk-plugin/commit/6c829cc9039a2ec50d38d4f50a2745110c9b78e3) Thanks [@innerdvations](https://github.com/innerdvations)! - Make package manager not strict
+
 ## 5.0.0
 
 ### Patch Changes
