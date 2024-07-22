@@ -152,7 +152,7 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
 
 const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
   {
-    name: 'server/src/index.ts',
+    name: 'server/src/index.js',
     contents: outdent`
         'use strict';
 
@@ -190,7 +190,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
         `,
   },
   {
-    name: 'server/src/bootstrap.ts',
+    name: 'server/src/bootstrap.js',
     contents: outdent`
         'use strict';
 
@@ -202,7 +202,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
         `,
   },
   {
-    name: 'server/src/destroy.ts',
+    name: 'server/src/destroy.js',
     contents: outdent`
         'use strict';
 
@@ -214,7 +214,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
         `,
   },
   {
-    name: 'server/src/register.ts',
+    name: 'server/src/register.js',
     contents: outdent`
         'use strict';
 
@@ -226,7 +226,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
         `,
   },
   {
-    name: 'server/src/config/index.ts',
+    name: 'server/src/config/index.js',
     contents: outdent`
       'use strict';
 
@@ -237,7 +237,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/content-types/index.ts',
+    name: 'server/src/content-types/index.js',
     contents: outdent`
     'use strict';
 
@@ -245,7 +245,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/controllers/index.ts',
+    name: 'server/src/controllers/index.js',
     contents: outdent`
     'use strict';
 
@@ -257,7 +257,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/controllers/controller.ts',
+    name: 'server/src/controllers/controller.js',
     contents: outdent`
     'use strict';
 
@@ -275,7 +275,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/middlewares/index.ts',
+    name: 'server/src/middlewares/index.js',
     contents: outdent`
     'use strict';
 
@@ -283,7 +283,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/policies/index.ts',
+    name: 'server/src/policies/index.js',
     contents: outdent`
     'use strict';
 
@@ -291,7 +291,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/routes/index.ts',
+    name: 'server/src/routes/index.js',
     contents: outdent`
     'use strict';
 
@@ -309,7 +309,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/services/index.ts',
+    name: 'server/src/services/index.js',
     contents: outdent`
     'use strict';
 
@@ -321,7 +321,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/services/service.ts',
+    name: 'server/src/services/service.js',
     contents: outdent`
     'use strict';
 
