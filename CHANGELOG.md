@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.0.2
+
+### Patch Changes
+
+- [#28](https://github.com/strapi/sdk-plugin/pull/28) [`4711257`](https://github.com/strapi/sdk-plugin/commit/47112572ea317b837ba6a3ca09768f8fa4e97a52) Thanks [@innerdvations](https://github.com/innerdvations)! - Use rc versions instead of beta
+
 ## 5.0.1
 
 ### Patch Changes
