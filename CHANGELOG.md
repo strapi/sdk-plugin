@@ -1,5 +1,15 @@
 # @strapi/sdk-plugin
 
+## 5.0.1
+
+### Patch Changes
+
+- [#20](https://github.com/strapi/sdk-plugin/pull/20) [`6c829cc`](https://github.com/strapi/sdk-plugin/commit/6c829cc9039a2ec50d38d4f50a2745110c9b78e3) Thanks [@innerdvations](https://github.com/innerdvations)! - Make package manager not strict
+
+- [#25](https://github.com/strapi/sdk-plugin/pull/25) [`6f9c20b`](https://github.com/strapi/sdk-plugin/commit/6f9c20b88071858b580cf3324e8ec12dba4cdda3) Thanks [@innerdvations](https://github.com/innerdvations)! - Use correct extensions for javascript projects
+
+- [#26](https://github.com/strapi/sdk-plugin/pull/26) [`af82a2c`](https://github.com/strapi/sdk-plugin/commit/af82a2c1cadc4e4bda63667cf6683aacc08b32be) Thanks [@innerdvations](https://github.com/innerdvations)! - fix workflow permissions
+
 ## 5.0.0
 
 ### Patch Changes
