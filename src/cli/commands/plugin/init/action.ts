@@ -14,7 +14,7 @@ import type { InitOptions, TemplateFile } from '@strapi/pack-up';
 type ActionOptions = Pick<InitOptions, 'silent' | 'debug'>;
 
 // TODO: remove these when release versions are available
-const USE_BETA_VERSIONS: string[] = [
+const USE_RC_VERSIONS: string[] = [
   '@strapi/design-system',
   '@strapi/icons',
   '@strapi/strapi',
@@ -537,7 +537,7 @@ const resolveLatestVerisonOfDeps = async (
 
   for (const [name, version] of Object.entries(deps)) {
     try {
-      const range = USE_BETA_VERSIONS.includes(name) ? 'beta' : version;
+      const range = USE_RC_VERSIONS.includes(name) ? 'rc' : version;
       const latestVersion = await getLatestVersion(name, { range });
       latestDeps[name] = latestVersion ? `^${latestVersion}` : '*';
     } catch (err) {
