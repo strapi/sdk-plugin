@@ -49,7 +49,7 @@ ${exportInstruction} {
   ${chalk.gray('// ...')}
   ${chalk.green(`'${pluginName}'`)}: {
     enabled: ${chalk.yellow(true)},
-    resolve: ${chalk.yellow(pluginPath || `'./src/plugins/${pluginName}'`)}
+    resolve: '${chalk.yellow(pluginPath || `./src/plugins/${pluginName}`)}'
   },
   ${chalk.gray('// ...')}
 }
