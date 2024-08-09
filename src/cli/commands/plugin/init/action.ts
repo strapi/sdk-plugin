@@ -444,7 +444,6 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
                       fileToUpdate.contents = outdent`
                       'use strict';
 
-                      // New content goes here
                       module.exports = require('./dist/server');
                     `;
                     } else {
