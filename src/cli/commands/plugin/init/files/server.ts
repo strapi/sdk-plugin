@@ -9,20 +9,33 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
     /**
      * Application methods
      */
-    export * as bootstrap from './bootstrap';
-    export * as destroy from './destroy';
-    export * as register from './register';
+    import bootstrap from './bootstrap';
+    import destroy from './destroy';
+    import register from './register';
 
     /**
      * Plugin server methods
      */
-    export * as config from './config';
-    export * as contentTypes from './content-types';
-    export * as controllers from './controllers';
-    export * as middlewares from './middlewares';
-    export * as policies from './policies';
-    export * as routes from './routes';
-    export * as services from './services';
+    import config from './config';
+    import contentTypes from './content-types';
+    import controllers from './controllers';
+    import middlewares from './middlewares';
+    import policies from './policies';
+    import routes from './routes';
+    import services from './services';
+
+    export default {
+      register,
+      bootstrap,
+      destroy,
+      config,
+      controllers,
+      routes,
+      services,
+      contentTypes,
+      policies,
+      middlewares,
+    };
     `,
   },
   {
@@ -79,7 +92,11 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/controllers/index.ts',
     contents: outdent`
-    export * as controller from './controller';
+    import controller from './controller';
+
+    export default {
+      controller,
+    };
     `,
   },
   {
@@ -131,7 +148,11 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/services/index.ts',
     contents: outdent`
-    export * as service from './service';
+    import service from './service';
+
+    export default {
+      service,
+    };
     `,
   },
   {
