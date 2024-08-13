@@ -380,7 +380,7 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
                     contents: outdent`
                       'use strict';
   
-                      module.exports = require('./server/src');
+                      module.exports = require('./dist/server');
                   `,
                   });
                 }
@@ -437,18 +437,6 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
                       serverTsconfigFiles.tsconfigBuildFile,
                       serverTsconfigFiles.tsconfigFile
                     );
-
-                    // Replace the strapi-server import to use the dist directory
-                    const fileToUpdate = files.find((file) => file.name === 'strapi-server.js');
-                    if (fileToUpdate) {
-                      fileToUpdate.contents = outdent`
-                      'use strict';
-
-                      module.exports = require('./dist/server');
-                    `;
-                    } else {
-                      logger.error('File with name strapi-server.js not found.');
-                    }
                   }
 
                   pkgJson.devDependencies = {
