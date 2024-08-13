@@ -58,6 +58,7 @@
     "watch": "pack-up watch"
   },
   "dependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
     "@strapi/pack-up": ">=5.0.1-alpha.1 <6.0.0",
     "@types/prompts": "2.4.9",
     "boxen": "5.1.2",
