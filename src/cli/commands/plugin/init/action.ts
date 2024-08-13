@@ -25,7 +25,7 @@ const USE_RC_VERSIONS: string[] = [
 
 // Store results of prompt answers (run by pack-up init)
 // This is a limitation of pack-up; we cannot run the prompt and pass the answers in
-let promptAnswers: any = [];
+let promptAnswers: { name: string; answer: string | boolean }[] = [];
 
 export default async (
   packagePath: string,
@@ -33,13 +33,17 @@ export default async (
   { logger, cwd }: CLIContext
 ) => {
   try {
-    const isStrapi = dirContainsStrapiProject(cwd);
+    // Make sure prompt answers are reset
+    promptAnswers = [];
+
+    const isStrapiProject = dirContainsStrapiProject(cwd);
 
     // If the user entered a path, we will try to parse the plugin name from it so we can provide it as a suggestion for consistency
     const parsedPath = path.parse(packagePath);
     const suggestedPackageName = parsedPath.base;
     const isPathPackageName = !packagePath.includes('/');
-    const pluginPath = isStrapi && isPathPackageName ? `./src/plugins/${packagePath}` : packagePath;
+    const pluginPath =
+      isStrapiProject && isPathPackageName ? `./src/plugins/${packagePath}` : packagePath;
 
     //
     const template = getPluginTemplate({ suggestedPackageName });
@@ -55,14 +59,15 @@ export default async (
       template,
     });
 
-    if (isStrapi) {
-      const pkgName = promptAnswers.find((option: any) => option?.name === 'pkgName')?.answer;
-
-      const language = promptAnswers.find((option: any) => option?.name === 'typescript')?.answer
+    if (isStrapiProject) {
+      const pkgName = promptAnswers.find((option) => option.name === 'pkgName')?.answer;
+      const language = promptAnswers.find((option) => option.name === 'typescript')?.answer
         ? 'ts'
         : 'js';
 
-      logger.info(logInstructions(pkgName, { language, path: pluginPath }));
+      if (typeof pkgName === 'string' && ['ts', 'js'].includes(language)) {
+        logger.info(logInstructions(pkgName, { language, path: pluginPath }));
+      }
     }
 
     logger.info('Plugin generated successfully.');
@@ -255,7 +260,7 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
           optional: true,
         }),
       ],
-      async getFiles(answers) {
+      async getFiles(answers = []) {
         const author: string[] = [];
 
         const files: TemplateFile[] = [];
@@ -288,7 +293,7 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
           },
           peerDependencies: {
             // TODO: set this to 5.0.0 when Strapi 5 is released
-            '@strapi/strapi': '^5.0.0-beta',
+            '@strapi/strapi': '^5.0.0-rc',
             '@strapi/sdk-plugin': '^5.0.0',
           },
           strapi: {
@@ -307,12 +312,12 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
                 break;
               }
               case 'description': {
-                pkgJson.description = String(answer) ?? undefined;
-                pkgJson.strapi.description = String(answer) ?? undefined;
+                pkgJson.description = String(answer);
+                pkgJson.strapi.description = String(answer);
                 break;
               }
               case 'displayName': {
-                pkgJson.strapi.displayName = String(answer) ?? undefined;
+                pkgJson.strapi.displayName = String(answer);
                 break;
               }
               case 'authorName': {
@@ -379,7 +384,7 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
                     name: 'strapi-server.js',
                     contents: outdent`
                       'use strict';
-  
+
                       module.exports = require('./dist/server');
                   `,
                   });

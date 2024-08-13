@@ -23,8 +23,7 @@ export const dirContainsStrapiProject = (dir: string) => {
     const packageJsonPath = path.join(dir, 'package.json');
     const pkgJSON = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
     return Boolean(
-      (pkgJSON.dependencies && pkgJSON.dependencies['@strapi/strapi']) ||
-        (pkgJSON.devDependencies && pkgJSON.devDependencies['@strapi/strapi'])
+      pkgJSON.dependencies?.['@strapi/strapi'] || pkgJSON.devDependencies?.['@strapi/strapi']
     );
   } catch (err) {
     return false;
@@ -33,7 +32,7 @@ export const dirContainsStrapiProject = (dir: string) => {
 
 export const logInstructions = (
   pluginName: string,
-  { language, path: pluginPath }: { language: string; path?: string }
+  { language, path: pluginPath }: { language: string; path: string }
 ) => {
   const maxLength = `    resolve: './src/plugins/${pluginName}'`.length;
   const separator = Array(maxLength).fill('─').join('');
@@ -49,7 +48,7 @@ ${exportInstruction} {
   ${chalk.gray('// ...')}
   ${chalk.green(`'${pluginName}'`)}: {
     enabled: ${chalk.yellow(true)},
-    resolve: '${chalk.yellow(pluginPath || `./src/plugins/${pluginName}`)}'
+    resolve: '${chalk.yellow(pluginPath)}'
   },
   ${chalk.gray('// ...')}
 }
