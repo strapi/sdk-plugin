@@ -384,7 +384,7 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
                     name: 'strapi-server.js',
                     contents: outdent`
                       'use strict';
-                      
+
                       module.exports = require('./dist/server');
                   `,
                   });
