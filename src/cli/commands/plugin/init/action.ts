@@ -6,14 +6,18 @@ import gitUrlParse from 'git-url-parse';
 import path from 'node:path';
 import { outdent } from 'outdent';
 
-import { dirContainsStrapiProject, logInstructions } from '../../utils/helpers';
+import {
+  dirContainsStrapiProject,
+  logInstructions,
+  getPkgManager,
+  runBuild,
+  runInstall,
+} from '../../utils/helpers';
 
 import { gitIgnoreFile } from './files/gitIgnore';
 
-import type { CLIContext } from '../../../../types';
-import type { InitOptions, TemplateFile } from '@strapi/pack-up';
-
-type ActionOptions = Pick<InitOptions, 'silent' | 'debug'>;
+import type { CLIContext, CommonCLIOptions } from '../../../../types';
+import type { TemplateFile } from '@strapi/pack-up';
 
 // TODO: remove these when release versions are available
 const USE_RC_VERSIONS: string[] = [
@@ -29,7 +33,7 @@ let promptAnswers: { name: string; answer: string | boolean }[] = [];
 
 export default async (
   packagePath: string,
-  { silent, debug }: ActionOptions,
+  { silent, debug, useNpm, usePnpm, useYarn, install }: CommonCLIOptions,
   { logger, cwd }: CLIContext
 ) => {
   try {
@@ -58,6 +62,20 @@ export default async (
       debug,
       template,
     });
+
+    const packageManager = getPkgManager(
+      {
+        useNpm,
+        usePnpm,
+        useYarn,
+      },
+      isStrapiProject
+    );
+
+    if (install) {
+      await runInstall(packageManager, pluginPath);
+      await runBuild(packageManager, pluginPath);
+    }
 
     if (isStrapiProject) {
       const pkgName = promptAnswers.find((option) => option.name === 'pkgName')?.answer;

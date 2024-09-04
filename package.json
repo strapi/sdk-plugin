@@ -65,6 +65,7 @@
     "chalk": "4.1.2",
     "commander": "12.1.0",
     "concurrently": "^8.2.2",
+    "execa": "^9.3.1",
     "get-latest-version": "5.1.0",
     "git-url-parse": "13.1.1",
     "nodemon": "^3.1.0",
