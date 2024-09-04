@@ -1,5 +1,21 @@
 # @strapi/sdk-plugin
 
+## 5.1.1
+
+### Patch Changes
+
+- [#43](https://github.com/strapi/sdk-plugin/pull/43) [`845a3b0`](https://github.com/strapi/sdk-plugin/commit/845a3b0facdcb47f5fdc2716eb8d1ae45109beaa) Thanks [@jhoward1994](https://github.com/jhoward1994)! - add admin jsconfig when building plugin in javascript
+
+## 5.1.0
+
+### Minor Changes
+
+- [#36](https://github.com/strapi/sdk-plugin/pull/36) [`f5ddf69`](https://github.com/strapi/sdk-plugin/commit/f5ddf691a8be96e008c42dc238650a95ab9ff2cb) Thanks [@innerdvations](https://github.com/innerdvations)! - In Strapi projects, generate plugin in plugins path and log config info
+
+### Patch Changes
+
+- [#38](https://github.com/strapi/sdk-plugin/pull/38) [`52c55bf`](https://github.com/strapi/sdk-plugin/commit/52c55bf080a972724d4cf686db2871bee7cd9bf2) Thanks [@innerdvations](https://github.com/innerdvations)! - Support commonjs plugins
+
 ## 5.0.2
 
 ### Patch Changes
