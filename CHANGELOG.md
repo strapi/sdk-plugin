@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.1.1
+
+### Patch Changes
+
+- [#43](https://github.com/strapi/sdk-plugin/pull/43) [`845a3b0`](https://github.com/strapi/sdk-plugin/commit/845a3b0facdcb47f5fdc2716eb8d1ae45109beaa) Thanks [@jhoward1994](https://github.com/jhoward1994)! - add admin jsconfig when building plugin in javascript
+
 ## 5.1.0
 
 ### Minor Changes
