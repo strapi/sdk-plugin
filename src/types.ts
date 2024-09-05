@@ -5,6 +5,10 @@ import type { Command } from 'commander';
 export interface CommonCLIOptions {
   silent?: boolean;
   debug?: boolean;
+  useNpm?: boolean;
+  useYarn?: boolean;
+  usePnpm?: boolean;
+  install?: boolean;
 }
 
 export interface CLIContext {
