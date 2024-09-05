@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-import { execa as execa_ } from 'execa';
 import fs from 'fs';
 import path from 'path';
 
@@ -102,7 +101,9 @@ ${separator}
 };
 
 export const runInstall = async (packageManager: 'yarn' | 'npm' | 'pnpm', pluginPath: string) => {
-  const execa = execa_({
+  const { execa: execaPkg } = await import('execa');
+
+  const execa = execaPkg({
     cwd: pluginPath,
     verbose: 'full',
   });
@@ -111,13 +112,16 @@ export const runInstall = async (packageManager: 'yarn' | 'npm' | 'pnpm', plugin
 };
 
 export const runBuild = async (packageManager: 'yarn' | 'npm' | 'pnpm', pluginPath: string) => {
-  const execa = execa_({
-    pluginPath,
+  const { execa: execaPkg } = await import('execa');
+
+  const execa = execaPkg({
+    cwd: pluginPath,
     verbose: 'full',
   });
 
   if (packageManager === 'npm') {
     await execa`${packageManager} run build`;
+    return;
   }
   await execa`${packageManager} build`;
 };
