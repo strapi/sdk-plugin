@@ -1,5 +1,15 @@
 # @strapi/sdk-plugin
 
+## 5.2.0
+
+### Minor Changes
+
+- [#46](https://github.com/strapi/sdk-plugin/pull/46) [`4803fe6`](https://github.com/strapi/sdk-plugin/commit/4803fe6c837969284bb53ff76074cb6a548c6a6a) Thanks [@Bassel17](https://github.com/Bassel17)! - automate install and build for generated plugins
+
+### Patch Changes
+
+- [#45](https://github.com/strapi/sdk-plugin/pull/45) [`345fa5a`](https://github.com/strapi/sdk-plugin/commit/345fa5a52f00723e0b73e98d968affbad9252a40) Thanks [@dhoko](https://github.com/dhoko)! - Add support for Node 22
+
 ## 5.1.1
 
 ### Patch Changes
