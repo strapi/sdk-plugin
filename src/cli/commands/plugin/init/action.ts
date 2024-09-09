@@ -395,17 +395,6 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
                     require: './dist/server/index.js',
                     default: './dist/server/index.js',
                   };
-
-                  pkgJson.files.push('./strapi-server.js');
-
-                  files.push({
-                    name: 'strapi-server.js',
-                    contents: outdent`
-                      'use strict';
-
-                      module.exports = require('./dist/server');
-                  `,
-                  });
                 }
 
                 break;
