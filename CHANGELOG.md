@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.2.1
+
+### Patch Changes
+
+- [#48](https://github.com/strapi/sdk-plugin/pull/48) [`43ab894`](https://github.com/strapi/sdk-plugin/commit/43ab894e3d9e24fd78a8024bb34773f9bfb63c29) Thanks [@alexandrebodin](https://github.com/alexandrebodin)! - fix missing commonjs plugin
+
 ## 5.2.0
 
 ### Minor Changes
