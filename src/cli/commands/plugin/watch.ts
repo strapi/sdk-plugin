@@ -1,4 +1,3 @@
-import commonjs from '@rollup/plugin-commonjs';
 import { watch } from '@strapi/pack-up';
 import boxen from 'boxen';
 import chalk from 'chalk';
@@ -68,7 +67,6 @@ const action = async (opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLICo
       cwd,
       configFile: false,
       config: {
-        plugins: [commonjs()],
         bundles,
         dist: './dist',
         /**

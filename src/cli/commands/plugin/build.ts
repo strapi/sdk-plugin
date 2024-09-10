@@ -1,4 +1,3 @@
-import commonjs from '@rollup/plugin-commonjs';
 import { build } from '@strapi/pack-up';
 import boxen from 'boxen';
 import chalk from 'chalk';
@@ -71,7 +70,6 @@ const action = async ({ ...opts }: BuildCLIOptions, _cmd: unknown, { logger, cwd
       cwd,
       configFile: false,
       config: {
-        plugins: [commonjs()],
         bundles,
         dist: './dist',
         /**
