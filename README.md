@@ -29,9 +29,7 @@ npx @strapi/sdk-plugin@latest init my-plugin
 
 That will create a directory with all your plugin project files.
 
-Once your project has been installed, you will have access to the `strapi-plugin` command.
-
-Run `strapi-plugin -h` for more information on CLI usage.
+Once your project has been installed, Multiple commands are available to you.
 
 ## Commands
 
@@ -47,19 +45,35 @@ Creates a new plugin at the given path.
 
 ### `build`
 
-Builds your current package based on the configuration in your `package.json` and `packup.config.ts` (if applicable).
+Builds your current package based on the configuration in your `package.json`.
 
 - `--minify` – minifies the output (default `false`).
 - `--sourcemap` – generates sourcemaps for the output (default `true`).
+
+```sh
+yarn run build
+```
 
 ### `watch`
 
 Watch & compile your strapi plugin for local development.
 
+```sh
+yarn run watch
+```
+
 ### `watch:link`
 
 Recompiles your plugin automatically on changes and runs yalc push --publish
 
+```sh
+yarn run watch:link
+```
+
 ### `verify`
 
 Verifies the output of your plugin before publishing it
+
+```sh
+yarn run verify
+```
