@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.2.2
+
+### Patch Changes
+
+- [#50](https://github.com/strapi/sdk-plugin/pull/50) [`08d2f73`](https://github.com/strapi/sdk-plugin/commit/08d2f73162ca0d2041cf3cc2d04b0b4fafd4c464) Thanks [@alexandrebodin](https://github.com/alexandrebodin)! - chore: remove strapi-server file from generate plugin
+
 ## 5.2.1
 
 ### Patch Changes
