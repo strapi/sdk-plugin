@@ -29,7 +29,7 @@ npx @strapi/sdk-plugin@latest init my-plugin
 
 That will create a directory with all your plugin project files.
 
-Once your project has been installed, Multiple commands are available to you.
+Once your project has been installed, several commands are available to you.
 
 ## Commands
 
