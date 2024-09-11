@@ -1,6 +1,6 @@
 {
   "name": "@strapi/sdk-plugin",
-  "version": "5.2.2",
+  "version": "5.2.3-alpha.1",
   "description": "Simple tools for developing Strapi plugins",
   "keywords": [
     "strapi",
