@@ -175,27 +175,25 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/index.js',
     contents: outdent`
-        'use strict';
-
         /**
          * Application methods
          */
-        const bootstrap = require('./bootstrap');
-        const destroy = require('./destroy');
-        const register = require('./register');
+        import bootstrap from './bootstrap';
+        import destroy from './destroy';
+        import register from './register';
 
         /**
          * Plugin server methods
          */
-        const config = require('./config');
-        const contentTypes = require('./content-types');
-        const controllers = require('./controllers');
-        const middlewares = require('./middlewares');
-        const policies = require('./policies');
-        const routes = require('./routes');
-        const services = require('./services');
+        import config from './config';
+        import contentTypes from './content-types';
+        import controllers from './controllers';
+        import middlewares from './middlewares';
+        import policies from './policies';
+        import routes from './routes';
+        import services from './services';
 
-        module.exports = {
+        export default {
             bootstrap,
             destroy,
             register,
@@ -213,45 +211,37 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/bootstrap.js',
     contents: outdent`
-        'use strict';
-
         const bootstrap = ({ strapi }) => {
           // bootstrap phase
         };
 
-        module.exports = bootstrap;
+        export default bootstrap;
         `,
   },
   {
     name: 'server/src/destroy.js',
     contents: outdent`
-        'use strict';
-
         const destroy = ({ strapi }) => {
           // destroy phase
         };
 
-        module.exports = destroy;
+        export default destroy;
         `,
   },
   {
     name: 'server/src/register.js',
     contents: outdent`
-        'use strict';
-
         const register = ({ strapi }) => {
           // register phase
         };
 
-        module.exports = register;
+        export default register;
         `,
   },
   {
     name: 'server/src/config/index.js',
     contents: outdent`
-      'use strict';
-
-      module.exports = {
+      export default {
         default: {},
         validator() {},
       };
@@ -260,19 +250,15 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/content-types/index.js',
     contents: outdent`
-    'use strict';
-
-    module.exports = {};
+    export default {};
     `,
   },
   {
     name: 'server/src/controllers/index.js',
     contents: outdent`
-    'use strict';
+    import controller from './controller';
 
-    const controller = require('./controller');
-
-    module.exports = {
+    export default {
         controller,
     };
     `,
@@ -280,8 +266,6 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/controllers/controller.js',
     contents: outdent`
-    'use strict';
-
     const controller = ({ strapi }) => ({
       index(ctx) {
         ctx.body = strapi
@@ -292,31 +276,25 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
       },
     });
 
-    module.exports = controller
+    export default controller
     `,
   },
   {
     name: 'server/src/middlewares/index.js',
     contents: outdent`
-    'use strict';
-
-    module.exports = {};
+    export default {};
     `,
   },
   {
     name: 'server/src/policies/index.js',
     contents: outdent`
-    'use strict';
-
-    module.exports = {};
+    export default {};
     `,
   },
   {
     name: 'server/src/routes/index.js',
     contents: outdent`
-    'use strict';
-
-    module.exports = [
+    export default [
         {
           method: 'GET',
           path: '/',
@@ -332,11 +310,9 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/services/index.js',
     contents: outdent`
-    'use strict';
+    import service from './service';
 
-    const service = require('./service');
-
-    module.exports = {
+    export default {
         service,
     };
     `,
@@ -344,15 +320,13 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
   {
     name: 'server/src/services/service.js',
     contents: outdent`
-    'use strict';
-
     const service = ({ strapi }) => ({
         getWelcomeMessage() {
             return 'Welcome to Strapi 🚀';
         },
     });
 
-    module.exports = service
+    export default service
     `,
   },
 ];

@@ -21,4 +21,22 @@ const ADMIN: TemplateFile = {
     `,
 };
 
-export { ADMIN as adminJsConfigFile };
+const SERVER: TemplateFile = {
+  name: 'server/jsconfig.json',
+  contents: outdent`
+      {
+        "compilerOptions": {
+          "target": "es6",
+          "module": "commonjs",
+          "allowSyntheticDefaultImports": true,
+          "esModuleInterop": true
+        },
+        "include": [
+          "./src/**/*.js",
+        ],
+        "exclude": ["node_modules"]
+      }
+    `,
+};
+
+export { ADMIN as adminJsConfigFile, SERVER as serverJsConfigFile };

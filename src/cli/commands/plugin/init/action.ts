@@ -172,26 +172,6 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
     return {
       prompts: [
         definePackageOption({
-          name: 'repo',
-          type: 'text',
-          message: 'git url',
-          validate(val: unknown) {
-            if (!val) {
-              return true;
-            }
-
-            try {
-              const result = gitUrlParse(val as any);
-
-              repo = { source: result.source, owner: result.owner, name: result.name };
-
-              return true;
-            } catch (err) {
-              return 'invalid git url';
-            }
-          },
-        }),
-        definePackageOption({
           name: 'pkgName',
           type: 'text',
           message: 'plugin name',
@@ -231,6 +211,26 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
           type: 'text',
           message: 'plugin author email',
           initial: gitConfig?.user?.email,
+        }),
+        definePackageOption({
+          name: 'repo',
+          type: 'text',
+          message: 'git url',
+          validate(val: unknown) {
+            if (!val) {
+              return true;
+            }
+
+            try {
+              const result = gitUrlParse(val as any);
+
+              repo = { source: result.source, owner: result.owner, name: result.name };
+
+              return true;
+            } catch (err) {
+              return 'invalid git url';
+            }
+          },
         }),
         definePackageOption({
           name: 'license',
@@ -456,13 +456,24 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
                     '@strapi/typescript-utils': '*',
                     typescript: '*',
                   };
-                } else if (isRecord(pkgJson.exports['./strapi-admin'])) {
-                  // If the plugin is not typescript, we need to add a jsconfig.json file
-                  // to the frontend code. This configuration ensures we have no
-                  // build errors for the frontend javascript code.
-                  const { adminJsConfigFile } = await import('./files/javascript');
+                } else {
+                  if (isRecord(pkgJson.exports['./strapi-admin'])) {
+                    // If the plugin is not typescript, we need to add a jsconfig.json file
+                    // to the frontend code. This configuration ensures we have no
+                    // build errors for the frontend javascript code.
+                    const { adminJsConfigFile } = await import('./files/javascript');
 
-                  files.push(adminJsConfigFile);
+                    files.push(adminJsConfigFile);
+                  }
+
+                  if (isRecord(pkgJson.exports['./strapi-server'])) {
+                    // If the plugin is not typescript, we need to add a jsconfig.json file
+                    // to the frontend code. This configuration ensures we have no
+                    // build errors for the frontend javascript code.
+                    const { serverJsConfigFile } = await import('./files/javascript');
+
+                    files.push(serverJsConfigFile);
+                  }
                 }
 
                 /**
