@@ -1,6 +1,6 @@
 {
   "name": "@strapi/sdk-plugin",
-  "version": "0.0.0-experimental.3ddc4bc338d159d83d4b4e1119dbda5e56f10cf4",
+  "version": "5.2.2",
   "description": "Simple tools for developing Strapi plugins",
   "keywords": [
     "strapi",
@@ -58,7 +58,7 @@
     "watch": "pack-up watch"
   },
   "dependencies": {
-    "@strapi/pack-up": "0.0.0-experimental.d0238c20f2d2af79a77b594f297c7380a46dfe33",
+    "@strapi/pack-up": "5.0.1-alpha.3",
     "@types/prompts": "2.4.9",
     "boxen": "5.1.2",
     "chalk": "4.1.2",
@@ -87,7 +87,6 @@
     "@types/git-url-parse": "9.0.3",
     "@types/jest": "^29.5.12",
     "@types/node": "^22.5.4",
-    "@types/nodemon": "^1.19.6",
     "@types/prettier": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
     "@typescript-eslint/parser": "^7.6.0",
