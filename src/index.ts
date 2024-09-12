@@ -12,7 +12,7 @@ const createCLI = async (argv: string[], command = new Command()) => {
 
   // Help command
   command.helpOption('-h, --help', 'Display help for command');
-  command.addHelpCommand('help [command]', 'Display help for command');
+  command.helpCommand('help [command]', 'Display help for command');
 
   command.version(
     // eslint-disable-next-line @typescript-eslint/no-var-requires
