@@ -1,9 +1,9 @@
-import commonjs from '@rollup/plugin-commonjs';
 import { build } from '@strapi/pack-up';
 import boxen from 'boxen';
 import chalk from 'chalk';
 import { createCommand } from 'commander';
 
+import { resolveConfig } from '../utils/config';
 import { runAction } from '../utils/helpers';
 import { loadPkg, validatePkg } from '../utils/pkg';
 
@@ -70,17 +70,7 @@ const action = async ({ ...opts }: BuildCLIOptions, _cmd: unknown, { logger, cwd
     await build({
       cwd,
       configFile: false,
-      config: {
-        plugins: [commonjs()],
-        bundles,
-        dist: './dist',
-        /**
-         * ignore the exports map of a plugin, because we're streamlining the
-         * process and ensuring the server package and admin package are built
-         * with the correct runtime and their individual tsconfigs
-         */
-        exports: {},
-      },
+      config: resolveConfig({ cwd, bundles }),
       ...opts,
     });
   } catch (err) {

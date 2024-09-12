@@ -18,12 +18,6 @@ const action = async (_opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIC
     const outDir = './dist';
     const extensions = 'ts,js,png,svg,gif,jpeg,css';
 
-    nodemon({
-      watch: [outDir],
-      ext: extensions,
-      exec: 'yalc push --changed',
-    });
-
     const folder = path.join(cwd, outDir);
 
     if (!(await pathExists(folder))) {
@@ -33,35 +27,48 @@ const action = async (_opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIC
     const pkg = await loadPkg({ cwd, logger });
     const pkgJson = await validatePkg({ pkg });
 
+    logger.info(
+      outdent`
+          Watching ${outDir} for changes to files with extensions: ${extensions}
+
+          To use this package in Strapi, in a separate shell run:
+          cd /path/to/strapi/project
+
+          Then run one of the commands below based on the package manager used in that project:
+
+          ## yarn
+          ${chalk.greenBright(`yarn dlx yalc add --link ${pkgJson.name} && yarn install`)}
+
+          ## npm
+          ${chalk.greenBright(
+            `npx yalc add ${pkgJson.name} && npx yalc link ${pkgJson.name} && npm install`
+          )}
+        `.trimStart()
+    );
+
+    // @ts-expect-error - invalid types
+    nodemon({
+      watch: [outDir],
+      ext: extensions,
+      exec: 'yalc push --changed',
+    });
+
     concurrently(['npm run watch']);
 
     nodemon
-      .on('start', () => {
-        logger.info(
-          outdent`
-        Watching ${outDir} for changes to files with extensions: ${extensions}
-
-        To use this package in Strapi, in a separate shell run:
-        cd /path/to/strapi/project
-
-        Then run one of the commands below based on the package manager used in that project:
-
-        ## yarn
-        ${chalk.greenBright(`yarn dlx yalc add --link ${pkgJson.name} && yarn install`)}
-
-        ## npm
-        ${chalk.greenBright(
-          `npx yalc add ${pkgJson.name} && npx yalc link ${pkgJson.name} && npm install`
-        )}
-      `.trimStart()
-        );
-      })
       .on('quit', () => {
         process.exit();
       })
       .on('restart', (files: unknown) => {
         logger.info('Found changes in files:', chalk.magentaBright(files));
         logger.info('Pushing new yalc package...');
+      })
+      .on('crash', () => {
+        logger.error(
+          'An error occurred. Make sure yalc is installed globally on your system. Exiting...'
+        );
+
+        process.exit(1);
       });
   } catch (err) {
     logger.error(
