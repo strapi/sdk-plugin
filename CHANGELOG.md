@@ -1,5 +1,13 @@
 # @strapi/sdk-plugin
 
+## 5.2.5
+
+### Patch Changes
+
+- [#53](https://github.com/strapi/sdk-plugin/pull/53) [`4c9d898`](https://github.com/strapi/sdk-plugin/commit/4c9d89864faa22d86a8c6b12587770be640ceb60) Thanks [@alexandrebodin](https://github.com/alexandrebodin)! - Remove unecessary commonjs plugin
+
+- [#52](https://github.com/strapi/sdk-plugin/pull/52) [`374fd9a`](https://github.com/strapi/sdk-plugin/commit/374fd9a75386c796a91c717ac8b860535c9ebcfc) Thanks [@alexandrebodin](https://github.com/alexandrebodin)! - chore: update readme and some typescript issues
+
 ## 5.2.2
 
 ### Patch Changes
