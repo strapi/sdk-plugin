@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@strapi/pack-up':
-        specifier: 5.0.1-alpha.4
-        version: 5.0.1-alpha.4(@types/node@22.5.4)
+        specifier: ^5.0.1
+        version: 5.0.1(@types/node@22.5.4)
       '@types/prompts':
         specifier: 2.4.9
         version: 2.4.9
@@ -848,8 +848,8 @@ packages:
       typescript:
         optional: true
 
-  '@strapi/pack-up@5.0.1-alpha.4':
-    resolution: {integrity: sha512-Hnz03w9+awKf9FeMyx5BEDBX7x2Qy2FBGiouCWzK5AT103qfK0IdvwWbPtJGZ5smJI59UfOG69Oe5Z2FxezwDg==}
+  '@strapi/pack-up@5.0.1':
+    resolution: {integrity: sha512-q1+lzhbfgAhaCNxKMxxog52laGRf2XGY1jegENzHrurKI7qngD8Q8XKD4GuiUc3foFy2GrAHVKCKEUyC0xhHgQ==}
     engines: {node: '>=18.0.0 <=20.x.x', npm: '>=6.0.0'}
     hasBin: true
 
@@ -4748,7 +4748,7 @@ snapshots:
       '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.45.0)(typescript@5.4.4))(eslint@8.45.0)(typescript@5.4.4)
       '@typescript-eslint/parser': 5.62.0(eslint@8.45.0)(typescript@5.4.4)
       eslint: 8.45.0
-      eslint-config-airbnb: 19.0.4(eslint-plugin-import@2.30.0(@typescript-eslint/parser@5.62.0(eslint@8.45.0)(typescript@5.4.4))(eslint-import-resolver-typescript@3.6.3)(eslint@8.45.0))(eslint-plugin-jsx-a11y@6.10.0(eslint@8.45.0))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.0))(eslint-plugin-react@7.36.0(eslint@8.45.0))(eslint@8.45.0)
+      eslint-config-airbnb: 19.0.4(eslint-plugin-import@2.30.0(@typescript-eslint/parser@5.62.0(eslint@8.45.0)(typescript@5.4.4))(eslint-import-resolver-typescript@3.6.3)(eslint@8.45.0))(eslint-plugin-jsx-a11y@6.10.0(eslint@8.57.0))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.0))(eslint-plugin-react@7.36.0(eslint@8.57.0))(eslint@8.45.0)
       eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.30.0(@typescript-eslint/parser@5.62.0(eslint@8.45.0)(typescript@5.4.4))(eslint-import-resolver-typescript@3.6.3)(eslint@8.45.0))(eslint@8.45.0)
       eslint-config-airbnb-typescript: 17.1.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.45.0)(typescript@5.4.4))(eslint@8.45.0)(typescript@5.4.4))(@typescript-eslint/parser@5.62.0(eslint@8.45.0)(typescript@5.4.4))(eslint-plugin-import@2.30.0(@typescript-eslint/parser@5.62.0(eslint@8.45.0)(typescript@5.4.4))(eslint-import-resolver-typescript@3.6.3)(eslint@8.45.0))(eslint@8.45.0)
       eslint-config-prettier: 8.10.0(eslint@8.45.0)
@@ -4772,7 +4772,7 @@ snapshots:
       - prettier
       - supports-color
 
-  '@strapi/pack-up@5.0.1-alpha.4(@types/node@22.5.4)':
+  '@strapi/pack-up@5.0.1(@types/node@22.5.4)':
     dependencies:
       '@vitejs/plugin-react-swc': 3.6.0(vite@5.2.8(@types/node@22.5.4))
       boxen: 5.1.2
@@ -5932,7 +5932,7 @@ snapshots:
       eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.30.0(@typescript-eslint/parser@5.62.0(eslint@8.45.0)(typescript@5.4.4))(eslint-import-resolver-typescript@3.6.3)(eslint@8.45.0))(eslint@8.45.0)
       eslint-plugin-import: 2.30.0(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.4.4))(eslint@8.57.0)
 
-  eslint-config-airbnb@19.0.4(eslint-plugin-import@2.30.0(@typescript-eslint/parser@5.62.0(eslint@8.45.0)(typescript@5.4.4))(eslint-import-resolver-typescript@3.6.3)(eslint@8.45.0))(eslint-plugin-jsx-a11y@6.10.0(eslint@8.45.0))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.0))(eslint-plugin-react@7.36.0(eslint@8.45.0))(eslint@8.45.0):
+  eslint-config-airbnb@19.0.4(eslint-plugin-import@2.30.0(@typescript-eslint/parser@5.62.0(eslint@8.45.0)(typescript@5.4.4))(eslint-import-resolver-typescript@3.6.3)(eslint@8.45.0))(eslint-plugin-jsx-a11y@6.10.0(eslint@8.57.0))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.0))(eslint-plugin-react@7.36.0(eslint@8.57.0))(eslint@8.45.0):
     dependencies:
       eslint: 8.45.0
       eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.30.0(@typescript-eslint/parser@5.62.0(eslint@8.45.0)(typescript@5.4.4))(eslint-import-resolver-typescript@3.6.3)(eslint@8.45.0))(eslint@8.45.0)
