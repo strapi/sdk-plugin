@@ -20,12 +20,7 @@ import type { CLIContext, CommonCLIOptions } from '../../../../types';
 import type { TemplateFile } from '@strapi/pack-up';
 
 // TODO: remove these when release versions are available
-const USE_RC_VERSIONS: string[] = [
-  '@strapi/design-system',
-  '@strapi/icons',
-  '@strapi/strapi',
-  '@strapi/typescript-utils',
-] as const;
+const USE_RC_VERSIONS: string[] = ['@strapi/design-system', '@strapi/icons'] as const;
 
 // Store results of prompt answers (run by pack-up init)
 // This is a limitation of pack-up; we cannot run the prompt and pass the answers in
@@ -310,8 +305,7 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
             prettier: '*',
           },
           peerDependencies: {
-            // TODO: set this to 5.0.0 when Strapi 5 is released
-            '@strapi/strapi': '^5.0.0-rc',
+            '@strapi/strapi': '^5.0.0',
             '@strapi/sdk-plugin': '^5.0.0',
           },
           strapi: {
