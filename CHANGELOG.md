@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.2.6
+
+### Patch Changes
+
+- [`38263ff`](https://github.com/strapi/sdk-plugin/commit/38263ffe654c9378b2be364feca715948d1f3d45) Thanks [@alexandrebodin](https://github.com/alexandrebodin)! - Traget 5.0.0
+
 ## 5.2.5
 
 ### Patch Changes
