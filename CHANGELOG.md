@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.2.7
+
+### Patch Changes
+
+- [#54](https://github.com/strapi/sdk-plugin/pull/54) [`fc7192a`](https://github.com/strapi/sdk-plugin/commit/fc7192a31ac363e72aa2fc6658d4d5f16327058d) Thanks [@alexandrebodin](https://github.com/alexandrebodin)! - chore: use esm for server code by default
+
 ## 5.2.6
 
 ### Patch Changes
