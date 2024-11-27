@@ -55,7 +55,7 @@ const TYPESCRIPT: TemplateFile[] = [
         import { PLUGIN_ID } from './pluginId';
         import { Initializer } from './components/Initializer';
         import { PluginIcon } from './components/PluginIcon';
-        
+
         export default {
           register(app: any) {
             app.addMenuLink({
@@ -71,7 +71,7 @@ const TYPESCRIPT: TemplateFile[] = [
                 return App;
               },
             });
-        
+
             app.registerPlugin({
                 id: PLUGIN_ID,
                 initializer: Initializer,
@@ -79,31 +79,28 @@ const TYPESCRIPT: TemplateFile[] = [
                 name: PLUGIN_ID,
             });
           },
-        
+
           async registerTrads(app: any) {
             const { locales } = app;
-        
+
             const importedTranslations = await Promise.all(
-              (locales as string[]).map((locale) => {
-                return import(\`./translations/\${locale}.json\`)
-                  .then(({ default: data }) => {
-                    return {
-                      data: getTranslation(data),
-                      locale,
-                    };
-                  })
-                  .catch(() => {
-                    return {
-                      data: {},
-                      locale,
-                    };
-                  });
+              (locales as string[]).map(async (locale) => {
+                try {
+                  const { default: data } = await import(\`./translations/\${locale}.json\`);
+                  return {
+                    data: getTranslation(data),
+                    locale,
+                  };
+                } catch (err) {
+                  // File not found or other error; skip this locale
+                  return null;
+                }
               })
             );
-        
-            return importedTranslations;
-          },
-        };
+
+            // Filter out null values
+            return importedTranslations.filter((translation) => translation !== null);
+          }
         `,
   },
   {
@@ -205,27 +202,25 @@ const JAVASCRIPT: TemplateFile[] = [
             
               async registerTrads(app) {
                 const { locales } = app;
-            
+
                 const importedTranslations = await Promise.all(
-                  locales.map((locale) => {
-                    return import(\`./translations/\${locale}.json\`)
-                      .then(({ default: data }) => {
-                        return {
-                          data: getTranslation(data),
-                          locale,
-                        };
-                      })
-                      .catch(() => {
-                        return {
-                          data: {},
-                          locale,
-                        };
-                      });
+                  locales.map(async (locale) => {
+                    try {
+                      const { default: data } = await import(\`./translations/\${locale}.json\`);
+                      return {
+                        data: getTranslation(data),
+                        locale,
+                      };
+                    } catch (err) {
+                      // File not found or other error; skip this locale
+                      return null;
+                    }
                   })
                 );
-            
-                return importedTranslations;
-              },
+
+                // Filter out null values
+                return importedTranslations.filter((translation) => translation !== null);
+              }
             };
             `,
   },
