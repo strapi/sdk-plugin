@@ -84,7 +84,7 @@ const TYPESCRIPT: TemplateFile[] = [
             return Promise.all(
               locales.map(async (locale) => {
                 try {
-                  const { default: data } = await import(`./translations/${locale}.json`);
+                  const { default: data } = await import(\`./translations/\${locale}.json\`);
         
                   return { data, locale };
                 } catch {
@@ -197,7 +197,7 @@ const JAVASCRIPT: TemplateFile[] = [
                 return Promise.all(
                   locales.map(async (locale) => {
                     try {
-                      const { default: data } = await import(`./translations/${locale}.json`);
+                      const { default: data } = await import(\`./translations/\${locale}.json\`);
             
                       return { data, locale };
                     } catch {
