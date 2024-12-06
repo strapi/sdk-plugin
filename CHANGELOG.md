@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.2.8
+
+### Patch Changes
+
+- [#66](https://github.com/strapi/sdk-plugin/pull/66) [`2aa1e40`](https://github.com/strapi/sdk-plugin/commit/2aa1e407dee6bd44365ca4c4b2cb5b0c88099970) Thanks [@Link2Twenty](https://github.com/Link2Twenty)! - fix: registerTrads function
+
 ## 5.2.7
 
 ### Patch Changes
