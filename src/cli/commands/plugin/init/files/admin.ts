@@ -80,28 +80,18 @@ const TYPESCRIPT: TemplateFile[] = [
             });
           },
         
-          async registerTrads(app: any) {
-            const { locales } = app;
+          async registerTrads({ locales }: { locales: string[] }) {      
+            return Promise.all(
+              locales.map(async (locale) => {
+                try {
+                  const { default: data } = await import(\`./translations/\${locale}.json\`);
         
-            const importedTranslations = await Promise.all(
-              (locales as string[]).map((locale) => {
-                return import(\`./translations/\${locale}.json\`)
-                  .then(({ default: data }) => {
-                    return {
-                      data: getTranslation(data),
-                      locale,
-                    };
-                  })
-                  .catch(() => {
-                    return {
-                      data: {},
-                      locale,
-                    };
-                  });
+                  return { data, locale };
+                } catch {
+                  return { data: {}, locale };
+                }
               })
             );
-        
-            return importedTranslations;
           },
         };
         `,
@@ -203,28 +193,18 @@ const JAVASCRIPT: TemplateFile[] = [
                 });
               },
             
-              async registerTrads(app) {
-                const { locales } = app;
+              async registerTrads({ locales }) {
+                return Promise.all(
+                  locales.map(async (locale) => {
+                    try {
+                      const { default: data } = await import(\`./translations/\${locale}.json\`);
             
-                const importedTranslations = await Promise.all(
-                  locales.map((locale) => {
-                    return import(\`./translations/\${locale}.json\`)
-                      .then(({ default: data }) => {
-                        return {
-                          data: getTranslation(data),
-                          locale,
-                        };
-                      })
-                      .catch(() => {
-                        return {
-                          data: {},
-                          locale,
-                        };
-                      });
+                      return { data, locale };
+                    } catch {
+                      return { data: {}, locale };
+                    }
                   })
                 );
-            
-                return importedTranslations;
               },
             };
             `,
