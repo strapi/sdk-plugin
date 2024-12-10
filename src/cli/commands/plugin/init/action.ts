@@ -364,10 +364,10 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
 
                   pkgJson.devDependencies = {
                     ...pkgJson.devDependencies,
-                    react: '*',
-                    'react-dom': '*',
-                    'react-router-dom': '*',
-                    'styled-components': '*',
+                    react: '^17.0.0 || ^18.0.0',
+                    'react-dom': '^17.0.0 || ^18.0.0',
+                    'react-router-dom': '^6.0.0',
+                    'styled-components': '^6.0.0',
                   };
 
                   pkgJson.peerDependencies = {
