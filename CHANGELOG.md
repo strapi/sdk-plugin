@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.3.0
+
+### Minor Changes
+
+- [#70](https://github.com/strapi/sdk-plugin/pull/70) [`3a01652`](https://github.com/strapi/sdk-plugin/commit/3a01652bf06d0c9f130155e48fdbc32fd6e0f32e) Thanks [@jhoward1994](https://github.com/jhoward1994)! - make react deps compatible with design system
+
 ## 5.2.8
 
 ### Patch Changes
