@@ -36,7 +36,7 @@ const packageJsonSchema = yup.object({
               } else {
                 acc[key] = yup
                   .string()
-                  .matches(/^\.\/.*\.json$/)
+                  .matches(/^\.\/.*\.(json|d\.ts)$/)
                   .required();
               }
 
