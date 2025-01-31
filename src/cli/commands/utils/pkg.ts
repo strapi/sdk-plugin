@@ -15,38 +15,49 @@ interface Export {
   default: string;
 }
 
-const packageJsonSchema = yup.object({
-  name: yup.string().required(),
-  exports: yup.lazy((value) =>
-    yup
-      .object(
-        typeof value === 'object'
-          ? Object.entries(value).reduce((acc, [key, keyValue]) => {
-              if (typeof keyValue === 'object') {
-                acc[key] = yup
-                  .object({
+const createPackageJsonSchema = (logger: Logger) =>
+  yup.object({
+    name: yup.string().required(),
+    exports: yup.lazy((value) =>
+      yup
+        .object(
+          typeof value === 'object'
+            ? Object.entries(value).reduce((acc, [key, keyValue]) => {
+                if (typeof keyValue === 'object') {
+                  acc[key] = yup.object({
                     types: yup.string().optional(),
                     source: yup.string().required(),
                     module: yup.string().optional(),
                     import: yup.string().required(),
                     require: yup.string().required(),
                     default: yup.string().required(),
-                  })
-                  .noUnknown(true);
-              } else {
-                acc[key] = yup
-                  .string()
-                  .matches(/^\.\/.*\.(json|d\.ts)$/)
-                  .required();
-              }
+                  });
+                } else {
+                  acc[key] = yup
+                    .string()
+                    .test(
+                      'warn-if-not-matching',
+                      'Warning: The file does not match the expected pattern (./*.json or ./*.d.ts)',
+                      (innervalue) => {
+                        const isValid = /^\.\/.*\.(json|d\.ts)$/.test(innervalue || '');
+                        if (!isValid) {
+                          logger.warn(
+                            `Warning: '${key}' in 'exports' does not match the expected pattern.`
+                          );
+                        }
+                        return true; // Always return true to pass validation
+                      }
+                    )
+                    .required();
+                }
 
-              return acc;
-            }, {} as Record<string, yup.SchemaOf<string> | yup.SchemaOf<Export>>)
-          : undefined
-      )
-      .optional()
-  ),
-});
+                return acc;
+              }, {} as Record<string, yup.SchemaOf<string> | yup.SchemaOf<Export>>)
+            : undefined
+        )
+        .optional()
+    ),
+  });
 
 /**
  * @description being a task to load the package.json starting from the current working directory
@@ -69,13 +80,21 @@ const loadPkg = async ({ cwd, logger }: { cwd: string; logger: Logger }): Promis
   return pkg;
 };
 
-type PackageJson = yup.Asserts<typeof packageJsonSchema>;
+type PackageJson = yup.Asserts<ReturnType<typeof createPackageJsonSchema>>;
 
 /**
  * @description validate the package.json against a standardised schema using `yup`.
  * If the validation fails, the process will throw with an appropriate error message.
  */
-const validatePkg = async ({ pkg }: { pkg: object }): Promise<PackageJson> => {
+const validatePkg = async ({
+  pkg,
+  logger,
+}: {
+  pkg: object;
+  logger: Logger;
+}): Promise<PackageJson> => {
+  const packageJsonSchema = createPackageJsonSchema(logger);
+
   try {
     const validatedPkg = await packageJsonSchema.validate(pkg, {
       strict: true,
@@ -114,7 +133,7 @@ const validatePkg = async ({ pkg }: { pkg: object }): Promise<PackageJson> => {
             throw new Error(
               `'${err.path}' in 'package.json' must be of type '${chalk.magenta(
                 err.params.type
-              )}' (recieved '${chalk.magenta(typeof err.params.value)}')`
+              )}' (received '${chalk.magenta(typeof err.params.value)}')`
             );
           }
       }

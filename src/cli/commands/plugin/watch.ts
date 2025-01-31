@@ -16,7 +16,7 @@ type ActionOptions = WatchCLIOptions;
 const action = async (opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIContext) => {
   try {
     const pkg = await loadPkg({ cwd, logger });
-    const pkgJson = await validatePkg({ pkg });
+    const pkgJson = await validatePkg({ pkg, logger });
 
     if (!pkgJson.exports['./strapi-admin'] && !pkgJson.exports['./strapi-server']) {
       throw new Error(
