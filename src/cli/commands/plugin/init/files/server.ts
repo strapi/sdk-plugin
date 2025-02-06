@@ -130,7 +130,7 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/routes/index.ts',
+    name: 'server/src/routes/content-api.ts',
     contents: outdent`
     export default [
         {
@@ -143,6 +143,21 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
           },
         },
       ];
+    `,
+  },
+  {
+    name: 'server/src/routes/index.ts',
+    contents: outdent`
+    import contentAPIRoutes from './content-api';
+
+    const routes = {
+      'content-api': {
+        type: 'content-api',
+        routes: contentAPIRoutes,
+      },
+    };
+
+    export default routes;
     `,
   },
   {
@@ -292,7 +307,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/routes/index.js',
+    name: 'server/src/routes/content-api.js',
     contents: outdent`
     export default [
         {
@@ -305,6 +320,21 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
           },
         },
       ];
+    `,
+  },
+  {
+    name: 'server/src/routes/index.js',
+    contents: outdent`
+    import contentAPIRoutes from './content-api';
+
+    const routes = {
+      'content-api': {
+        type: 'content-api',
+        routes: contentAPIRoutes,
+      },
+    };
+
+    export default routes;
     `,
   },
   {
