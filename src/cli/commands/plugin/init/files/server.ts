@@ -139,7 +139,6 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
           // name of the controller file & the method.
           handler: 'controller.index',
           config: {
-            auth: false,
             policies: [],
           },
         },
@@ -317,7 +316,6 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
           // name of the controller file & the method.
           handler: 'controller.index',
           config: {
-            auth: false,
             policies: [],
           },
         },
