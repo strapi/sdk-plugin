@@ -19,7 +19,7 @@ const action = async ({ ...opts }: BuildCLIOptions, _cmd: unknown, { logger, cwd
     process.env.NODE_ENV = 'production';
 
     const pkg = await loadPkg({ cwd, logger });
-    const pkgJson = await validatePkg({ pkg });
+    const pkgJson = await validatePkg({ pkg, logger });
 
     if (!pkgJson.exports['./strapi-admin'] && !pkgJson.exports['./strapi-server']) {
       throw new Error(

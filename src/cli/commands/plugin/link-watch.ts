@@ -25,7 +25,7 @@ const action = async (_opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIC
     }
 
     const pkg = await loadPkg({ cwd, logger });
-    const pkgJson = await validatePkg({ pkg });
+    const pkgJson = await validatePkg({ pkg, logger });
 
     logger.info(
       outdent`
