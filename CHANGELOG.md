@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.3.1
+
+### Patch Changes
+
+- [#81](https://github.com/strapi/sdk-plugin/pull/81) [`58bf397`](https://github.com/strapi/sdk-plugin/commit/58bf3977fbfd2b2d22cf4b34fd57c0ae01284559) Thanks [@innerdvations](https://github.com/innerdvations)! - fix: allow any file extension in exports string
+
 ## 5.3.0
 
 ### Minor Changes
