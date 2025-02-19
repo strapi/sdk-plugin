@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 5.3.2
+
+### Patch Changes
+
+- [#72](https://github.com/strapi/sdk-plugin/pull/72) [`9747836`](https://github.com/strapi/sdk-plugin/commit/9747836c850cdf5b726d172ee3b8b3eb8288dcbe) Thanks [@boazpoolman](https://github.com/boazpoolman)! - Fix the routes config for it to be properly registered
+
 ## 5.3.1
 
 ### Patch Changes
