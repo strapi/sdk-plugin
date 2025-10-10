@@ -17,6 +17,12 @@ interface Export {
 
 const packageJsonSchema = yup.object({
   name: yup.string().required(),
+  strapi: yup.object({
+    kind: yup.string().required(),
+    name: yup.string().required(),
+    displayName: yup.string().required(),
+    description: yup.string().optional(),
+  }),
   exports: yup.lazy((value) =>
     yup
       .object(
