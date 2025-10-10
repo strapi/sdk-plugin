@@ -58,6 +58,7 @@
     "watch": "pack-up watch"
   },
   "dependencies": {
+    "@strapi/generators": "5.27.0",
     "@strapi/pack-up": "^5.0.1",
     "@types/prompts": "2.4.9",
     "boxen": "5.1.2",
@@ -67,6 +68,7 @@
     "execa": "^9.3.1",
     "get-latest-version": "5.1.0",
     "git-url-parse": "13.1.1",
+    "inquirer": "^12.9.6",
     "nodemon": "^3.1.0",
     "ora": "5.4.1",
     "outdent": "0.8.0",
