@@ -25,7 +25,7 @@ const action = async ({ ctx: { cwd, logger } }: { ctx: CLIContext }) => {
     {
       kind: nameInfo.kind,
       singularName: nameInfo.singularName,
-      id: nameInfo.id,
+      id: nameInfo.displayName,
       pluralName: nameInfo.pluralName,
       displayName: nameInfo.displayName,
       destination: 'root',
