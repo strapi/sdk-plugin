@@ -134,7 +134,17 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
     contents: outdent`
     export default () => ({
       type: 'content-api',
-      routes: [],
+      routes: [
+        {
+          method: 'GET',
+          path: '/',
+          // name of the controller file & the method.
+          handler: 'controller.index',
+          config: {
+            policies: [],
+          },
+        },
+      ],
     });
     `,
   },
@@ -312,7 +322,17 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     contents: outdent`
     export default () => ({
       type: 'content-api',
-      routes: [],
+      routes: [
+        {
+          method: 'GET',
+          path: '/',
+          // name of the controller file & the method.
+          handler: 'controller.index',
+          config: {
+            policies: [],
+          },
+        },
+      ],
     });
     `,
   },
