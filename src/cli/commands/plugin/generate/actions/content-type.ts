@@ -20,12 +20,12 @@ const action = async ({ ctx: { cwd, logger } }: { ctx: CLIContext }) => {
   const attributes = await getAttributesPrompts(inquirer);
   const bootstrapInfo = await inquirer.prompt([...bootstrapApiPrompts] as any);
 
-  generate(
+  await generate(
     'content-type',
     {
       kind: nameInfo.kind,
       singularName: nameInfo.singularName,
-      id: nameInfo.displayName,
+      id: nameInfo.singularName,
       pluralName: nameInfo.pluralName,
       displayName: nameInfo.displayName,
       destination: 'root',

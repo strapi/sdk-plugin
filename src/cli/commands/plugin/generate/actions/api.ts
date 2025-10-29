@@ -22,7 +22,7 @@ const action = async ({ ctx: { cwd, logger } }: { ctx: CLIContext }) => {
     },
   ]);
 
-  generate(
+  await generate(
     'api',
     {
       id: config.id,
