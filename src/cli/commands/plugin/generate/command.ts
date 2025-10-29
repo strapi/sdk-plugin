@@ -13,7 +13,9 @@ import type { CLIContext, StrapiCommand } from '../../../../types';
 
 interface ActionOptions {}
 
-const action = async (_opts: ActionOptions, _cmd: unknown, ctx: CLIContext) => {
+const action = async (_opts: ActionOptions, cmd: { args: string[] }, ctx: CLIContext) => {
+  let generator = cmd.args[0];
+
   const options = [
     { name: 'api', value: 'api' },
     { name: 'controller', value: 'controller' },
@@ -23,14 +25,18 @@ const action = async (_opts: ActionOptions, _cmd: unknown, ctx: CLIContext) => {
     { name: 'service', value: 'service' },
   ];
 
-  const { generator } = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'generator',
-      message: 'Strapi Generators',
-      choices: options,
-    },
-  ]);
+  if (!generator) {
+    const inquirerOutput = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'generator',
+        message: 'Strapi Generators',
+        choices: options,
+      },
+    ]);
+
+    generator = inquirerOutput.generator;
+  }
 
   switch (generator) {
     case 'api':
