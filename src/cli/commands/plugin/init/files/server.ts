@@ -130,9 +130,11 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/routes/content-api.ts',
+    name: 'server/src/routes/content-api/index.ts',
     contents: outdent`
-    export default [
+    export default () => ({
+      type: 'content-api',
+      routes: [
         {
           method: 'GET',
           path: '/',
@@ -142,19 +144,28 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
             policies: [],
           },
         },
-      ];
+      ],
+    });
+    `,
+  },
+  {
+    name: 'server/src/routes/admin/index.ts',
+    contents: outdent`
+    export default () => ({
+      type: 'admin',
+      routes: [],
+    });
     `,
   },
   {
     name: 'server/src/routes/index.ts',
     contents: outdent`
     import contentAPIRoutes from './content-api';
+    import adminAPIRoutes from './admin';
 
     const routes = {
-      'content-api': {
-        type: 'content-api',
-        routes: contentAPIRoutes,
-      },
+      'content-api': contentAPIRoutes,
+      admin: adminAPIRoutes,
     };
 
     export default routes;
@@ -307,9 +318,11 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     `,
   },
   {
-    name: 'server/src/routes/content-api.js',
+    name: 'server/src/routes/content-api/index.js',
     contents: outdent`
-    export default [
+    export default () => ({
+      type: 'content-api',
+      routes: [
         {
           method: 'GET',
           path: '/',
@@ -319,19 +332,28 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
             policies: [],
           },
         },
-      ];
+      ],
+    });
+    `,
+  },
+  {
+    name: 'server/src/routes/admin/index.js',
+    contents: outdent`
+    export default () => ({
+      type: 'admin',
+      routes: [],
+    });
     `,
   },
   {
     name: 'server/src/routes/index.js',
     contents: outdent`
     import contentAPIRoutes from './content-api';
+    import adminAPIRoutes from './admin';
 
     const routes = {
-      'content-api': {
-        type: 'content-api',
-        routes: contentAPIRoutes,
-      },
+      'content-api': contentAPIRoutes,
+      admin: adminAPIRoutes,
     };
 
     export default routes;
