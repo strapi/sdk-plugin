@@ -77,3 +77,7 @@ Verifies the output of your plugin before publishing it
 ```sh
 yarn run verify
 ```
+
+### `generate`
+
+Starts an interactive CLI to generate boilerplate code for your plugin
