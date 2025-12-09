@@ -1,0 +1,47 @@
+{
+  "name": "@strapi/plugin-test",
+  "version": "1.0.0",
+  "description": "Test plugin for E2E testing",
+  "type": "commonjs",
+  "exports": {
+    "./strapi-admin": {
+      "types": "./dist/admin/src/index.d.ts",
+      "source": "./admin/src/index.ts",
+      "import": "./dist/admin/index.mjs",
+      "require": "./dist/admin/index.js",
+      "default": "./dist/admin/index.js"
+    },
+    "./strapi-server": {
+      "types": "./dist/server/src/index.d.ts",
+      "source": "./server/src/index.ts",
+      "import": "./dist/server/index.mjs",
+      "require": "./dist/server/index.js",
+      "default": "./dist/server/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "strapi-plugin build",
+    "watch": "strapi-plugin watch",
+    "verify": "strapi-plugin verify"
+  },
+  "devDependencies": {
+    "@strapi/strapi": "^5.0.0",
+    "@strapi/sdk-plugin": "^5.0.0",
+    "@strapi/typescript-utils": "^5.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@strapi/strapi": "^5.0.0",
+    "@strapi/sdk-plugin": "^5.0.0"
+  },
+  "strapi": {
+    "name": "@strapi/plugin-test",
+    "displayName": "Test Plugin",
+    "description": "Test plugin for E2E testing",
+    "kind": "plugin"
+  }
+}

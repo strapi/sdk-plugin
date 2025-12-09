@@ -6,6 +6,7 @@ import gitUrlParse from 'git-url-parse';
 import path from 'node:path';
 import { outdent } from 'outdent';
 
+import { isLegacyEnabled } from '../../utils/feature-flags';
 import {
   dirContainsStrapiProject,
   logInstructions,
@@ -17,7 +18,7 @@ import {
 import { gitIgnoreFile } from './files/gitIgnore';
 
 import type { CLIContext, CommonCLIOptions } from '../../../../types';
-import type { TemplateFile } from '@strapi/pack-up';
+import type { TemplateFile } from '../../utils/init/types';
 
 // TODO: remove these when release versions are available
 const USE_RC_VERSIONS: string[] = ['@strapi/design-system', '@strapi/icons'] as const;
@@ -44,19 +45,37 @@ export default async (
     const pluginPath =
       isStrapiProject && isPathPackageName ? `./src/plugins/${packagePath}` : packagePath;
 
-    //
-    const template = getPluginTemplate({ suggestedPackageName });
+    // Check feature flag to determine which implementation to use
+    if (isLegacyEnabled('useLegacyInit')) {
+      logger.debug('Using legacy pack-up init implementation (USE_LEGACY_PACKUP_INIT=true)');
 
-    /**
-     * Create the package // plugin
-     */
-    await init({
-      path: pluginPath,
-      cwd,
-      silent,
-      debug,
-      template,
-    });
+      const template = getPluginTemplate({ suggestedPackageName });
+
+      /**
+       * Create the plugin using pack-up
+       */
+      await init({
+        path: pluginPath,
+        cwd,
+        silent,
+        debug,
+        template,
+      });
+    } else {
+      logger.debug('Using new init implementation');
+
+      const { init: nativeInit } = await import('../../utils/init');
+      const answers = await nativeInit({
+        cwd,
+        path: pluginPath,
+        silent,
+        debug,
+        logger,
+      });
+
+      // Store answers for use later in the function
+      promptAnswers = answers;
+    }
 
     const packageManager = getPkgManager(
       {
