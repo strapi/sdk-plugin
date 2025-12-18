@@ -1,7 +1,6 @@
 import { definePackageFeature, definePackageOption, defineTemplate, init } from '@strapi/pack-up';
 import boxen from 'boxen';
 import chalk from 'chalk';
-import getLatestVersion from 'get-latest-version';
 import gitUrlParse from 'git-url-parse';
 import path from 'node:path';
 import { outdent } from 'outdent';
@@ -14,14 +13,13 @@ import {
   runBuild,
   runInstall,
 } from '../../utils/helpers';
+import { isRecord, resolveLatestVersionOfDeps } from '../../utils/init/shared';
 
 import { gitIgnoreFile } from './files/gitIgnore';
 
 import type { CLIContext, CommonCLIOptions } from '../../../../types';
+import type { PluginPackageJson } from '../../utils/init/shared';
 import type { TemplateFile } from '../../utils/init/types';
-
-// TODO: remove these when release versions are available
-const USE_RC_VERSIONS: string[] = ['@strapi/design-system', '@strapi/icons'] as const;
 
 // Store results of prompt answers (run by pack-up init)
 // This is a limitation of pack-up; we cannot run the prompt and pass the answers in
@@ -122,48 +120,6 @@ export default async (
 };
 
 const PACKAGE_NAME_REGEXP = /^(?:@(?:[a-z0-9-*~][a-z0-9-*._~]*)\/)?[a-z0-9-~][a-z0-9-._~]*$/i;
-
-interface PackageExport {
-  types?: string;
-  require: string;
-  import: string;
-  source: string;
-  default: string;
-}
-
-interface PluginPackageJson {
-  name?: string;
-  description?: string;
-  version?: string;
-  keywords?: string[];
-  type: 'commonjs';
-  license?: string;
-  repository?: {
-    type: 'git';
-    url: string;
-  };
-  bugs?: {
-    url: string;
-  };
-  homepage?: string;
-  author?: string;
-  exports: {
-    './strapi-admin'?: PackageExport;
-    './strapi-server'?: PackageExport;
-    './package.json': `${string}.json`;
-  };
-  files: string[];
-  scripts: Record<string, string>;
-  dependencies: Record<string, string>;
-  devDependencies: Record<string, string>;
-  peerDependencies: Record<string, string>;
-  strapi: {
-    name?: string;
-    displayName?: string;
-    description?: string;
-    kind: 'plugin';
-  };
-}
 
 type PluginTemplateOptions = {
   suggestedPackageName?: string;
@@ -607,25 +563,4 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
       },
     };
   });
-};
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  Boolean(value) && !Array.isArray(value) && typeof value === 'object';
-
-const resolveLatestVersionOfDeps = async (
-  deps: Record<string, string>
-): Promise<Record<string, string>> => {
-  const latestDeps: Record<string, string> = {};
-
-  for (const [name, version] of Object.entries(deps)) {
-    try {
-      const range = USE_RC_VERSIONS.includes(name) ? 'rc' : version;
-      const latestVersion = await getLatestVersion(name, { range });
-      latestDeps[name] = latestVersion ? `^${latestVersion}` : '*';
-    } catch (err) {
-      latestDeps[name] = '*';
-    }
-  }
-
-  return latestDeps;
 };

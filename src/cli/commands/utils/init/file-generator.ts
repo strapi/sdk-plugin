@@ -1,78 +1,12 @@
-import getLatestVersion from 'get-latest-version';
 import { outdent } from 'outdent';
 
 import { gitIgnoreFile } from '../../plugin/init/files/gitIgnore';
 
+import { isRecord, resolveLatestVersionOfDeps } from './shared';
+
 import type { Logger } from '../logger';
+import type { PluginPackageJson } from './shared';
 import type { PromptAnswer, TemplateFile } from './types';
-
-// Import existing template files
-
-// TODO: remove these when release versions are available
-const USE_RC_VERSIONS: string[] = ['@strapi/design-system', '@strapi/icons'];
-
-interface PackageExport {
-  types?: string;
-  require: string;
-  import: string;
-  source: string;
-  default: string;
-}
-
-interface PluginPackageJson {
-  name?: string;
-  description?: string;
-  version?: string;
-  keywords?: string[];
-  type: 'commonjs';
-  license?: string;
-  repository?: {
-    type: 'git';
-    url: string;
-  };
-  bugs?: {
-    url: string;
-  };
-  homepage?: string;
-  author?: string;
-  exports: {
-    './strapi-admin'?: PackageExport;
-    './strapi-server'?: PackageExport;
-    './package.json': `${string}.json`;
-  };
-  files: string[];
-  scripts: Record<string, string>;
-  dependencies: Record<string, string>;
-  devDependencies: Record<string, string>;
-  peerDependencies: Record<string, string>;
-  strapi: {
-    name?: string;
-    displayName?: string;
-    description?: string;
-    kind: 'plugin';
-  };
-}
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  Boolean(value) && !Array.isArray(value) && typeof value === 'object';
-
-const resolveLatestVersionOfDeps = async (
-  deps: Record<string, string>
-): Promise<Record<string, string>> => {
-  const latestDeps: Record<string, string> = {};
-
-  for (const [name, version] of Object.entries(deps)) {
-    try {
-      const range = USE_RC_VERSIONS.includes(name) ? 'rc' : version;
-      const latestVersion = await getLatestVersion(name, { range });
-      latestDeps[name] = latestVersion ? `^${latestVersion}` : '*';
-    } catch {
-      latestDeps[name] = '*';
-    }
-  }
-
-  return latestDeps;
-};
 
 /**
  * Generate all files for a new plugin based on prompt answers.

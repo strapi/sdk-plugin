@@ -1,16 +1,11 @@
-import type { Core } from '@strapi/strapi';
-
 export default {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  register({ strapi }: { strapi: Core.Strapi }) {
+  register() {
     // Register phase
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  bootstrap({ strapi }: { strapi: Core.Strapi }) {
+  bootstrap() {
     // Bootstrap phase
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  destroy({ strapi }: { strapi: Core.Strapi }) {
+  destroy() {
     // Destroy phase
   },
 };

@@ -37,6 +37,18 @@ export const check = async ({ cwd, logger }: CheckOptions) => {
   });
 
   /**
+   * Validate plugin exports are present (admin and/or server).
+   *
+   * This matches the build/watch commands which require at least one of these exports.
+   */
+  if (!validatedPkg.exports?.['./strapi-admin'] && !validatedPkg.exports?.['./strapi-server']) {
+    packageJsonLoader.fail();
+    throw new Error(
+      'You need to have either a strapi-admin or strapi-server export in your package.json'
+    );
+  }
+
+  /**
    * Validate the exports of the package incl. the order of the
    * exports within the exports map if applicable
    */
