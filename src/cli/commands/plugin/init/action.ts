@@ -1,11 +1,11 @@
 import { definePackageFeature, definePackageOption, defineTemplate, init } from '@strapi/pack-up';
 import boxen from 'boxen';
 import chalk from 'chalk';
-import getLatestVersion from 'get-latest-version';
 import gitUrlParse from 'git-url-parse';
 import path from 'node:path';
 import { outdent } from 'outdent';
 
+import { isLegacyEnabled } from '../../utils/feature-flags';
 import {
   dirContainsStrapiProject,
   logInstructions,
@@ -13,14 +13,13 @@ import {
   runBuild,
   runInstall,
 } from '../../utils/helpers';
+import { isRecord, resolveLatestVersionOfDeps } from '../../utils/init/shared';
 
 import { gitIgnoreFile } from './files/gitIgnore';
 
 import type { CLIContext, CommonCLIOptions } from '../../../../types';
-import type { TemplateFile } from '@strapi/pack-up';
-
-// TODO: remove these when release versions are available
-const USE_RC_VERSIONS: string[] = ['@strapi/design-system', '@strapi/icons'] as const;
+import type { PluginPackageJson } from '../../utils/init/shared';
+import type { TemplateFile } from '../../utils/init/types';
 
 // Store results of prompt answers (run by pack-up init)
 // This is a limitation of pack-up; we cannot run the prompt and pass the answers in
@@ -44,19 +43,37 @@ export default async (
     const pluginPath =
       isStrapiProject && isPathPackageName ? `./src/plugins/${packagePath}` : packagePath;
 
-    //
-    const template = getPluginTemplate({ suggestedPackageName });
+    // Check feature flag to determine which implementation to use
+    if (isLegacyEnabled('useLegacyInit')) {
+      logger.debug('Using legacy pack-up init implementation (USE_LEGACY_PACKUP_INIT=true)');
 
-    /**
-     * Create the package // plugin
-     */
-    await init({
-      path: pluginPath,
-      cwd,
-      silent,
-      debug,
-      template,
-    });
+      const template = getPluginTemplate({ suggestedPackageName });
+
+      /**
+       * Create the plugin using pack-up
+       */
+      await init({
+        path: pluginPath,
+        cwd,
+        silent,
+        debug,
+        template,
+      });
+    } else {
+      logger.debug('Using new init implementation');
+
+      const { init: nativeInit } = await import('../../utils/init');
+      const answers = await nativeInit({
+        cwd,
+        path: pluginPath,
+        silent,
+        debug,
+        logger,
+      });
+
+      // Store answers for use later in the function
+      promptAnswers = answers;
+    }
 
     const packageManager = getPkgManager(
       {
@@ -103,48 +120,6 @@ export default async (
 };
 
 const PACKAGE_NAME_REGEXP = /^(?:@(?:[a-z0-9-*~][a-z0-9-*._~]*)\/)?[a-z0-9-~][a-z0-9-._~]*$/i;
-
-interface PackageExport {
-  types?: string;
-  require: string;
-  import: string;
-  source: string;
-  default: string;
-}
-
-interface PluginPackageJson {
-  name?: string;
-  description?: string;
-  version?: string;
-  keywords?: string[];
-  type: 'commonjs';
-  license?: string;
-  repository?: {
-    type: 'git';
-    url: string;
-  };
-  bugs?: {
-    url: string;
-  };
-  homepage?: string;
-  author?: string;
-  exports: {
-    './strapi-admin'?: PackageExport;
-    './strapi-server'?: PackageExport;
-    './package.json': `${string}.json`;
-  };
-  files: string[];
-  scripts: Record<string, string>;
-  dependencies: Record<string, string>;
-  devDependencies: Record<string, string>;
-  peerDependencies: Record<string, string>;
-  strapi: {
-    name?: string;
-    displayName?: string;
-    description?: string;
-    kind: 'plugin';
-  };
-}
 
 type PluginTemplateOptions = {
   suggestedPackageName?: string;
@@ -588,25 +563,4 @@ const getPluginTemplate = ({ suggestedPackageName }: PluginTemplateOptions) => {
       },
     };
   });
-};
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  Boolean(value) && !Array.isArray(value) && typeof value === 'object';
-
-const resolveLatestVersionOfDeps = async (
-  deps: Record<string, string>
-): Promise<Record<string, string>> => {
-  const latestDeps: Record<string, string> = {};
-
-  for (const [name, version] of Object.entries(deps)) {
-    try {
-      const range = USE_RC_VERSIONS.includes(name) ? 'rc' : version;
-      const latestVersion = await getLatestVersion(name, { range });
-      latestDeps[name] = latestVersion ? `^${latestVersion}` : '*';
-    } catch (err) {
-      latestDeps[name] = '*';
-    }
-  }
-
-  return latestDeps;
 };

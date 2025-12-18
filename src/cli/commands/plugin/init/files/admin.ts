@@ -1,6 +1,6 @@
 import { outdent } from 'outdent';
 
-import type { TemplateFile } from '@strapi/pack-up';
+import type { TemplateFile } from '../../../utils/init/types';
 
 const PLUGIN_ICON_CODE = outdent`
 import { PuzzlePiece } from '@strapi/icons';
