@@ -172,7 +172,7 @@ const JAVASCRIPT: TemplateFile[] = [
             export default {
               register(app) {
                 app.addMenuLink({
-                  to: \`plugins/\${PluginIcon}\`,
+                  to: \`plugins/\${PLUGIN_ID}\`,
                   icon: PluginIcon,
                   intlLabel: {
                     id: \`\${PLUGIN_ID}.plugin.name\`,

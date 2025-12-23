@@ -2,7 +2,7 @@ import { outdent } from 'outdent';
 
 import type { TemplateFile } from '../../../utils/init/types';
 
-const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
+const TYPESCRIPT = (pluginId: string): TemplateFile[] => [
   {
     name: 'server/src/index.ts',
     contents: outdent`
@@ -107,7 +107,7 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
     const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
       index(ctx) {
         ctx.body = strapi
-          .plugin('${pluginName}')
+          .plugin('${pluginId}')
           // the name of the service file & the method.
           .service('service')
           .getWelcomeMessage();
@@ -197,7 +197,7 @@ const TYPESCRIPT = (pluginName: string): TemplateFile[] => [
   },
 ];
 
-const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
+const JAVASCRIPT = (pluginId: string): TemplateFile[] => [
   {
     name: 'server/src/index.js',
     contents: outdent`
@@ -295,7 +295,7 @@ const JAVASCRIPT = (pluginName: string): TemplateFile[] => [
     const controller = ({ strapi }) => ({
       index(ctx) {
         ctx.body = strapi
-          .plugin('${pluginName}')
+          .plugin('${pluginId}')
           // the name of the service file & the method.
           .service('service')
           .getWelcomeMessage();

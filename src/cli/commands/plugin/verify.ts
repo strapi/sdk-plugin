@@ -1,7 +1,6 @@
 import boxen from 'boxen';
 import chalk from 'chalk';
 
-import { isLegacyEnabled } from '../utils/feature-flags';
 import { runAction } from '../utils/helpers';
 
 import type { StrapiCommand, CLIContext } from '../../../types';
@@ -13,22 +12,11 @@ interface ActionOptions {
 
 const action = async (opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIContext) => {
   try {
-    // Check feature flag to determine which implementation to use
-    if (isLegacyEnabled('useLegacyCheck')) {
-      logger.debug('Using legacy pack-up check implementation (USE_LEGACY_PACKUP_CHECK=true)');
-      const { check } = await import('@strapi/pack-up');
-      await check({
-        cwd,
-        ...opts,
-      });
-    } else {
-      logger.debug('Using new check implementation');
-      const { check } = await import('../utils/validation');
-      await check({
-        cwd,
-        logger,
-      });
-    }
+    const { check } = await import('../utils/validation');
+    await check({
+      cwd,
+      logger,
+    });
   } catch (err) {
     logger.error(
       'There seems to be an unexpected error, try again with --debug for more information \n'

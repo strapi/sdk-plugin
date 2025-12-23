@@ -9,6 +9,7 @@
     "allowJs": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,

@@ -1,6 +1,6 @@
 {
   "name": "@strapi/sdk-plugin",
-  "version": "5.3.2",
+  "version": "6.0.0",
   "description": "Simple tools for developing Strapi plugins",
   "keywords": [
     "strapi",
@@ -28,9 +28,9 @@
   "exports": {
     ".": {
       "source": "./src/index.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "default": "./dist/index.js"
+      "import": "./dist/cli.mjs",
+      "require": "./dist/cli.js",
+      "default": "./dist/cli.js"
     },
     "./package.json": "./package.json"
   },
@@ -42,8 +42,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "pack-up build",
-    "check": "pack-up check",
+    "build": "vite build",
+    "check": "pnpm lint && pnpm test:ts && pnpm test:unit",
     "lint": "eslint .",
     "prepare": "husky",
     "prerelease:enter": "changeset pre enter",
@@ -55,11 +55,9 @@
     "release:version": "changeset version && pnpm install",
     "test:ts": "tsc --noEmit",
     "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "watch": "pack-up watch",
-    "compare": "tsx scripts/compare-implementations.ts"
+    "watch": "vite build --watch"
   },
   "dependencies": {
-    "@strapi/pack-up": "^5.0.1",
     "@types/prompts": "2.4.9",
     "@vitejs/plugin-react": "^4.3.4",
     "boxen": "5.1.2",

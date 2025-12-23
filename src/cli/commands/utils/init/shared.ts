@@ -2,7 +2,6 @@ import getLatestVersion from 'get-latest-version';
 
 /**
  * Shared types and utilities for plugin initialization.
- * Used by both the new native implementation and legacy pack-up template.
  */
 
 // TODO: remove these when release versions are available

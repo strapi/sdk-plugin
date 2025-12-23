@@ -20,6 +20,10 @@ export const generateFiles = async (
   const author: string[] = [];
   const files: TemplateFile[] = [];
 
+  const pluginIdAnswer = answers.find((a) => a.name === 'pluginId')?.answer;
+  const pluginId =
+    typeof pluginIdAnswer === 'string' && pluginIdAnswer ? pluginIdAnswer : packageFolder;
+
   // Extract repo info from hidden answers
   const repoSource = answers.find((a) => a.name === '_repoSource')?.answer as string | undefined;
   const repoOwner = answers.find((a) => a.name === '_repoOwner')?.answer as string | undefined;
@@ -63,6 +67,9 @@ export const generateFiles = async (
     switch (name) {
       case 'pkgName': {
         pkgJson.name = String(answer);
+        break;
+      }
+      case 'pluginId': {
         pkgJson.strapi.name = String(answer);
         break;
       }
@@ -98,8 +105,8 @@ export const generateFiles = async (
             default: './dist/admin/index.js',
           };
 
-          pkgJson.dependencies = {
-            ...pkgJson.dependencies,
+          pkgJson.peerDependencies = {
+            ...pkgJson.peerDependencies,
             '@strapi/design-system': '*',
             '@strapi/icons': '*',
             'react-intl': '*',
@@ -107,6 +114,9 @@ export const generateFiles = async (
 
           pkgJson.devDependencies = {
             ...pkgJson.devDependencies,
+            '@strapi/design-system': '*',
+            '@strapi/icons': '*',
+            'react-intl': '*',
             react: '^17.0.0 || ^18.0.0',
             'react-dom': '^17.0.0 || ^18.0.0',
             'react-router-dom': '^6.0.0',
@@ -200,7 +210,7 @@ export const generateFiles = async (
           files.push({
             name: isTypescript ? 'admin/src/pluginId.ts' : 'admin/src/pluginId.js',
             contents: outdent`
-              export const PLUGIN_ID = '${pkgJson.name!.replace(/^strapi-plugin-/i, '')}';
+              export const PLUGIN_ID = '${pluginId}';
             `,
           });
 
@@ -216,10 +226,10 @@ export const generateFiles = async (
         if (isRecord(pkgJson.exports['./strapi-server'])) {
           if (isTypescript) {
             const { serverTypescriptFiles } = await import('../../plugin/init/files/server');
-            files.push(...serverTypescriptFiles(packageFolder));
+            files.push(...serverTypescriptFiles(pluginId));
           } else {
             const { serverJavascriptFiles } = await import('../../plugin/init/files/server');
-            files.push(...serverJavascriptFiles(packageFolder));
+            files.push(...serverJavascriptFiles(pluginId));
           }
         }
 
@@ -251,6 +261,11 @@ export const generateFiles = async (
       default:
         break;
     }
+  }
+
+  // Ensure strapi.name is always set (plugin identifier used by Strapi)
+  if (!pkgJson.strapi.name) {
+    pkgJson.strapi.name = pluginId;
   }
 
   // Add repo info to package.json

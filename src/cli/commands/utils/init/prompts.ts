@@ -4,6 +4,7 @@ import prompts from 'prompts';
 import type { GitConfig, PromptAnswer } from './types';
 
 const PACKAGE_NAME_REGEXP = /^(?:@(?:[a-z0-9-*~][a-z0-9-*._~]*)\/)?[a-z0-9-~][a-z0-9-._~]*$/i;
+const PLUGIN_ID_REGEXP = /^[a-z0-9][a-z0-9-_]*$/;
 
 interface RepoInfo {
   source?: string;
@@ -40,6 +41,21 @@ export const runPrompts = async (
           }
           if (!PACKAGE_NAME_REGEXP.test(val)) {
             return 'invalid package name';
+          }
+          return true;
+        },
+      },
+      {
+        type: 'text',
+        name: 'pluginId',
+        message: 'plugin id (used by Strapi)',
+        initial: suggestedPackageName,
+        validate(val: string) {
+          if (!val) {
+            return 'plugin id is required';
+          }
+          if (!PLUGIN_ID_REGEXP.test(val)) {
+            return 'plugin id must match /^[a-z0-9][a-z0-9-_]*$/';
           }
           return true;
         },
@@ -181,6 +197,7 @@ const getDefaultAnswers = (
 ): PromptAnswer[] => {
   return [
     { name: 'pkgName', answer: suggestedPackageName },
+    { name: 'pluginId', answer: suggestedPackageName },
     { name: 'displayName', answer: '' },
     { name: 'description', answer: '' },
     { name: 'authorName', answer: gitConfig?.user?.name ?? '' },
