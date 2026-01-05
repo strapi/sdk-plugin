@@ -16,15 +16,15 @@ import { loadPkg, validatePkg } from './pkg-loader';
 
 import type { Logger } from './pkg-loader';
 
-export interface CheckOptions {
+export interface VerifyOptions {
   cwd: string;
   logger: Logger;
 }
 
 /**
- * Main check function that validates package.json and export files
+ * Main verify function that validates package.json and export files
  */
-export const check = async ({ cwd, logger }: CheckOptions) => {
+export const verify = async ({ cwd, logger }: VerifyOptions) => {
   /**
    * Load the closest package.json and then verify the structure against what we expect.
    */

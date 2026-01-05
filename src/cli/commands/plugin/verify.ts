@@ -12,8 +12,8 @@ interface ActionOptions {
 
 const action = async (opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIContext) => {
   try {
-    const { check } = await import('../utils/validation');
-    await check({
+    const { verify } = await import('../utils/validation');
+    await verify({
       cwd,
       logger,
     });
