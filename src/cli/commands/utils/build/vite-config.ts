@@ -10,6 +10,8 @@ export interface ViteConfigOptions {
   minify?: boolean;
   sourcemap?: boolean;
   silent?: boolean;
+  /** Build target. Defaults to 'es2020' for admin, 'node18' for server */
+  target?: string;
 }
 
 /**
@@ -99,7 +101,7 @@ function isNodeBuiltin(id: string): boolean {
  * Create Vite configuration for building a plugin bundle.
  */
 export async function createViteConfig(options: ViteConfigOptions): Promise<InlineConfig> {
-  const { cwd, bundle, minify = false, sourcemap = false, silent = false } = options;
+  const { cwd, bundle, minify = false, sourcemap = false, silent = false, target } = options;
 
   const externals = getExternals(cwd);
   const isAdmin = bundle.type === 'admin';
@@ -189,7 +191,7 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
         },
       },
       // Target appropriate platform
-      target: isAdmin ? 'es2020' : 'node18',
+      target: target ?? (isAdmin ? 'es2020' : 'node18'),
       // CommonJS options for proper interop
       commonjsOptions: {
         include: [/node_modules/],
