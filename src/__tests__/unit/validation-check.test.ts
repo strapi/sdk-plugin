@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { check } from '../../cli/commands/utils/validation';
+import { verify } from '../../cli/commands/utils/validation';
 
 const fixturesRoot = path.join(__dirname, '..', 'fixtures');
 
@@ -17,14 +17,14 @@ describe('validation.check', () => {
     const logger = createLogger();
     const cwd = path.join(fixturesRoot, 'typescript-plugin');
 
-    await expect(check({ cwd, logger })).resolves.toBeUndefined();
+    await expect(verify({ cwd, logger })).resolves.toBeUndefined();
   });
 
   it('fails when no strapi-admin or strapi-server exports exist', async () => {
     const logger = createLogger();
     const cwd = path.join(fixturesRoot, 'missing-exports-plugin');
 
-    await expect(check({ cwd, logger })).rejects.toThrow(
+    await expect(verify({ cwd, logger })).rejects.toThrow(
       'You need to have either a strapi-admin or strapi-server export in your package.json'
     );
   });
@@ -33,7 +33,7 @@ describe('validation.check', () => {
     const logger = createLogger();
     const cwd = path.join(fixturesRoot, 'bad-exports-ordering-plugin');
 
-    await expect(check({ cwd, logger })).rejects.toThrow(
+    await expect(verify({ cwd, logger })).rejects.toThrow(
       'exports["./strapi-admin"]: the \'types\' property should be the first property'
     );
   });
@@ -42,6 +42,6 @@ describe('validation.check', () => {
     const logger = createLogger();
     const cwd = path.join(fixturesRoot, 'missing-dist-plugin');
 
-    await expect(check({ cwd, logger })).rejects.toThrow('Missing files for exports:');
+    await expect(verify({ cwd, logger })).rejects.toThrow('Missing files for exports:');
   });
 });
