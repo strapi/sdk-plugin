@@ -1,3 +1,9 @@
+/**
+ * CLI command: `strapi-plugin watch`
+ *
+ * Watches source files and rebuilds on changes using Vite.
+ * Used during local plugin development.
+ */
 import boxen from 'boxen';
 import chalk from 'chalk';
 import { createCommand } from 'commander';

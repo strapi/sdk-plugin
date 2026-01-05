@@ -1,3 +1,6 @@
+/**
+ * Build orchestrator for Strapi plugins.
+ */
 import { build as viteBuild } from 'vite';
 
 import { createViteConfig } from './vite-config';

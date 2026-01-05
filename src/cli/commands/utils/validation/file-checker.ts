@@ -1,3 +1,6 @@
+/**
+ * Verifies that all files referenced in package.json exports actually exist.
+ */
 import chalk from 'chalk';
 import fs from 'fs/promises';
 import ora from 'ora';

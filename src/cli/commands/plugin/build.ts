@@ -1,3 +1,9 @@
+/**
+ * CLI command: `strapi-plugin build`
+ *
+ * Bundles the plugin for npm publishing using Vite.
+ * Produces dual CommonJS/ESM output with TypeScript declarations.
+ */
 import boxen from 'boxen';
 import chalk from 'chalk';
 import { createCommand } from 'commander';

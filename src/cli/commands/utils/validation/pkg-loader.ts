@@ -1,3 +1,9 @@
+/**
+ * Package.json loader and validator.
+ *
+ * Finds the nearest package.json, validates its structure using yup schema,
+ * and extracts Strapi plugin export configuration.
+ */
 import chalk from 'chalk';
 import fs from 'fs/promises';
 import os from 'os';

@@ -1,3 +1,9 @@
+/**
+ * Watch mode for Strapi plugin development.
+ *
+ * Uses Vite's built-in watch mode to rebuild on file changes.
+ * Watches both admin and server bundles concurrently.
+ */
 import { build as viteBuild } from 'vite';
 
 import { createViteConfig } from './vite-config';

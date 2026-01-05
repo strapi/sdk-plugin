@@ -1,3 +1,12 @@
+/**
+ * Main validation runner for the `verify` command.
+ *
+ * Checks performed:
+ * 1. package.json exists and has valid structure
+ * 2. Has ./strapi-admin and/or ./strapi-server exports
+ * 3. Export properties are in correct order (types first)
+ * 4. All exported files exist in dist/
+ */
 import ora from 'ora';
 import os from 'os';
 
