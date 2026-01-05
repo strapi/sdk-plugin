@@ -10,7 +10,7 @@ export interface ViteConfigOptions {
   minify?: boolean;
   sourcemap?: boolean;
   silent?: boolean;
-  /** Build target. Defaults to 'es2020' for admin, 'node18' for server */
+  /** Build target. Defaults to 'es2020' for admin, 'node20' for server */
   target?: string;
 }
 
@@ -191,7 +191,7 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
         },
       },
       // Target appropriate platform
-      target: target ?? (isAdmin ? 'es2020' : 'node18'),
+      target: target ?? (isAdmin ? 'es2020' : 'node20'),
       // CommonJS options for proper interop
       commonjsOptions: {
         include: [/node_modules/],

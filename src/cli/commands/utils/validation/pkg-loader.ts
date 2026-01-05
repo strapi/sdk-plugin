@@ -57,7 +57,6 @@ const packageJsonSchema = yup.object({
     })
     .optional(),
   homepage: yup.string().optional(),
-  // TODO: be nice just to make this either a string or a record of strings.
   bin: yup.lazy((value) => {
     if (typeof value === 'object') {
       return record(value);
@@ -65,7 +64,6 @@ const packageJsonSchema = yup.object({
 
     return yup.string().optional();
   }),
-  // TODO: be nice just to make this either a string or a record of strings.
   browser: yup.lazy((value) => {
     if (typeof value === 'object') {
       return record(value);
