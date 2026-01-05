@@ -1,5 +1,15 @@
 # @strapi/sdk-plugin
 
+## 5.4.0
+
+### Minor Changes
+
+- [#97](https://github.com/strapi/sdk-plugin/pull/97) [`bb1d25c`](https://github.com/strapi/sdk-plugin/commit/bb1d25cf5ee6a0fdd0fdfb3cc1a318080d3f8d4b) Thanks [@boazpoolman](https://github.com/boazpoolman)! - refactor: update the routes folder format for the init command
+
+### Patch Changes
+
+- [#104](https://github.com/strapi/sdk-plugin/pull/104) [`d5ccf04`](https://github.com/strapi/sdk-plugin/commit/d5ccf042945c54917385344a1ef6d3a308131759) Thanks [@jhoward1994](https://github.com/jhoward1994)! - update @strapi/pack-up to 5.1.1 - resolving vite vulnerability
+
 ## 5.3.2
 
 ### Patch Changes
