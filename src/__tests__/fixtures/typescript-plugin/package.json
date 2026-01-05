@@ -30,13 +30,13 @@
   },
   "devDependencies": {
     "@strapi/strapi": "^5.0.0",
-    "@strapi/sdk-plugin": "^5.0.0",
+    "@strapi/sdk-plugin": "^6.0.0",
     "@strapi/typescript-utils": "^5.0.0",
     "typescript": "^5.0.0"
   },
   "peerDependencies": {
     "@strapi/strapi": "^5.0.0",
-    "@strapi/sdk-plugin": "^5.0.0"
+    "@strapi/sdk-plugin": "^6.0.0"
   },
   "strapi": {
     "name": "@strapi/plugin-test",

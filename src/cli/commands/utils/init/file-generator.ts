@@ -53,7 +53,7 @@ export const generateFiles = async (
     },
     peerDependencies: {
       '@strapi/strapi': '^5.0.0',
-      '@strapi/sdk-plugin': '^5.0.0',
+      '@strapi/sdk-plugin': '^6.0.0',
     },
     strapi: {
       kind: 'plugin',
