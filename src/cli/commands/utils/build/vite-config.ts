@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { builtinModules } from 'node:module';
 import path from 'node:path';
 
 import type { BundleConfig } from './index';
@@ -63,38 +64,7 @@ function externalizeDepsPlugin(externals: string[]): Plugin {
  * Check if a module is a Node.js built-in.
  */
 function isNodeBuiltin(id: string): boolean {
-  const builtins = [
-    'assert',
-    'buffer',
-    'child_process',
-    'cluster',
-    'crypto',
-    'dgram',
-    'dns',
-    'events',
-    'fs',
-    'http',
-    'https',
-    'net',
-    'os',
-    'path',
-    'perf_hooks',
-    'process',
-    'querystring',
-    'readline',
-    'stream',
-    'string_decoder',
-    'timers',
-    'tls',
-    'tty',
-    'url',
-    'util',
-    'v8',
-    'vm',
-    'worker_threads',
-    'zlib',
-  ];
-  return builtins.includes(id);
+  return builtinModules.includes(id);
 }
 
 /**

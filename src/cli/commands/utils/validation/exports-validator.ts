@@ -1,5 +1,10 @@
 /**
- * Export validation utilities
+ * Validates package.json export field ordering.
+ *
+ * Ensures "types" is first in each export object - required for TypeScript
+ * resolution to work correctly with the "moduleResolution": "bundler" setting.
+ *
+ * @see https://www.typescriptlang.org/docs/handbook/modules/reference.html#packagejson-exports
  */
 import type { Logger, PackageJson } from './pkg-loader';
 
