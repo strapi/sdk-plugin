@@ -1,12 +1,36 @@
 /**
  * Build orchestrator for Strapi plugins.
  */
+import fs from 'node:fs';
+import path from 'node:path';
 import { build as viteBuild } from 'vite';
 
 import { createViteConfig } from './vite-config';
 
 import type { Logger } from '../logger';
 import type { Export } from '../pkg';
+
+/**
+ * Check for legacy packup config files and warn if found.
+ */
+function warnIfPackupConfigExists(cwd: string, logger: Logger, silent: boolean): void {
+  if (silent) {
+    return;
+  }
+
+  const packupConfigFiles = ['packup.config.ts', 'packup.config.js', 'packup.config.mjs'];
+
+  for (const configFile of packupConfigFiles) {
+    if (fs.existsSync(path.join(cwd, configFile))) {
+      logger.warn(
+        `Found ${configFile} but it will be ignored. ` +
+          'Configuration is now derived from package.json exports. ' +
+          'You can safely delete this file.'
+      );
+      break;
+    }
+  }
+}
 
 export interface BuildOptions {
   cwd: string;
@@ -33,6 +57,8 @@ export interface BundleConfig {
  */
 export async function build(options: BuildOptions): Promise<void> {
   const { cwd, logger, minify = false, sourcemap = false, silent = false } = options;
+
+  warnIfPackupConfigExists(cwd, logger, silent);
 
   if (!silent) {
     logger.info('Building plugin...');
