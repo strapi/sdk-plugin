@@ -42,11 +42,11 @@ export interface BuildOptions {
 }
 
 export interface BundleConfig {
-  type: 'admin' | 'server';
+  type: string;
   source: string;
   output: {
-    cjs: string;
-    esm: string;
+    cjs?: string;
+    esm?: string;
     types?: string;
   };
   tsconfig?: string;
@@ -77,34 +77,24 @@ export async function build(options: BuildOptions): Promise<void> {
 
   const bundles: BundleConfig[] = [];
 
-  // Configure admin bundle
-  if (pkgJson.exports['./strapi-admin']) {
-    const exp = pkgJson.exports['./strapi-admin'] as Export;
-    bundles.push({
-      type: 'admin',
-      source: exp.source,
-      output: {
-        cjs: exp.require!,
-        esm: exp.import!,
-        types: exp.types,
-      },
-      tsconfig: exp.types ? './admin/tsconfig.build.json' : undefined,
-    });
-  }
+  // Iterate all object-type exports
+  for (const [exportKey, exp] of Object.entries(pkgJson.exports)) {
+    if (typeof exp !== 'string') {
+      const typedExp = exp as Export;
+      const isAdmin = exportKey === './strapi-admin';
+      const name = exportKey.replace(/^\.\//, '').replace(/^strapi-/, '');
 
-  // Configure server bundle
-  if (pkgJson.exports['./strapi-server']) {
-    const exp = pkgJson.exports['./strapi-server'] as Export;
-    bundles.push({
-      type: 'server',
-      source: exp.source,
-      output: {
-        cjs: exp.require!,
-        esm: exp.import!,
-        types: exp.types,
-      },
-      tsconfig: exp.types ? './server/tsconfig.build.json' : undefined,
-    });
+      bundles.push({
+        type: isAdmin ? 'admin' : name,
+        source: typedExp.source,
+        output: {
+          cjs: typedExp.require,
+          esm: typedExp.import,
+          types: typedExp.types,
+        },
+        tsconfig: typedExp.types ? `./${name}/tsconfig.build.json` : undefined,
+      });
+    }
   }
 
   // Build each bundle sequentially (admin first, then server)

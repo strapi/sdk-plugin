@@ -76,9 +76,12 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
   const externals = getExternals(cwd);
   const isAdmin = bundle.type === 'admin';
 
-  // Determine output directory from the CJS output path
-  // e.g., './dist/admin/index.js' -> 'dist/admin'
-  const outDir = path.dirname(bundle.output.cjs);
+  // Determine output directory from whichever output is specified
+  const outputPath = bundle.output.cjs ?? bundle.output.esm;
+  if (!outputPath) {
+    throw new Error(`Bundle ${bundle.type} has no output paths specified`);
+  }
+  const outDir = path.dirname(outputPath);
 
   // Entry file absolute path
   const entry = path.resolve(cwd, bundle.source);
@@ -138,7 +141,10 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
       minify: minify ? 'esbuild' : false,
       lib: {
         entry,
-        formats: ['es', 'cjs'],
+        formats: [
+          ...(bundle.output.esm ? (['es'] as const) : []),
+          ...(bundle.output.cjs ? (['cjs'] as const) : []),
+        ],
         fileName: (format) => (format === 'es' ? 'index.mjs' : 'index.js'),
       },
       rollupOptions: {
