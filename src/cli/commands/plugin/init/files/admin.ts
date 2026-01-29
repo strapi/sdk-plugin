@@ -55,9 +55,12 @@ const TYPESCRIPT: TemplateFile[] = [
         import { PLUGIN_ID } from './pluginId';
         import { Initializer } from './components/Initializer';
         import { PluginIcon } from './components/PluginIcon';
+
+        // Types
+        import type { StrapiApp } from '@strapi/strapi/admin';
         
         export default {
-          register(app: any) {
+          register(app: StrapiApp) {
             app.addMenuLink({
               to: \`plugins/\${PLUGIN_ID}\`,
               icon: PluginIcon,
@@ -70,6 +73,7 @@ const TYPESCRIPT: TemplateFile[] = [
         
                 return App;
               },
+              permissions: [],
             });
         
             app.registerPlugin({
