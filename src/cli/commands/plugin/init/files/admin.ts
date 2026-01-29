@@ -25,7 +25,7 @@ const App = () => {
   );
 };
 
-export { App };
+export default App;
 `;
 
 const HOMEPAGE_CODE = outdent`
