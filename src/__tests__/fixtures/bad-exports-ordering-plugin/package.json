@@ -1,0 +1,22 @@
+{
+  "name": "@strapi/plugin-bad-exports-order",
+  "version": "1.0.0",
+  "description": "Fixture: bad export ordering",
+  "type": "commonjs",
+  "exports": {
+    "./strapi-admin": {
+      "source": "./admin/src/index.ts",
+      "types": "./dist/admin/src/index.d.ts",
+      "import": "./dist/admin/index.mjs",
+      "default": "./dist/admin/index.js",
+      "require": "./dist/admin/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "strapi": {
+    "name": "@strapi/plugin-bad-exports-order",
+    "displayName": "Bad exports order",
+    "description": "Fixture: bad export ordering",
+    "kind": "plugin"
+  }
+}

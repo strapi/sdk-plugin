@@ -1,19 +1,21 @@
-import { check } from '@strapi/pack-up';
 import boxen from 'boxen';
 import chalk from 'chalk';
 
 import { runAction } from '../utils/helpers';
 
 import type { StrapiCommand, CLIContext } from '../../../types';
-import type { CheckOptions } from '@strapi/pack-up';
 
-type ActionOptions = CheckOptions;
+interface ActionOptions {
+  debug?: boolean;
+  silent?: boolean;
+}
 
 const action = async (opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIContext) => {
   try {
-    await check({
+    const { verify } = await import('../utils/validation');
+    await verify({
       cwd,
-      ...opts,
+      logger,
     });
   } catch (err) {
     logger.error(

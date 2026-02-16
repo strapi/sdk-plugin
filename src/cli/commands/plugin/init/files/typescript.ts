@@ -1,6 +1,6 @@
 import { outdent } from 'outdent';
 
-import type { TemplateFile } from '@strapi/pack-up';
+import type { TemplateFile } from '../../../utils/init/types';
 
 interface TsConfigFiles {
   tsconfigFile: TemplateFile;

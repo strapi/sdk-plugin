@@ -28,9 +28,9 @@
   "exports": {
     ".": {
       "source": "./src/index.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "default": "./dist/index.js"
+      "import": "./dist/cli.mjs",
+      "require": "./dist/cli.js",
+      "default": "./dist/cli.js"
     },
     "./package.json": "./package.json"
   },
@@ -42,8 +42,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "pack-up build",
-    "check": "pack-up check",
+    "build": "vite build",
+    "check": "pnpm lint && pnpm test:ts && pnpm test:unit",
     "lint": "eslint .",
     "prepare": "husky",
     "prerelease:enter": "changeset pre enter",
@@ -55,15 +55,16 @@
     "release:version": "changeset version && pnpm install",
     "test:ts": "tsc --noEmit",
     "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "watch": "pack-up watch"
+    "watch": "vite build --watch"
   },
   "dependencies": {
-    "@strapi/pack-up": "^5.1.1",
     "@types/prompts": "2.4.9",
+    "@vitejs/plugin-react": "^4.3.4",
     "boxen": "5.1.2",
     "chalk": "4.1.2",
     "commander": "12.1.0",
     "concurrently": "^8.2.2",
+    "esbuild": "^0.24.0",
     "execa": "^9.3.1",
     "get-latest-version": "5.1.0",
     "git-url-parse": "13.1.1",
@@ -72,7 +73,10 @@
     "outdent": "0.8.0",
     "pkg-up": "3.1.0",
     "prettier": "2.8.8",
+    "prompts": "^2.4.2",
     "typescript": "5.4.4",
+    "vite": "^6.0.3",
+    "vite-plugin-dts": "^4.3.0",
     "yup": "0.32.9"
   },
   "devDependencies": {
@@ -94,7 +98,8 @@
     "eslint-plugin-rxjs": "^5.0.3",
     "husky": "^9.0.11",
     "jest": "^29.7.0",
-    "lint-staged": "^15.2.2"
+    "lint-staged": "^15.2.2",
+    "tsx": "^4.19.0"
   },
   "packageManager": "pnpm@9.1.0",
   "engines": {

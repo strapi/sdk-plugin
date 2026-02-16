@@ -1,6 +1,6 @@
 import { outdent } from 'outdent';
 
-import type { TemplateFile } from '@strapi/pack-up';
+import type { TemplateFile } from '../../../utils/init/types';
 
 const PLUGIN_ICON_CODE = outdent`
 import { PuzzlePiece } from '@strapi/icons';
@@ -172,7 +172,7 @@ const JAVASCRIPT: TemplateFile[] = [
             export default {
               register(app) {
                 app.addMenuLink({
-                  to: \`plugins/\${PluginIcon}\`,
+                  to: \`plugins/\${PLUGIN_ID}\`,
                   icon: PluginIcon,
                   intlLabel: {
                     id: \`\${PLUGIN_ID}.plugin.name\`,
