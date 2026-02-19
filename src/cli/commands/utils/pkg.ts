@@ -23,13 +23,15 @@ const packageJsonSchema = yup.object({
         typeof value === 'object'
           ? Object.entries(value).reduce((acc, [key, keyValue]) => {
               if (typeof keyValue === 'object') {
+                // Standard exports require both import and require
+                const isStandardExport = key === './strapi-admin' || key === './strapi-server';
                 acc[key] = yup
                   .object({
                     types: yup.string().optional(),
                     source: yup.string().required(),
                     module: yup.string().optional(),
-                    import: yup.string().required(),
-                    require: yup.string().required(),
+                    import: isStandardExport ? yup.string().required() : yup.string().optional(),
+                    require: isStandardExport ? yup.string().required() : yup.string().optional(),
                     default: yup.string().required(),
                   })
                   .noUnknown(true);

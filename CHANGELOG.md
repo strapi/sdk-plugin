@@ -1,5 +1,26 @@
 # @strapi/sdk-plugin
 
+## 6.0.0
+
+### Major Changes
+
+- [#103](https://github.com/strapi/sdk-plugin/pull/103) [`cce52a6`](https://github.com/strapi/sdk-plugin/commit/cce52a69ce121bfd316dfdd8d1a483250e24c304) Thanks [@jhoward1994](https://github.com/jhoward1994)! - ### Breaking Changes
+
+  - Removed `@strapi/pack-up` dependency - build system now uses Vite v6 directly
+  - `packup.config.ts` is no longer used (can be safely deleted)
+  - Sourcemaps now default to `false` (use `--sourcemap` flag to enable)
+
+  ### Migration
+
+  1. Delete `packup.config.ts` from your plugin (it's no longer read)
+  2. If you need sourcemaps, add `--sourcemap` to your build command
+
+  ### Why This Change?
+
+  - Resolves Vite security vulnerability (CVE) that existed in pack-up's dependencies
+  - Simplifies the build system with direct Vite configuration
+  - Reduces maintenance overhead by removing the pack-up abstraction layer
+
 ## 5.4.0
 
 ### Minor Changes

@@ -1,0 +1,15 @@
+{
+  "name": "@strapi/plugin-missing-exports",
+  "version": "1.0.0",
+  "description": "Fixture: missing strapi exports",
+  "type": "commonjs",
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "strapi": {
+    "name": "@strapi/plugin-missing-exports",
+    "displayName": "Missing exports",
+    "description": "Fixture: missing strapi exports",
+    "kind": "plugin"
+  }
+}

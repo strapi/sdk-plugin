@@ -1,74 +1,30 @@
-import { watch } from '@strapi/pack-up';
+/**
+ * CLI command: `strapi-plugin watch`
+ *
+ * Watches source files and rebuilds on changes using Vite.
+ * Used during local plugin development.
+ */
 import boxen from 'boxen';
 import chalk from 'chalk';
 import { createCommand } from 'commander';
 
-import { resolveConfig } from '../utils/config';
 import { runAction } from '../utils/helpers';
-import { loadPkg, validatePkg } from '../utils/pkg';
 
 import type { StrapiCommand, CLIContext } from '../../../types';
-import type { Export } from '../utils/pkg';
-import type { ConfigBundle, WatchCLIOptions } from '@strapi/pack-up';
 
-type ActionOptions = WatchCLIOptions;
+interface WatchActionOptions {
+  debug?: boolean;
+  silent?: boolean;
+}
 
-const action = async (opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIContext) => {
+const action = async (opts: WatchActionOptions, _cmd: unknown, { cwd, logger }: CLIContext) => {
   try {
-    const pkg = await loadPkg({ cwd, logger });
-    const pkgJson = await validatePkg({ pkg });
-
-    if (!pkgJson.exports['./strapi-admin'] && !pkgJson.exports['./strapi-server']) {
-      throw new Error(
-        'You need to have either a strapi-admin or strapi-server export in your package.json'
-      );
-    }
-
-    const bundles: ConfigBundle[] = [];
-
-    if (pkgJson.exports['./strapi-admin']) {
-      const exp = pkgJson.exports['./strapi-admin'] as Export;
-
-      const bundle: ConfigBundle = {
-        source: exp.source,
-        import: exp.import,
-        require: exp.require,
-        runtime: 'web',
-      };
-
-      if (exp.types) {
-        bundle.types = exp.types;
-        // TODO: should this be sliced from the source path...?
-        bundle.tsconfig = './admin/tsconfig.build.json';
-      }
-
-      bundles.push(bundle);
-    }
-
-    if (pkgJson.exports['./strapi-server']) {
-      const exp = pkgJson.exports['./strapi-server'] as Export;
-
-      const bundle: ConfigBundle = {
-        source: exp.source,
-        import: exp.import,
-        require: exp.require,
-        runtime: 'node',
-      };
-
-      if (exp.types) {
-        bundle.types = exp.types;
-        // TODO: should this be sliced from the source path...?
-        bundle.tsconfig = './server/tsconfig.build.json';
-      }
-
-      bundles.push(bundle);
-    }
-
+    const { watch } = await import('../utils/build/watch');
     await watch({
       cwd,
-      configFile: false,
-      config: resolveConfig({ cwd, bundles }),
-      ...opts,
+      logger,
+      silent: opts.silent,
+      debug: opts.debug,
     });
   } catch (err) {
     logger.error(
