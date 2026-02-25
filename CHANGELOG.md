@@ -1,5 +1,11 @@
 # @strapi/sdk-plugin
 
+## 6.0.1
+
+### Patch Changes
+
+- [#112](https://github.com/strapi/sdk-plugin/pull/112) [`d0b76e3`](https://github.com/strapi/sdk-plugin/commit/d0b76e3dbe0441382b4fa77afbf09e3a6901fffc) Thanks [@jhoward1994](https://github.com/jhoward1994)! - lock version of react-intl to a strapi compatible major
+
 ## 6.0.0
 
 ### Major Changes
