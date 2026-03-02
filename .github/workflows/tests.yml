@@ -33,7 +33,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Cache build output
         with:
-          name: build-output
+          name: build-output-node-${{ matrix.node }}
           path: |
             bin/
             dist/
