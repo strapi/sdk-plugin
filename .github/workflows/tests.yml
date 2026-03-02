@@ -38,6 +38,13 @@ jobs:
             bin/
             dist/
 
+  # Satisfies branch protection that requires a check named "lint & build"
+  lint-build-complete:
+    name: lint & build
+    needs: lint-build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Lint and build passed on all Node versions"
 #   test-unit:
 #     needs: 'lint-build'
 #     name: 'test:unit (${{ matrix.node }})'
