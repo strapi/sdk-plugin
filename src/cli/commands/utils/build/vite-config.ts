@@ -117,7 +117,7 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
           tsconfigPath,
           outDir: typesDir,
           // Only emit declarations for the entry file
-          include: [bundle.source],
+          include: [path.join(path.dirname(bundle.source), '**/*')],
           // Don't bundle types into a single file
           rollupTypes: false,
           // Clean output to ensure consistent structure
