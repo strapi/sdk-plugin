@@ -117,16 +117,16 @@ export const generateFiles = async (
             '@strapi/design-system': '*',
             '@strapi/icons': '*',
             'react-intl': '^6.0.0',
-            react: '^17.0.0 || ^18.0.0',
-            'react-dom': '^17.0.0 || ^18.0.0',
+            react: '^18.0.0',
+            'react-dom': '^18.0.0',
             'react-router-dom': '^6.0.0',
             'styled-components': '^6.0.0',
           };
 
           pkgJson.peerDependencies = {
             ...pkgJson.peerDependencies,
-            react: '^17.0.0 || ^18.0.0',
-            'react-dom': '^17.0.0 || ^18.0.0',
+            react: '^18.0.0',
+            'react-dom': '^18.0.0',
             'react-router-dom': '^6.0.0',
             'styled-components': '^6.0.0',
           };
@@ -158,13 +158,13 @@ export const generateFiles = async (
 
             pkgJson.scripts = {
               ...pkgJson.scripts,
-              'test:ts:front': 'run -T tsc -p admin/tsconfig.json',
+              'test:ts:front': 'tsc -p admin/tsconfig.json',
             };
 
             pkgJson.devDependencies = {
               ...pkgJson.devDependencies,
-              '@types/react': '*',
-              '@types/react-dom': '*',
+              '@types/react': '^18.0.0',
+              '@types/react-dom': '^18.0.0',
             };
 
             const { adminTsconfigFiles } = await import('../../plugin/init/files/typescript');
@@ -181,7 +181,7 @@ export const generateFiles = async (
 
             pkgJson.scripts = {
               ...pkgJson.scripts,
-              'test:ts:back': 'run -T tsc -p server/tsconfig.json',
+              'test:ts:back': 'tsc -p server/tsconfig.json',
             };
 
             const { serverTsconfigFiles } = await import('../../plugin/init/files/typescript');
