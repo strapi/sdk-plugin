@@ -47,8 +47,8 @@ export const generateFiles = async (
     },
     dependencies: {},
     devDependencies: {
-      '@strapi/strapi': '*',
-      '@strapi/sdk-plugin': '*',
+      '@strapi/strapi': '^5.0.0',
+      '@strapi/sdk-plugin': '^6.0.0',
       prettier: '*',
     },
     peerDependencies: {
@@ -107,15 +107,15 @@ export const generateFiles = async (
 
           pkgJson.peerDependencies = {
             ...pkgJson.peerDependencies,
-            '@strapi/design-system': '*',
-            '@strapi/icons': '*',
+            '@strapi/design-system': '^2.0.0',
+            '@strapi/icons': '^2.0.0',
             'react-intl': '^6.0.0',
           };
 
           pkgJson.devDependencies = {
             ...pkgJson.devDependencies,
-            '@strapi/design-system': '*',
-            '@strapi/icons': '*',
+            '@strapi/design-system': '^2.0.0',
+            '@strapi/icons': '^2.0.0',
             'react-intl': '^6.0.0',
             react: '^17.0.0 || ^18.0.0',
             'react-dom': '^17.0.0 || ^18.0.0',
@@ -190,8 +190,8 @@ export const generateFiles = async (
 
           pkgJson.devDependencies = {
             ...pkgJson.devDependencies,
-            '@strapi/typescript-utils': '*',
-            typescript: '*',
+            '@strapi/typescript-utils': '^5',
+            typescript: '^5',
           };
         } else {
           if (isRecord(pkgJson.exports['./strapi-admin'])) {
