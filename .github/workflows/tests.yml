@@ -12,15 +12,18 @@ concurrency:
 
 jobs:
   lint-build:
-    name: 'lint & build'
+    name: 'lint & build (Node ${{ matrix.node }})'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [22, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           cache: pnpm
-          node-version: lts/*
+          node-version: ${{ matrix.node }}
       - run: pnpm --version
       - run: pnpm install
       - run: pnpm lint
@@ -30,11 +33,18 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Cache build output
         with:
-          name: build-output
+          name: build-output-node-${{ matrix.node }}
           path: |
             bin/
             dist/
 
+  # Satisfies branch protection that requires a check named "lint & build"
+  lint-build-complete:
+    name: lint & build
+    needs: lint-build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Lint and build passed on all Node versions"
 #   test-unit:
 #     needs: 'lint-build'
 #     name: 'test:unit (${{ matrix.node }})'

@@ -103,9 +103,28 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
   }
 
   // Add TypeScript declarations plugin if types are expected
-  if (bundle.output.types && bundle.tsconfig) {
-    const tsconfigPath = path.resolve(cwd, bundle.tsconfig);
-    if (fs.existsSync(tsconfigPath)) {
+  if (bundle.output.types) {
+    // Find an appropriate tsconfig: try per-bundle first, then fall back to root-level configs
+    let tsconfigPath: string | undefined;
+
+    if (bundle.tsconfig) {
+      const candidate = path.resolve(cwd, bundle.tsconfig);
+      if (fs.existsSync(candidate)) {
+        tsconfigPath = candidate;
+      }
+    }
+
+    if (!tsconfigPath) {
+      for (const fallback of ['tsconfig.build.json', 'tsconfig.json']) {
+        const candidate = path.resolve(cwd, fallback);
+        if (fs.existsSync(candidate)) {
+          tsconfigPath = candidate;
+          break;
+        }
+      }
+    }
+
+    if (tsconfigPath) {
       const { default: dts } = await import('vite-plugin-dts');
 
       // Output types to the correct location
@@ -117,7 +136,7 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
           tsconfigPath,
           outDir: typesDir,
           // Only emit declarations for the entry file
-          include: [bundle.source],
+          include: [path.join(path.dirname(bundle.source), '**/*')],
           // Don't bundle types into a single file
           rollupTypes: false,
           // Clean output to ensure consistent structure
