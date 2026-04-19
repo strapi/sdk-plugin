@@ -56,7 +56,7 @@ describe('build command', () => {
 
     afterEach(() => {
       // Clean up built files after each test
-      const filesToClean = ['index.mjs', 'index.js'];
+      const filesToClean = ['index.mjs', 'index.js', 'index.d.ts'];
       for (const file of filesToClean) {
         const typesFilePath = path.join(distTypesDir, file);
         if (fs.existsSync(typesFilePath)) {
@@ -95,6 +95,19 @@ describe('build command', () => {
       expect(fs.existsSync(path.join(distTypesDir, 'index.mjs'))).toBe(true);
       // CJS should NOT exist (not specified in exports for ./types)
       expect(fs.existsSync(path.join(distTypesDir, 'index.js'))).toBe(false);
+    });
+
+    it('should generate type declarations for custom exports with types field', async () => {
+      const logger = createLogger({ silent: true, debug: false, timestamp: false });
+
+      await build({
+        cwd: fixturePath,
+        logger,
+        silent: true,
+      });
+
+      // Type declarations should be generated for the ./types custom export
+      expect(fs.existsSync(path.join(distTypesDir, 'index.d.ts'))).toBe(true);
     });
   });
 });
