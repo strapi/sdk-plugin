@@ -45,26 +45,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Lint and build passed on all Node versions"
-#   test-unit:
-#     needs: 'lint-build'
-#     name: 'test:unit (${{ matrix.node }})'
-#     runs-on: ubuntu-latest
-#     strategy:
-#       # A test failing on windows doesn't mean it'll fail on macos. It's useful to let all tests run to its completion to get the full picture
-#       fail-fast: false
-#       matrix:
-#         node: [18, 20]
-#     steps:
-#       - uses: actions/checkout@v4
-#       - uses: pnpm/action-setup@v4
-#       - uses: actions/setup-node@v4
-#         with:
-#           cache: pnpm
-#           node-version: ${{ matrix.node }}
-#       - run: pnpm --version
-#       - run: pnpm install
-#       - uses: actions/download-artifact@v4
-#         name: Restore build output
-#         with:
-#           name: build-output
-#       - run: pnpm test:unit
+  test-unit:
+    needs: 'lint-build'
+    name: 'test:unit (${{ matrix.node }})'
+    runs-on: ubuntu-latest
+    strategy:
+      # A test failing on windows doesn't mean it'll fail on macos. It's useful to let all tests run to its completion to get the full picture
+      fail-fast: false
+      matrix:
+        node: [18, 20]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: pnpm
+          node-version: ${{ matrix.node }}
+      - run: pnpm --version
+      - run: pnpm install
+      - uses: actions/download-artifact@v4
+        name: Restore build output
+        with:
+          name: build-output
+      - run: pnpm test:unit

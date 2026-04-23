@@ -1,5 +1,6 @@
 import path from 'node:path';
 
+import { build } from '../../cli/commands/utils/build';
 import { verify } from '../../cli/commands/utils/validation';
 
 const fixturesRoot = path.join(__dirname, '..', 'fixtures');
@@ -16,6 +17,12 @@ describe('validation.check', () => {
   it('passes for a valid plugin fixture (exports ordered + files exist)', async () => {
     const logger = createLogger();
     const cwd = path.join(fixturesRoot, 'typescript-plugin');
+
+    await build({
+      cwd,
+      logger,
+      silent: true,
+    });
 
     await expect(verify({ cwd, logger })).resolves.toBeUndefined();
   });
