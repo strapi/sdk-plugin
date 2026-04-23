@@ -25,7 +25,7 @@ const App = () => {
   );
 };
 
-export default App;
+export { App };
 `;
 
 const HOMEPAGE_CODE = outdent`
@@ -69,7 +69,7 @@ const TYPESCRIPT: TemplateFile[] = [
               defaultMessage: PLUGIN_ID,
             },
             Component: async () => {
-              const App = await import('./pages/App');
+              const { App } = await import('./pages/App');
 
               return App;
             },
@@ -105,10 +105,10 @@ const TYPESCRIPT: TemplateFile[] = [
               }
             })
           );
-       },
-      };
+        },
+        };
 
-      export default plugin;
+        export default plugin;
         `,
   },
   {
@@ -213,8 +213,15 @@ const JAVASCRIPT: TemplateFile[] = [
                   locales.map(async (locale) => {
                     try {
                       const { default: data } = await import(\`./translations/\${locale}.json\`);
-            
-                      return { data, locale };
+
+                      const newData = {};
+                      const keys = Object.keys(data);
+
+                      for (const key of keys) {
+                        newData[getTranslation(key)] = data[key];
+                      }
+
+                      return { data: newData, locale };
                     } catch {
                       return { data: {}, locale };
                     }
