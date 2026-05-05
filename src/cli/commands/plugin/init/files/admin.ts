@@ -25,7 +25,7 @@ const App = () => {
   );
 };
 
-export { App };
+export default App;
 `;
 
 const HOMEPAGE_CODE = outdent`
@@ -56,56 +56,51 @@ const TYPESCRIPT: TemplateFile[] = [
         import { Initializer } from './components/Initializer';
         import { PluginIcon } from './components/PluginIcon';
 
-        // Types
         import type { StrapiApp } from '@strapi/strapi/admin';
-        
+
         const plugin: StrapiApp['appPlugins'][string] = {
-        register(app) {
-          app.addMenuLink({
-            to: \`plugins/\${PLUGIN_ID}\`,
-            icon: PluginIcon,
-            intlLabel: {
-              id: \`\${PLUGIN_ID}.plugin.name\`,
-              defaultMessage: PLUGIN_ID,
-            },
-            Component: async () => {
-              const { App } = await import('./pages/App');
+          register(app) {
+            app.addMenuLink({
+              to: \`plugins/\${PLUGIN_ID}\`,
+              icon: PluginIcon,
+              intlLabel: {
+                id: \`\${PLUGIN_ID}.plugin.name\`,
+                defaultMessage: PLUGIN_ID,
+              },
+              Component: () => import('./pages/App'),
+              permissions: [],
+            });
 
-              return App;
-            },
-            permissions: [],
-          });
+            app.registerPlugin({
+              id: PLUGIN_ID,
+              initializer: Initializer,
+              isReady: false,
+              name: PLUGIN_ID,
+            });
+          },
 
-          app.registerPlugin({
-            id: PLUGIN_ID,
-            initializer: Initializer,
-            isReady: false,
-            name: PLUGIN_ID,
-          });
-        },
+          registerTrads({ locales }) {
+            return Promise.all(
+              locales.map(async (locale) => {
+                try {
+                  const { default: data } = (await import(\`./translations/\${locale}.json\`)) as {
+                    default: Record<string, string>;
+                  };
 
-        registerTrads({ locales }) {
-          return Promise.all(
-            locales.map(async (locale) => {
-              try {
-                const { default: data } = (await import(\`./translations/\${locale}.json\`)) as {
-                  default: Record<string, string>;
-                };
+                  const newData: Record<string, string> = {};
+                  const keys = Object.keys(data);
 
-                const newData: Record<string, string> = {};
-                const keys = Object.keys(data);
+                  for (const key of keys) {
+                    newData[getTranslation(key)] = data[key];
+                  }
 
-                for (const key of keys) {
-                  newData[getTranslation(key)] = data[key];
+                  return { data: newData, locale };
+                } catch {
+                  return { data: {}, locale };
                 }
-
-                return { data: newData, locale };
-              } catch {
-                return { data: {}, locale };
-              }
-            })
-          );
-        },
+              })
+            );
+          },
         };
 
         export default plugin;
@@ -193,11 +188,8 @@ const JAVASCRIPT: TemplateFile[] = [
                     id: \`\${PLUGIN_ID}.plugin.name\`,
                     defaultMessage: PLUGIN_ID,
                   },
-                  Component: async () => {
-                    const { App } = await import('./pages/App');
-            
-                    return App;
-                  },
+                  Component: () => import('./pages/App'),
+                  permissions: [],
                 });
             
                 app.registerPlugin({

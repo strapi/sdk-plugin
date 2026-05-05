@@ -186,6 +186,12 @@ describe('init file generation', () => {
     const adminIndexFile = getFile(files, 'admin/src/index.ts');
     expect(adminIndexFile.contents).toContain("const plugin: StrapiApp['appPlugins'][string] = {");
     expect(adminIndexFile.contents).toContain('};\n\nexport default plugin;');
+    expect(adminIndexFile.contents).toContain("Component: () => import('./pages/App'),");
+    expect(adminIndexFile.contents).not.toContain('Component: async () =>');
+
+    const appPageFile = getFile(files, 'admin/src/pages/App.tsx');
+    expect(appPageFile.contents).toContain('export default App;');
+    expect(appPageFile.contents).not.toContain('export { App };');
   });
 
   it('should generate JS admin template with docs-aligned App loader and translated trad keys', async () => {
@@ -212,12 +218,14 @@ describe('init file generation', () => {
     );
 
     const adminIndexFile = getFile(files, 'admin/src/index.js');
-    expect(adminIndexFile.contents).toContain("const { App } = await import('./pages/App');");
-    expect(adminIndexFile.contents).not.toContain("const App = await import('./pages/App');");
+    expect(adminIndexFile.contents).toContain("Component: () => import('./pages/App'),");
+    expect(adminIndexFile.contents).not.toContain('Component: async () =>');
+    expect(adminIndexFile.contents).not.toContain("const { App } = await import('./pages/App');");
+    expect(adminIndexFile.contents).toContain('permissions: [],');
     expect(adminIndexFile.contents).toContain('newData[getTranslation(key)] = data[key];');
 
     const appPageFile = getFile(files, 'admin/src/pages/App.jsx');
-    expect(appPageFile.contents).toContain('export { App };');
-    expect(appPageFile.contents).not.toContain('export default App;');
+    expect(appPageFile.contents).toContain('export default App;');
+    expect(appPageFile.contents).not.toContain('export { App };');
   });
 });
