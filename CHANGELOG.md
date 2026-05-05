@@ -1,5 +1,25 @@
 # @strapi/sdk-plugin
 
+## 6.1.0
+
+### Minor Changes
+
+- [#116](https://github.com/strapi/sdk-plugin/pull/116) [`b844cc1`](https://github.com/strapi/sdk-plugin/commit/b844cc1d01944587bc38874ce83bc0d218e5675e) Thanks [@Leptopoda](https://github.com/Leptopoda)! - remove maximum node version from engines to allow node 24
+
+### Patch Changes
+
+- [#124](https://github.com/strapi/sdk-plugin/pull/124) [`eb33a92`](https://github.com/strapi/sdk-plugin/commit/eb33a92f8635fc2672ee48656dfbbe4eaf4cd70b) Thanks [@boazpoolman](https://github.com/boazpoolman)! - chore: update dependencies
+
+- [#121](https://github.com/strapi/sdk-plugin/pull/121) [`b8d289b`](https://github.com/strapi/sdk-plugin/commit/b8d289bfecb58995a75708b070fcce37fff6c5c5) Thanks [@boazpoolman](https://github.com/boazpoolman)! - fix type declarations not being generated for custom exports
+
+  Previously, only `./strapi-admin` and `./strapi-server` exports would produce `.d.ts` files when a `types` field was defined in `package.json`. Custom exports silently skipped type generation because no per-bundle tsconfig existed for them.
+
+  The build now falls back to the project root `tsconfig.build.json` or `tsconfig.json` when no per-bundle tsconfig is found, so any export with a `types` field will correctly emit type declarations.
+
+- [#117](https://github.com/strapi/sdk-plugin/pull/117) [`6a61df0`](https://github.com/strapi/sdk-plugin/commit/6a61df07c743fb27158eac2b7092ac62fba16f5f) Thanks [@jhoward1994](https://github.com/jhoward1994)! - include all source files for type declaration
+
+- [#123](https://github.com/strapi/sdk-plugin/pull/123) [`c8bbba9`](https://github.com/strapi/sdk-plugin/commit/c8bbba9da74f96251af7db5fe26a852d32a2d163) Thanks [@jhoward1994](https://github.com/jhoward1994)! - Pin generated plugin devDependencies `typescript` and `@strapi/typescript-utils` to `^5` so install succeeds with Strapi 5 (avoids resolving TypeScript 6, which conflicts with `react-intl@6` peerOptional range).
+
 ## 6.0.1
 
 ### Patch Changes

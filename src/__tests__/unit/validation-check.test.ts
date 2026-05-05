@@ -1,21 +1,36 @@
 import path from 'node:path';
 
+import { build } from '../../cli/commands/utils/build';
 import { verify } from '../../cli/commands/utils/validation';
 
 const fixturesRoot = path.join(__dirname, '..', 'fixtures');
 
-const createLogger = () => {
-  return {
-    debug: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  };
-};
+const createLogger = () => ({
+  warnings: 0,
+  errors: 0,
+  info: jest.fn(),
+  debug: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+  log: jest.fn(),
+  spinner: jest.fn().mockReturnValue({
+    succeed: jest.fn(),
+    fail: jest.fn(),
+    start: jest.fn(),
+    text: '',
+  }),
+});
 
 describe('validation.check', () => {
   it('passes for a valid plugin fixture (exports ordered + files exist)', async () => {
     const logger = createLogger();
     const cwd = path.join(fixturesRoot, 'typescript-plugin');
+
+    await build({
+      cwd,
+      logger,
+      silent: true,
+    });
 
     await expect(verify({ cwd, logger })).resolves.toBeUndefined();
   });

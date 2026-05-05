@@ -4,9 +4,6 @@ import getLatestVersion from 'get-latest-version';
  * Shared types and utilities for plugin initialization.
  */
 
-// TODO: remove these when release versions are available
-export const USE_RC_VERSIONS: string[] = ['@strapi/design-system', '@strapi/icons'];
-
 export interface PackageExport {
   types?: string;
   require: string;
@@ -57,9 +54,8 @@ export const resolveLatestVersionOfDeps = async (
 ): Promise<Record<string, string>> => {
   const latestDeps: Record<string, string> = {};
 
-  for (const [name, version] of Object.entries(deps)) {
+  for (const [name, range] of Object.entries(deps)) {
     try {
-      const range = USE_RC_VERSIONS.includes(name) ? 'rc' : version;
       const latestVersion = await getLatestVersion(name, { range });
       latestDeps[name] = latestVersion ? `^${latestVersion}` : '*';
     } catch {
