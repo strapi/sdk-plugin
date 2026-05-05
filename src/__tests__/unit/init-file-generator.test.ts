@@ -156,7 +156,76 @@ describe('init file generation', () => {
     );
 
     const adminIndexFile = getFile(files, 'admin/src/index.js');
-    expect(adminIndexFile.contents).toContain('to: `plugins/${PLUGIN_ID}`');
-    expect(adminIndexFile.contents).not.toContain('to: `plugins/${PluginIcon}`');
+    expect(adminIndexFile.contents).toMatch(/to:\s*`plugins\/\$\{PLUGIN_ID\}`/);
+    expect(adminIndexFile.contents).not.toMatch(/to:\s*`plugins\/\$\{PluginIcon\}`/);
+  });
+
+  it('should generate TS admin template with valid plugin export shape', async () => {
+    const { generateFiles } = await import('../../cli/commands/utils/init/file-generator');
+
+    const logger = {
+      info: jest.fn(),
+      debug: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      log: jest.fn(),
+    };
+
+    const files = await generateFiles(
+      [
+        { name: 'pkgName', answer: 'my-plugin' },
+        { name: 'pluginId', answer: 'my-plugin' },
+        { name: 'client-code', answer: true },
+        { name: 'server-code', answer: false },
+        { name: 'typescript', answer: true },
+      ],
+      'my-plugin',
+      logger as any
+    );
+
+    const adminIndexFile = getFile(files, 'admin/src/index.ts');
+    expect(adminIndexFile.contents).toContain("const plugin: StrapiApp['appPlugins'][string] = {");
+    expect(adminIndexFile.contents).toContain('};\n\nexport default plugin;');
+    expect(adminIndexFile.contents).toContain("Component: () => import('./pages/App'),");
+    expect(adminIndexFile.contents).not.toContain('Component: async () =>');
+
+    const appPageFile = getFile(files, 'admin/src/pages/App.tsx');
+    expect(appPageFile.contents).toContain('export default App;');
+    expect(appPageFile.contents).not.toContain('export { App };');
+  });
+
+  it('should generate JS admin template with docs-aligned App loader and translated trad keys', async () => {
+    const { generateFiles } = await import('../../cli/commands/utils/init/file-generator');
+
+    const logger = {
+      info: jest.fn(),
+      debug: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      log: jest.fn(),
+    };
+
+    const files = await generateFiles(
+      [
+        { name: 'pkgName', answer: 'my-plugin' },
+        { name: 'pluginId', answer: 'my-plugin' },
+        { name: 'client-code', answer: true },
+        { name: 'server-code', answer: false },
+        { name: 'typescript', answer: false },
+      ],
+      'my-plugin',
+      logger as any
+    );
+
+    const adminIndexFile = getFile(files, 'admin/src/index.js');
+    expect(adminIndexFile.contents).toContain("Component: () => import('./pages/App'),");
+    expect(adminIndexFile.contents).not.toContain('Component: async () =>');
+    expect(adminIndexFile.contents).not.toContain("const { App } = await import('./pages/App');");
+    expect(adminIndexFile.contents).toContain('permissions: [],');
+    expect(adminIndexFile.contents).toContain('newData[getTranslation(key)] = data[key];');
+
+    const appPageFile = getFile(files, 'admin/src/pages/App.jsx');
+    expect(appPageFile.contents).toContain('export default App;');
+    expect(appPageFile.contents).not.toContain('export { App };');
   });
 });
