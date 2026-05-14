@@ -76,7 +76,7 @@
     "prompts": "^2.4.2",
     "typescript": "5.9.3",
     "vite": "^6.4.2",
-    "vite-plugin-dts": "^4.5.4",
+    "vite-plugin-dts": "^5.0.0",
     "yup": "0.32.9"
   },
   "devDependencies": {
