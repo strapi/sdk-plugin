@@ -86,6 +86,7 @@ logs
 results
 dist
 node_modules
+.pnpm-store/
 .node_history
 package-lock.json
 
