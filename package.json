@@ -88,6 +88,7 @@
     "@strapi/eslint-config": "^1.0.1",
     "@swc/core": "^1.15.33",
     "@swc/jest": "^0.2.39",
+    "@types/git-url-parse": "9.0.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.7.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
