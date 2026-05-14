@@ -244,9 +244,8 @@ export const generateFiles = async (
       }
       case 'prettier': {
         if (answer) {
-          const { prettierFile, prettierIgnoreFile } = await import(
-            '../../plugin/init/files/prettier'
-          );
+          const { prettierFile, prettierIgnoreFile } =
+            await import('../../plugin/init/files/prettier');
           files.push(prettierFile, prettierIgnoreFile);
         }
         break;

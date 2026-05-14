@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import fs from 'fs/promises';
 import os from 'os';
-import pkgUp from 'pkg-up';
+import { packageUp } from 'package-up';
 import * as yup from 'yup';
 
 import type { Logger } from './logger';
@@ -21,26 +21,29 @@ const packageJsonSchema = yup.object({
     yup
       .object(
         typeof value === 'object'
-          ? Object.entries(value).reduce((acc, [key, keyValue]) => {
-              if (typeof keyValue === 'object') {
-                // Standard exports require both import and require
-                const isStandardExport = key === './strapi-admin' || key === './strapi-server';
-                acc[key] = yup
-                  .object({
-                    types: yup.string().optional(),
-                    source: yup.string().required(),
-                    module: yup.string().optional(),
-                    import: isStandardExport ? yup.string().required() : yup.string().optional(),
-                    require: isStandardExport ? yup.string().required() : yup.string().optional(),
-                    default: yup.string().required(),
-                  })
-                  .noUnknown(true);
-              } else {
-                acc[key] = yup.string().required();
-              }
+          ? Object.entries(value).reduce(
+              (acc, [key, keyValue]) => {
+                if (typeof keyValue === 'object') {
+                  // Standard exports require both import and require
+                  const isStandardExport = key === './strapi-admin' || key === './strapi-server';
+                  acc[key] = yup
+                    .object({
+                      types: yup.string().optional(),
+                      source: yup.string().required(),
+                      module: yup.string().optional(),
+                      import: isStandardExport ? yup.string().required() : yup.string().optional(),
+                      require: isStandardExport ? yup.string().required() : yup.string().optional(),
+                      default: yup.string().required(),
+                    })
+                    .noUnknown(true);
+                } else {
+                  acc[key] = yup.string().required();
+                }
 
-              return acc;
-            }, {} as Record<string, yup.SchemaOf<string> | yup.SchemaOf<Export>>)
+                return acc;
+              },
+              {} as Record<string, yup.SchemaOf<string> | yup.SchemaOf<Export>>
+            )
           : undefined
       )
       .optional()
@@ -53,7 +56,7 @@ const packageJsonSchema = yup.object({
  * the process will throw with an appropriate error message.
  */
 const loadPkg = async ({ cwd, logger }: { cwd: string; logger: Logger }): Promise<object> => {
-  const pkgPath = await pkgUp({ cwd });
+  const pkgPath = await packageUp({ cwd });
 
   if (!pkgPath) {
     throw new Error('Could not find a package.json in the current directory');

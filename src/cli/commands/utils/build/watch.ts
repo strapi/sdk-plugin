@@ -4,8 +4,6 @@
  * Uses Vite's built-in watch mode to rebuild on file changes.
  * Watches both admin and server bundles concurrently.
  */
-import { build as viteBuild } from 'vite';
-
 import { createViteConfig } from './vite-config';
 
 import type { Logger } from '../logger';
@@ -75,6 +73,8 @@ export async function watch(options: WatchOptions): Promise<void> {
       });
     }
   }
+
+  const { build: viteBuild } = await import('vite');
 
   const watchers: RollupWatcher[] = [];
 
