@@ -7,8 +7,9 @@
 import chalk from 'chalk';
 import fs from 'fs/promises';
 import os from 'os';
-import { packageUp } from 'package-up';
 import * as yup from 'yup';
+
+import { findPackageJsonPath } from '../find-package-json';
 
 import type { Export } from './types';
 
@@ -151,7 +152,7 @@ export const loadPkg = async ({
   cwd: string;
   logger: Logger;
 }): Promise<object> => {
-  const pkgPath = await packageUp({ cwd });
+  const pkgPath = await findPackageJsonPath(cwd);
 
   if (!pkgPath) {
     throw new Error('Could not find a package.json in the current directory');
