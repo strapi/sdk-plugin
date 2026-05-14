@@ -63,7 +63,7 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: pnpm --version
       - run: pnpm install
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         name: Restore build output
         with:
           name: build-output-node-${{ matrix.node }}
