@@ -90,7 +90,7 @@
     "@swc/jest": "^0.2.39",
     "@types/git-url-parse": "9.0.3",
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.19.17",
+    "@types/node": "^25.7.0",
     "@types/prettier": "^2.7.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
