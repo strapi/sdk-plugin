@@ -1,5 +1,25 @@
 # @strapi/sdk-plugin
 
+## 6.1.1
+
+### Patch Changes
+
+- [#141](https://github.com/strapi/sdk-plugin/pull/141) [`5fddaff`](https://github.com/strapi/sdk-plugin/commit/5fddaffbe9159c788f3c32f4c1ee6c582cb7585d) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump @types/node from 22.19.17 to 25.7.0
+
+- [#147](https://github.com/strapi/sdk-plugin/pull/147) [`8ecff34`](https://github.com/strapi/sdk-plugin/commit/8ecff34b883e1559285ddaa3b4e5dee51cd81b9f) Thanks [@innerdvations](https://github.com/innerdvations)! - Repository maintenance: add `.pnpm-store/` to `.gitignore` so local pnpm store directories are not tracked. No change to published package contents.
+
+- [#128](https://github.com/strapi/sdk-plugin/pull/128) [`25b7b53`](https://github.com/strapi/sdk-plugin/commit/25b7b53f693995cd1348d536c395fc6ab2a04852) Thanks [@innerdvations](https://github.com/innerdvations)! - Repository maintenance: add `.vscode/` to `.gitignore` alongside other IDE paths. No change to published package contents.
+
+- [#107](https://github.com/strapi/sdk-plugin/pull/107) [`bd4d5a4`](https://github.com/strapi/sdk-plugin/commit/bd4d5a415e456b23148e70abb92532a5bfdbc365) Thanks [@Link2Twenty](https://github.com/Link2Twenty)! - Generated plugin admin templates now use default-export `App`, `Component: () => import('./pages/App')` (matching `addMenuLink` typings), and `permissions: []` on the JS admin entry for parity with TS.
+
+- [#135](https://github.com/strapi/sdk-plugin/pull/135) [`1d3067f`](https://github.com/strapi/sdk-plugin/commit/1d3067f83d9549dc3f4cda3a05c8a09be0773e86) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump commander from 12.1.0 to 14.0.3
+
+- [#139](https://github.com/strapi/sdk-plugin/pull/139) [`379aa6a`](https://github.com/strapi/sdk-plugin/commit/379aa6ad0e0d8ab67acf3c55b9d23537f51899a3) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump typescript from 5.4.4 to 5.9.3
+
+- [#143](https://github.com/strapi/sdk-plugin/pull/143) [`6593c9f`](https://github.com/strapi/sdk-plugin/commit/6593c9fa3f1055c3e84d6fc1bedf2f51ede4a934) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump lint-staged from 15.5.2 to 17.0.4
+
+- [#142](https://github.com/strapi/sdk-plugin/pull/142) [`ed008fd`](https://github.com/strapi/sdk-plugin/commit/ed008fd6ac42df7cd95475a972b8895fe55650b8) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump concurrently from 8.2.2 to 9.2.1
+
 ## 6.1.0
 
 ### Minor Changes
