@@ -115,12 +115,28 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
     }
 
     if (!tsconfigPath) {
-      for (const fallback of ['tsconfig.build.json', 'tsconfig.json']) {
-        const candidate = path.resolve(cwd, fallback);
-        if (fs.existsSync(candidate)) {
-          tsconfigPath = candidate;
+      const sourceDir = path.resolve(cwd, path.dirname(bundle.source));
+      let searchDir = sourceDir;
+
+      while (searchDir.startsWith(cwd)) {
+        for (const name of ['tsconfig.build.json', 'tsconfig.json']) {
+          const candidate = path.join(searchDir, name);
+          if (fs.existsSync(candidate)) {
+            tsconfigPath = candidate;
+            break;
+          }
+        }
+        if (tsconfigPath) {
           break;
         }
+
+        const parent = path.dirname(searchDir);
+
+        if (parent === searchDir) {
+          break;
+        }
+
+        searchDir = parent;
       }
     }
 
