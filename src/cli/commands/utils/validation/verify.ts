@@ -9,8 +9,6 @@
  */
 import os from 'os';
 
-import { loadOra } from '../ora-loader';
-
 import { validateExportsOrdering } from './exports-validator';
 import { checkExportFiles } from './file-checker';
 import { loadPkg, validatePkg } from './pkg-loader';
@@ -26,6 +24,7 @@ export interface VerifyOptions {
  * Main verify function that validates package.json and export files
  */
 export const verify = async ({ cwd, logger }: VerifyOptions) => {
+  const { loadOra } = await import('../ora-loader');
   const ora = await loadOra();
 
   /**

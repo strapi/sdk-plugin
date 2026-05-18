@@ -1,8 +1,6 @@
 import { Command } from 'commander';
 import path from 'node:path';
 
-import { createCLI } from '../../index';
-
 /**
  * Shared test utilities for e2e CLI tests.
  */
@@ -46,6 +44,7 @@ export async function withMockedCLI(fixtureName: string, testFn: TestCallback): 
  * Invokes the CLI with given arguments and returns the command instance.
  */
 export async function invokeCLI(args: string[], command?: Command): Promise<Command> {
+  const { createCLI } = await import('../../index');
   const cmd = command ?? new Command();
   await createCLI(['node', 'strapi-plugin', ...args], cmd);
   return cmd;
