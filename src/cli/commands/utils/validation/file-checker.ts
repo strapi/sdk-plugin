@@ -3,9 +3,10 @@
  */
 import chalk from 'chalk';
 import fs from 'fs/promises';
-import ora from 'ora';
 import os from 'os';
 import { resolve } from 'path';
+
+import { loadOra } from '../ora-loader';
 
 import type { Export } from './types';
 
@@ -28,6 +29,7 @@ export const checkExportFiles = async (
   exports: Record<string, Export | string>,
   cwd: string
 ): Promise<string[]> => {
+  const ora = await loadOra();
   const missingExports: string[] = [];
 
   const checkingFilePathsLoader = ora('Checking files for exports').start();

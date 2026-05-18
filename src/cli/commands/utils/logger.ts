@@ -1,10 +1,18 @@
 import chalk from 'chalk';
-import ora from 'ora';
+
+import { loadOra } from './ora-loader';
 
 export interface LoggerOptions {
   silent?: boolean;
   debug?: boolean;
   timestamp?: boolean;
+}
+
+interface SpinnerHandle {
+  text: string;
+  succeed: (text?: string) => SpinnerHandle;
+  fail: (text?: string) => SpinnerHandle;
+  start: (text?: string) => SpinnerHandle;
 }
 
 export interface Logger {
@@ -15,7 +23,7 @@ export interface Logger {
   warn: (...args: unknown[]) => void;
   error: (...args: unknown[]) => void;
   log: (...args: unknown[]) => void;
-  spinner: (text: string) => Pick<ora.Ora, 'succeed' | 'fail' | 'start' | 'text'>;
+  spinner: (text: string) => Promise<SpinnerHandle>;
 }
 
 const createLogger = (options: LoggerOptions = {}): Logger => {
@@ -88,22 +96,25 @@ const createLogger = (options: LoggerOptions = {}): Logger => {
       );
     },
 
-    // @ts-expect-error – returning a subpart of ora is fine because the types tell us what is what.
-    spinner(text: string) {
+    async spinner(text: string): Promise<SpinnerHandle> {
       if (silent) {
-        return {
+        const silentSpinner: SpinnerHandle = {
+          text: '',
           succeed() {
-            return this;
+            return silentSpinner;
           },
           fail() {
-            return this;
+            return silentSpinner;
           },
           start() {
-            return this;
+            return silentSpinner;
           },
-          text: '',
         };
+
+        return silentSpinner;
       }
+
+      const ora = await loadOra();
 
       return ora(text);
     },
