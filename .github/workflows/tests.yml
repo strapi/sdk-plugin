@@ -18,9 +18,9 @@ jobs:
       matrix:
         node: [22, 24]
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
         with:
           cache: pnpm
           node-version: ${{ matrix.node }}
@@ -30,7 +30,7 @@ jobs:
       - run: pnpm prettier:check
       - run: pnpm test:ts
       - run: pnpm build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         name: Cache build output
         with:
           name: build-output-node-${{ matrix.node }}
@@ -55,15 +55,15 @@ jobs:
       matrix:
         node: [22, 24]
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
         with:
           cache: pnpm
           node-version: ${{ matrix.node }}
       - run: pnpm --version
       - run: pnpm install
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         name: Restore build output
         with:
           name: build-output-node-${{ matrix.node }}
