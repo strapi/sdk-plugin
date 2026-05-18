@@ -1,4 +1,3 @@
-import boxen from 'boxen';
 import chalk from 'chalk';
 import concurrently from 'concurrently';
 import fs from 'node:fs/promises';
@@ -6,7 +5,7 @@ import path from 'node:path';
 import nodemon from 'nodemon';
 import { outdent } from 'outdent';
 
-import { runAction } from '../utils/helpers';
+import { formatBoxedErrorStack, runAction } from '../utils/helpers';
 import { loadPkg, validatePkg } from '../utils/pkg';
 
 import type { CLIContext, StrapiCommand } from '../../../types';
@@ -75,14 +74,7 @@ const action = async (_opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIC
       'There seems to be an unexpected error, try again with --debug for more information \n'
     );
     if (err instanceof Error && err.stack) {
-      logger.log(
-        chalk.red(
-          boxen(err.stack, {
-            padding: 1,
-            align: 'left',
-          })
-        )
-      );
+      logger.log(await formatBoxedErrorStack(err.stack));
     }
     process.exit(1);
   }
