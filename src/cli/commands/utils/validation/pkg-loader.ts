@@ -16,7 +16,7 @@ const record = (value: unknown) =>
   yup
     .object(
       typeof value === 'object' && value
-        ? Object.entries(value).reduce<Record<string, yup.SchemaOf<string>>>((acc, [key]) => {
+        ? Object.entries(value).reduce<Record<string, yup.StringSchema>>((acc, [key]) => {
             acc[key] = yup.string().required();
 
             return acc;
@@ -43,7 +43,10 @@ const packageJsonSchema = yup.object({
     return yup.string().optional();
   }),
   keywords: yup.array(yup.string()).optional(),
-  type: yup.mixed().oneOf(['commonjs', 'module']).optional(),
+  type: yup
+    .string()
+    .oneOf(['commonjs', 'module'] as const)
+    .optional(),
   license: yup.string().optional(),
   repository: yup
     .object({
@@ -82,7 +85,6 @@ const packageJsonSchema = yup.object({
           ? Object.entries(value).reduce(
               (acc, [key, v]) => {
                 if (typeof v === 'object') {
-                  // @ts-expect-error yup is not typed correctly
                   acc[key] = yup
                     .object({
                       types: yup.string().optional(),
@@ -114,7 +116,7 @@ const packageJsonSchema = yup.object({
 
                 return acc;
               },
-              {} as Record<string, yup.SchemaOf<string> | yup.SchemaOf<Export>>
+              {} as Record<string, yup.AnySchema>
             )
           : undefined
       )
@@ -129,9 +131,17 @@ const packageJsonSchema = yup.object({
   browserslist: yup.array(yup.string().required()).optional(),
 });
 
-export interface PackageJson extends Omit<yup.Asserts<typeof packageJsonSchema>, 'type'> {
-  type?: 'commonjs' | 'module';
+export interface PackageJson extends Omit<yup.InferType<typeof packageJsonSchema>, 'exports'> {
+  exports?: Record<string, Export | string>;
 }
+
+const getReachableSchemaType = (schema: yup.AnyObjectSchema, path: string): string => {
+  const reachable = yup.reach(schema, path);
+
+  return reachable && typeof reachable === 'object' && 'describe' in reachable
+    ? reachable.describe().type
+    : 'unknown';
+};
 
 export interface Logger {
   debug: (...args: unknown[]) => void;
@@ -176,7 +186,7 @@ export const validatePkg = async ({ pkg }: { pkg: object }): Promise<PackageJson
       strict: true,
     });
 
-    return validatedPkg;
+    return validatedPkg as PackageJson;
   } catch (err) {
     if (err instanceof yup.ValidationError) {
       switch (err.type) {
@@ -184,7 +194,7 @@ export const validatePkg = async ({ pkg }: { pkg: object }): Promise<PackageJson
           if (err.path) {
             throw new Error(
               `'${err.path}' in 'package.json' is required as type '${chalk.magenta(
-                yup.reach(packageJsonSchema, err.path).type
+                getReachableSchemaType(packageJsonSchema, err.path)
               )}'`
             );
           }

@@ -6,8 +6,6 @@ import fs from 'fs/promises';
 import os from 'os';
 import { resolve } from 'path';
 
-import { loadOra } from '../ora-loader';
-
 import type { Export } from './types';
 
 export const pathExists = async (path: string): Promise<boolean> => {
@@ -29,6 +27,7 @@ export const checkExportFiles = async (
   exports: Record<string, Export | string>,
   cwd: string
 ): Promise<string[]> => {
+  const { loadOra } = await import('../ora-loader');
   const ora = await loadOra();
   const missingExports: string[] = [];
 
