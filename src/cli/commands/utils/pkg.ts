@@ -15,6 +15,14 @@ interface Export {
   default: string;
 }
 
+const getReachableSchemaType = (schema: yup.AnyObjectSchema, path: string): string => {
+  const reachable = yup.reach(schema, path);
+
+  return reachable && typeof reachable === 'object' && 'describe' in reachable
+    ? reachable.describe().type
+    : 'unknown';
+};
+
 const packageJsonSchema = yup.object({
   name: yup.string().required(),
   exports: yup.lazy((value) =>
@@ -42,11 +50,11 @@ const packageJsonSchema = yup.object({
 
                 return acc;
               },
-              {} as Record<string, yup.SchemaOf<string> | yup.SchemaOf<Export>>
+              {} as Record<string, yup.AnySchema>
             )
           : undefined
       )
-      .optional()
+      .required()
   ),
 });
 
@@ -71,7 +79,10 @@ const loadPkg = async ({ cwd, logger }: { cwd: string; logger: Logger }): Promis
   return pkg;
 };
 
-type PackageJson = yup.Asserts<typeof packageJsonSchema>;
+type PackageJson = {
+  name: string;
+  exports: Record<string, Export | string>;
+};
 
 /**
  * @description validate the package.json against a standardised schema using `yup`.
@@ -83,7 +94,7 @@ const validatePkg = async ({ pkg }: { pkg: object }): Promise<PackageJson> => {
       strict: true,
     });
 
-    return validatedPkg;
+    return validatedPkg as PackageJson;
   } catch (err) {
     if (err instanceof yup.ValidationError) {
       switch (err.type) {
@@ -91,7 +102,7 @@ const validatePkg = async ({ pkg }: { pkg: object }): Promise<PackageJson> => {
           if (err.path) {
             throw new Error(
               `'${err.path}' in 'package.json' is required as type '${chalk.magenta(
-                yup.reach(packageJsonSchema, err.path).type
+                getReachableSchemaType(packageJsonSchema, err.path)
               )}'`
             );
           }
