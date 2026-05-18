@@ -21,26 +21,29 @@ const packageJsonSchema = yup.object({
     yup
       .object(
         typeof value === 'object'
-          ? Object.entries(value).reduce((acc, [key, keyValue]) => {
-              if (typeof keyValue === 'object') {
-                // Standard exports require both import and require
-                const isStandardExport = key === './strapi-admin' || key === './strapi-server';
-                acc[key] = yup
-                  .object({
-                    types: yup.string().optional(),
-                    source: yup.string().required(),
-                    module: yup.string().optional(),
-                    import: isStandardExport ? yup.string().required() : yup.string().optional(),
-                    require: isStandardExport ? yup.string().required() : yup.string().optional(),
-                    default: yup.string().required(),
-                  })
-                  .noUnknown(true);
-              } else {
-                acc[key] = yup.string().required();
-              }
+          ? Object.entries(value).reduce(
+              (acc, [key, keyValue]) => {
+                if (typeof keyValue === 'object') {
+                  // Standard exports require both import and require
+                  const isStandardExport = key === './strapi-admin' || key === './strapi-server';
+                  acc[key] = yup
+                    .object({
+                      types: yup.string().optional(),
+                      source: yup.string().required(),
+                      module: yup.string().optional(),
+                      import: isStandardExport ? yup.string().required() : yup.string().optional(),
+                      require: isStandardExport ? yup.string().required() : yup.string().optional(),
+                      default: yup.string().required(),
+                    })
+                    .noUnknown(true);
+                } else {
+                  acc[key] = yup.string().required();
+                }
 
-              return acc;
-            }, {} as Record<string, yup.SchemaOf<string> | yup.SchemaOf<Export>>)
+                return acc;
+              },
+              {} as Record<string, yup.SchemaOf<string> | yup.SchemaOf<Export>>
+            )
           : undefined
       )
       .optional()
