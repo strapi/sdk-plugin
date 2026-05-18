@@ -3,7 +3,6 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { build as viteBuild } from 'vite';
 
 import { createViteConfig } from './vite-config';
 
@@ -111,6 +110,7 @@ export async function build(options: BuildOptions): Promise<void> {
       silent,
     });
 
+    const { build: viteBuild } = await import('vite');
     await viteBuild(config);
 
     if (!silent) {

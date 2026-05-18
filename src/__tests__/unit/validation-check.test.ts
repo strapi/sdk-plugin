@@ -1,8 +1,5 @@
 import path from 'node:path';
 
-import { build } from '../../cli/commands/utils/build';
-import { verify } from '../../cli/commands/utils/validation';
-
 const fixturesRoot = path.join(__dirname, '..', 'fixtures');
 
 const createLogger = () => ({
@@ -23,6 +20,8 @@ const createLogger = () => ({
 
 describe('validation.check', () => {
   it('passes for a valid plugin fixture (exports ordered + files exist)', async () => {
+    const { build } = await import('../../cli/commands/utils/build');
+    const { verify } = await import('../../cli/commands/utils/validation');
     const logger = createLogger();
     const cwd = path.join(fixturesRoot, 'typescript-plugin');
 
@@ -36,6 +35,7 @@ describe('validation.check', () => {
   });
 
   it('fails when no strapi-admin or strapi-server exports exist', async () => {
+    const { verify } = await import('../../cli/commands/utils/validation');
     const logger = createLogger();
     const cwd = path.join(fixturesRoot, 'missing-exports-plugin');
 
@@ -45,6 +45,7 @@ describe('validation.check', () => {
   });
 
   it('fails when export ordering is invalid', async () => {
+    const { verify } = await import('../../cli/commands/utils/validation');
     const logger = createLogger();
     const cwd = path.join(fixturesRoot, 'bad-exports-ordering-plugin');
 
@@ -54,6 +55,7 @@ describe('validation.check', () => {
   });
 
   it('fails when exported dist files are missing', async () => {
+    const { verify } = await import('../../cli/commands/utils/validation');
     const logger = createLogger();
     const cwd = path.join(fixturesRoot, 'missing-dist-plugin');
 
