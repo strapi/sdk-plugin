@@ -60,7 +60,7 @@
   "dependencies": {
     "@types/prompts": "2.4.9",
     "@vitejs/plugin-react": "^4.7.0",
-    "boxen": "5.1.2",
+    "boxen": "8.0.1",
     "chalk": "4.1.2",
     "commander": "14.0.3",
     "concurrently": "^9.2.1",
