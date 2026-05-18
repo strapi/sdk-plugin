@@ -4,6 +4,21 @@ import path from 'path';
 
 import type { CLIContext, CommonCLIOptions } from '../../../types';
 
+/**
+ * Formats an error stack in a terminal box.
+ * boxen is ESM-only from v8; dynamic import keeps Jest/CJS entrypoints loadable.
+ */
+export async function formatBoxedErrorStack(stack: string): Promise<string> {
+  const { default: boxen } = await import('boxen');
+
+  return chalk.red(
+    boxen(stack, {
+      padding: 1,
+      align: 'left',
+    })
+  );
+}
+
 export const runAction =
   (name: string, action: (...args: any[]) => Promise<void>) =>
   (ctx: CLIContext, ...args: unknown[]) => {

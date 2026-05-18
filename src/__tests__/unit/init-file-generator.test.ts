@@ -2,7 +2,7 @@ import type { TemplateFile } from '../../cli/commands/utils/init/types';
 
 jest.mock('get-latest-version', () => ({
   __esModule: true,
-  default: jest.fn(async () => '1.2.3'),
+  getLatestVersion: jest.fn(async () => '1.2.3'),
 }));
 
 const getFile = (files: TemplateFile[], name: string): TemplateFile => {
@@ -93,7 +93,7 @@ describe('init file generation', () => {
   });
 
   it('should constrain react-intl to v6 range (compatible with React 18)', async () => {
-    const getLatestVersion = jest.requireMock('get-latest-version').default;
+    const { getLatestVersion } = jest.requireMock('get-latest-version');
     getLatestVersion.mockClear();
 
     const { generateFiles } = await import('../../cli/commands/utils/init/file-generator');

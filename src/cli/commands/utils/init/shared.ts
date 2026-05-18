@@ -1,5 +1,3 @@
-import getLatestVersion from 'get-latest-version';
-
 /**
  * Shared types and utilities for plugin initialization.
  */
@@ -52,6 +50,7 @@ export const isRecord = (value: unknown): value is Record<string, unknown> =>
 export const resolveLatestVersionOfDeps = async (
   deps: Record<string, string>
 ): Promise<Record<string, string>> => {
+  const { getLatestVersion } = await import('get-latest-version');
   const latestDeps: Record<string, string> = {};
 
   for (const [name, range] of Object.entries(deps)) {
