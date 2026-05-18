@@ -1,13 +1,26 @@
-import type { Ora, Options } from 'ora';
+interface OraOptions {
+  text?: string;
+}
 
-type OraFactory = (options?: string | Options) => Ora;
+interface OraSpinner {
+  text: string;
+  start: (text?: string) => OraSpinner;
+  succeed: (text?: string) => OraSpinner;
+  fail: (text?: string) => OraSpinner;
+}
+
+type OraFactory = (options?: string | OraOptions) => OraSpinner;
+
+const importEsm = (specifier: string): Promise<{ default: unknown }> =>
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- Jest on Node 22 intercepts `import()`; use Node's native importer
+  new Function('specifier', 'return import(specifier)')(specifier);
 
 export const loadOra = async (): Promise<OraFactory> => {
-  const mod = await import('ora');
+  const mod = await importEsm('ora');
   const candidate = mod.default;
 
   if (typeof candidate === 'function') {
-    return candidate;
+    return candidate as OraFactory;
   }
 
   // Jest/@swc interop: default export is re-wrapped as { default, oraPromise, spinners }
