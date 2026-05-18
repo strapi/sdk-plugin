@@ -7,8 +7,9 @@
  * 3. Export properties are in correct order (types first)
  * 4. All exported files exist in dist/
  */
-import ora from 'ora';
 import os from 'os';
+
+import { loadOra } from '../ora-loader';
 
 import { validateExportsOrdering } from './exports-validator';
 import { checkExportFiles } from './file-checker';
@@ -25,6 +26,8 @@ export interface VerifyOptions {
  * Main verify function that validates package.json and export files
  */
 export const verify = async ({ cwd, logger }: VerifyOptions) => {
+  const ora = await loadOra();
+
   /**
    * Load the closest package.json and then verify the structure against what we expect.
    */

@@ -2,9 +2,6 @@
  * @type {import('jest').Config}
  */
 export default {
-  moduleNameMapper: {
-    '^ora$': '<rootDir>/src/__tests__/mocks/ora.ts',
-  },
   modulePathIgnorePatterns: ['dist'],
   testMatch: ['**/__tests__/**/*.test.{js,ts}'],
   testPathIgnorePatterns: ['__tests__/fixtures/'],

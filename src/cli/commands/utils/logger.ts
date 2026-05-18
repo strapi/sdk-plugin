@@ -1,5 +1,6 @@
 import chalk from 'chalk';
-import ora from 'ora';
+
+import { loadOra } from './ora-loader';
 
 export interface LoggerOptions {
   silent?: boolean;
@@ -22,7 +23,7 @@ export interface Logger {
   warn: (...args: unknown[]) => void;
   error: (...args: unknown[]) => void;
   log: (...args: unknown[]) => void;
-  spinner: (text: string) => SpinnerHandle;
+  spinner: (text: string) => Promise<SpinnerHandle>;
 }
 
 const createLogger = (options: LoggerOptions = {}): Logger => {
@@ -95,7 +96,7 @@ const createLogger = (options: LoggerOptions = {}): Logger => {
       );
     },
 
-    spinner(text: string): SpinnerHandle {
+    async spinner(text: string): Promise<SpinnerHandle> {
       if (silent) {
         const silentSpinner: SpinnerHandle = {
           text: '',
@@ -112,6 +113,8 @@ const createLogger = (options: LoggerOptions = {}): Logger => {
 
         return silentSpinner;
       }
+
+      const ora = await loadOra();
 
       return ora(text);
     },
