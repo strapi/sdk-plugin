@@ -1,4 +1,12 @@
 /**
+ * Dynamic import that bypasses Jest's `import()` hook on Node < 24.9.
+ * Jest 30 cannot load pure ESM packages via intercepted `import()` on those versions.
+ */
+export const importEsm = (specifier: string): Promise<Record<string, unknown>> =>
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- use Node's native importer
+  new Function('specifier', 'return import(specifier)')(specifier);
+
+/**
  * Resolve the callable default export from a dynamic `import()` under Jest/@swc.
  * Some ESM packages expose `export { fn as default, fn as "module.exports" }`; interop
  * may surface the factory on `module.exports` while `default` is a namespace object.
