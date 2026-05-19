@@ -1,7 +1,5 @@
 import chalk from 'chalk';
 
-import { loadOra } from './ora-loader';
-
 export interface LoggerOptions {
   silent?: boolean;
   debug?: boolean;
@@ -114,6 +112,7 @@ const createLogger = (options: LoggerOptions = {}): Logger => {
         return silentSpinner;
       }
 
+      const { loadOra } = await import('./ora-loader');
       const ora = await loadOra();
 
       return ora(text);
