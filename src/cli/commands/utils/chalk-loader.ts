@@ -1,10 +1,7 @@
 import type { ChalkInstance } from 'chalk';
 
 let chalkInstance: ChalkInstance | undefined;
-
-const importEsm = (specifier: string): Promise<{ default: unknown }> =>
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- Jest on Node 22 intercepts `import()`; use Node's native importer
-  new Function('specifier', 'return import(specifier)')(specifier);
+let chalkPromise: Promise<ChalkInstance> | undefined;
 
 const resolveChalk = (candidate: unknown): ChalkInstance => {
   if (typeof candidate === 'function') {
@@ -29,10 +26,15 @@ export const loadChalk = async (): Promise<ChalkInstance> => {
     return chalkInstance;
   }
 
-  const mod = await importEsm('chalk');
-  chalkInstance = resolveChalk(mod.default);
+  if (!chalkPromise) {
+    chalkPromise = import('chalk').then((mod) => {
+      chalkInstance = resolveChalk(mod.default);
 
-  return chalkInstance;
+      return chalkInstance;
+    });
+  }
+
+  return chalkPromise;
 };
 
 export const getChalk = (): ChalkInstance => {
