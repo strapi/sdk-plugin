@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-import concurrently from 'concurrently';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import nodemon from 'nodemon';
@@ -52,6 +51,7 @@ const action = async (_opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIC
       exec: 'yalc push --changed',
     });
 
+    const { default: concurrently } = await import('concurrently');
     concurrently(['npm run watch']);
 
     nodemon

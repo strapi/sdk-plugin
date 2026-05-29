@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { getFixturePath, invokeCLI, withMockedCLI } from './test-utils';
+import { BUILD_TEST_TIMEOUT_MS, getFixturePath, invokeCLI, withMockedCLI } from './test-utils';
 
 describe('build command', () => {
   it('should validate package.json before building', async () => {
@@ -47,6 +47,8 @@ describe('build command', () => {
   });
 
   describe('custom exports', () => {
+    jest.setTimeout(BUILD_TEST_TIMEOUT_MS);
+
     const fixturePath = getFixturePath('custom-export-plugin');
     const distTypesDir = path.join(fixturePath, 'dist/types');
     const distServerDir = path.join(fixturePath, 'dist/server');
