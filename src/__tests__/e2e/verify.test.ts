@@ -1,7 +1,9 @@
-import { invokeCLI, withMockedCLI } from './test-utils';
+import { ensureFixtureBuilt, invokeCLI, withMockedCLI } from './test-utils';
 
 describe('verify command', () => {
   it('should verify a valid TypeScript plugin', async () => {
+    await ensureFixtureBuilt('typescript-plugin');
+
     await withMockedCLI('typescript-plugin', async ({ command, mockExit }) => {
       const cli = await invokeCLI(['verify', '--silent'], command);
 

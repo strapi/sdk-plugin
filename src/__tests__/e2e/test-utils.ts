@@ -41,6 +41,21 @@ export async function withMockedCLI(fixtureName: string, testFn: TestCallback): 
 }
 
 /**
+ * Builds a plugin fixture so verify (and other dist-dependent commands) succeed in CI,
+ * where fixture dist/ is not checked in because the repo root .gitignore ignores dist.
+ */
+export async function ensureFixtureBuilt(fixtureName: string): Promise<void> {
+  const { build } = await import('../../cli/commands/utils/build');
+  const { createLogger } = await import('../../cli/commands/utils/logger');
+
+  await build({
+    cwd: getFixturePath(fixtureName),
+    logger: createLogger({ silent: true, debug: false, timestamp: false }),
+    silent: true,
+  });
+}
+
+/**
  * Invokes the CLI with given arguments and returns the command instance.
  */
 export async function invokeCLI(args: string[], command?: Command): Promise<Command> {
