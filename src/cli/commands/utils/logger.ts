@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import { getChalk } from './chalk-loader';
 
 export interface LoggerOptions {
   silent?: boolean;
@@ -44,7 +44,7 @@ const createLogger = (options: LoggerOptions = {}): Logger => {
       }
 
       console.log(
-        chalk.cyan(`[DEBUG]${timestamp ? `\t[${new Date().toISOString()}]` : ''}`),
+        getChalk().cyan(`[DEBUG]${timestamp ? `\t[${new Date().toISOString()}]` : ''}`),
         ...args
       );
     },
@@ -55,7 +55,7 @@ const createLogger = (options: LoggerOptions = {}): Logger => {
       }
 
       console.info(
-        chalk.blue(`[INFO]${timestamp ? `\t[${new Date().toISOString()}]` : ''}`),
+        getChalk().blue(`[INFO]${timestamp ? `\t[${new Date().toISOString()}]` : ''}`),
         ...args
       );
     },
@@ -65,7 +65,10 @@ const createLogger = (options: LoggerOptions = {}): Logger => {
         return;
       }
 
-      console.info(chalk.blue(`${timestamp ? `\t[${new Date().toISOString()}]` : ''}`), ...args);
+      console.info(
+        getChalk().blue(`${timestamp ? `\t[${new Date().toISOString()}]` : ''}`),
+        ...args
+      );
     },
 
     warn(...args) {
@@ -76,7 +79,7 @@ const createLogger = (options: LoggerOptions = {}): Logger => {
       }
 
       console.warn(
-        chalk.yellow(`[WARN]${timestamp ? `\t[${new Date().toISOString()}]` : ''}`),
+        getChalk().yellow(`[WARN]${timestamp ? `\t[${new Date().toISOString()}]` : ''}`),
         ...args
       );
     },
@@ -89,7 +92,7 @@ const createLogger = (options: LoggerOptions = {}): Logger => {
       }
 
       console.error(
-        chalk.red(`[ERROR]${timestamp ? `\t[${new Date().toISOString()}]` : ''}`),
+        getChalk().red(`[ERROR]${timestamp ? `\t[${new Date().toISOString()}]` : ''}`),
         ...args
       );
     },
