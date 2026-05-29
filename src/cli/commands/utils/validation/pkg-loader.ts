@@ -9,6 +9,8 @@ import fs from 'fs/promises';
 import os from 'os';
 import * as yup from 'yup';
 
+import { findPackageJson } from '../find-package-json';
+
 import type { Export } from './types';
 
 const record = (value: unknown) =>
@@ -160,8 +162,7 @@ export const loadPkg = async ({
   cwd: string;
   logger: Logger;
 }): Promise<object> => {
-  const { pkgUp } = await import('pkg-up');
-  const pkgPath = await pkgUp({ cwd });
+  const pkgPath = await findPackageJson(cwd);
 
   if (!pkgPath) {
     throw new Error('Could not find a package.json in the current directory');
