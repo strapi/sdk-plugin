@@ -6,6 +6,9 @@ import path from 'node:path';
  */
 export const fixturesDir = path.join(__dirname, '../fixtures');
 
+/** Vite builds in e2e tests can exceed Jest's 5s default on slower CI Node versions. */
+export const BUILD_TEST_TIMEOUT_MS = 15_000;
+
 export function getFixturePath(fixtureName: string): string {
   return path.join(fixturesDir, fixtureName);
 }
