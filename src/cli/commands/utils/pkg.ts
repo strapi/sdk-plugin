@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 import fs from 'fs/promises';
 import os from 'os';
-import pkgUp from 'pkg-up';
 import * as yup from 'yup';
 
 import type { Logger } from './logger';
@@ -64,6 +63,7 @@ const packageJsonSchema = yup.object({
  * the process will throw with an appropriate error message.
  */
 const loadPkg = async ({ cwd, logger }: { cwd: string; logger: Logger }): Promise<object> => {
+  const { pkgUp } = await import('pkg-up');
   const pkgPath = await pkgUp({ cwd });
 
   if (!pkgPath) {

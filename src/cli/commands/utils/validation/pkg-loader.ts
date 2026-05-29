@@ -7,7 +7,6 @@
 import chalk from 'chalk';
 import fs from 'fs/promises';
 import os from 'os';
-import pkgUp from 'pkg-up';
 import * as yup from 'yup';
 
 import type { Export } from './types';
@@ -161,6 +160,7 @@ export const loadPkg = async ({
   cwd: string;
   logger: Logger;
 }): Promise<object> => {
+  const { pkgUp } = await import('pkg-up');
   const pkgPath = await pkgUp({ cwd });
 
   if (!pkgPath) {
