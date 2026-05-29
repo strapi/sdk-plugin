@@ -5,9 +5,7 @@ describe('verify command', () => {
     await withMockedCLI('typescript-plugin', async ({ command, mockExit }) => {
       const cli = await invokeCLI(['verify', '--silent'], command);
 
-      await expect(
-        cli.parseAsync(['node', 'strapi-plugin', 'verify', '--silent'])
-      ).resolves.not.toThrow();
+      await cli.parseAsync(['node', 'strapi-plugin', 'verify', '--silent']);
 
       expect(mockExit).not.toHaveBeenCalled();
     });

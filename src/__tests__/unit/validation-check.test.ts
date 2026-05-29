@@ -1,3 +1,5 @@
+import fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 
 const fixturesRoot = path.join(__dirname, '..', 'fixtures');
@@ -23,16 +25,23 @@ describe('validation.check', () => {
     const { build } = await import('../../cli/commands/utils/build');
     const { verify } = await import('../../cli/commands/utils/validation');
     const logger = createLogger();
-    const cwd = path.join(fixturesRoot, 'typescript-plugin');
+    const fixtureSource = path.join(fixturesRoot, 'typescript-plugin');
+    const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'strapi-sdk-plugin-validation-'));
 
-    await build({
-      cwd,
-      logger,
-      silent: true,
-    });
+    try {
+      await fs.cp(fixtureSource, cwd, { recursive: true });
 
-    await expect(verify({ cwd, logger })).resolves.toBeUndefined();
-  });
+      await build({
+        cwd,
+        logger,
+        silent: true,
+      });
+
+      await expect(verify({ cwd, logger })).resolves.toBeUndefined();
+    } finally {
+      await fs.rm(cwd, { recursive: true, force: true });
+    }
+  }, 15_000);
 
   it('fails when no strapi-admin or strapi-server exports exist', async () => {
     const { verify } = await import('../../cli/commands/utils/validation');
