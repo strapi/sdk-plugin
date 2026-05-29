@@ -1,17 +1,21 @@
-import { invokeCLI, withMockedCLI } from './test-utils';
+import { BUILD_TEST_TIMEOUT_MS, ensureFixtureBuilt, invokeCLI, withMockedCLI } from './test-utils';
 
 describe('verify command', () => {
-  it('should verify a valid TypeScript plugin', async () => {
-    await withMockedCLI('typescript-plugin', async ({ command, mockExit }) => {
-      const cli = await invokeCLI(['verify', '--silent'], command);
+  it(
+    'should verify a valid TypeScript plugin',
+    async () => {
+      await ensureFixtureBuilt('typescript-plugin');
 
-      await expect(
-        cli.parseAsync(['node', 'strapi-plugin', 'verify', '--silent'])
-      ).resolves.not.toThrow();
+      await withMockedCLI('typescript-plugin', async ({ command, mockExit }) => {
+        const cli = await invokeCLI(['verify', '--silent'], command);
 
-      expect(mockExit).not.toHaveBeenCalled();
-    });
-  });
+        await cli.parseAsync(['node', 'strapi-plugin', 'verify', '--silent']);
+
+        expect(mockExit).not.toHaveBeenCalled();
+      });
+    },
+    BUILD_TEST_TIMEOUT_MS
+  );
 
   it('should fail for plugin with invalid exports', async () => {
     await withMockedCLI('typescript-plugin', async () => {
