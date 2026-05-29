@@ -23,10 +23,8 @@ export const runAction =
   (name: string, action: (...args: any[]) => Promise<void>) =>
   (ctx: CLIContext, ...args: unknown[]) => {
     const { logger } = ctx;
-    Promise.resolve()
-      .then(() => {
-        return action(...args, ctx);
-      })
+    return Promise.resolve()
+      .then(() => action(...args, ctx))
       .catch((error) => {
         logger.error(error);
         process.exit(1);

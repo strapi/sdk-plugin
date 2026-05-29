@@ -6,6 +6,9 @@ import path from 'node:path';
  */
 export const fixturesDir = path.join(__dirname, '../fixtures');
 
+/** Vite builds in e2e tests can exceed Jest's 5s default on slower CI Node versions. */
+export const BUILD_TEST_TIMEOUT_MS = 15_000;
+
 export function getFixturePath(fixtureName: string): string {
   return path.join(fixturesDir, fixtureName);
 }
@@ -38,6 +41,21 @@ export async function withMockedCLI(fixtureName: string, testFn: TestCallback): 
     process.cwd = originalCwd;
     mockExit.mockRestore();
   }
+}
+
+/**
+ * Builds a plugin fixture so verify (and other dist-dependent commands) succeed in CI,
+ * where fixture dist/ is not checked in because the repo root .gitignore ignores dist.
+ */
+export async function ensureFixtureBuilt(fixtureName: string): Promise<void> {
+  const { build } = await import('../../cli/commands/utils/build');
+  const { createLogger } = await import('../../cli/commands/utils/logger');
+
+  await build({
+    cwd: getFixturePath(fixtureName),
+    logger: createLogger({ silent: true, debug: false, timestamp: false }),
+    silent: true,
+  });
 }
 
 /**
