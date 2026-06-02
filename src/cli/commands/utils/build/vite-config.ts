@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { builtinModules } from 'node:module';
+import { isBuiltin as isNodeBuiltin } from 'node:module';
 import path from 'node:path';
 
 import type { BundleConfig } from './index';
@@ -52,19 +52,12 @@ function externalizeDepsPlugin(externals: string[]): Plugin {
         return { id: source, external: true };
       }
       // Also externalize node built-ins
-      if (source.startsWith('node:') || isNodeBuiltin(source)) {
+      if (isNodeBuiltin(source)) {
         return { id: source, external: true };
       }
       return null;
     },
   };
-}
-
-/**
- * Check if a module is a Node.js built-in.
- */
-function isNodeBuiltin(id: string): boolean {
-  return builtinModules.includes(id);
 }
 
 /**
@@ -154,7 +147,7 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
             return true;
           }
           // Externalize node built-ins
-          if (id.startsWith('node:') || isNodeBuiltin(id)) {
+          if (isNodeBuiltin(id)) {
             return true;
           }
           return false;
