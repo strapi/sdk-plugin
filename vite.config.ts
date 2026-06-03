@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { builtinModules } from 'node:module';
+import { isBuiltin as isNodeBuiltin } from 'node:module';
 import { defineConfig } from 'vite';
 
 type PackageJsonLike = {
@@ -11,7 +11,6 @@ const pkg = JSON.parse(
 ) as PackageJsonLike;
 
 const externals = Object.keys(pkg.dependencies ?? {});
-const builtins = new Set([...builtinModules, ...builtinModules.map((m) => `node:${m}`)]);
 
 export default defineConfig({
   build: {
@@ -27,7 +26,7 @@ export default defineConfig({
     },
     rollupOptions: {
       external(id) {
-        if (builtins.has(id)) {
+        if (isNodeBuiltin(id)) {
           return true;
         }
 
