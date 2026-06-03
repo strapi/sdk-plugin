@@ -1,12 +1,15 @@
 import { Command } from 'commander';
 
 import { commands as strapiCommands } from './cli/commands';
+import { loadChalk } from './cli/commands/utils/chalk-loader';
 import { createLogger } from './cli/commands/utils/logger';
 import { loadTsConfig } from './cli/commands/utils/tsconfig';
 
 import type { CLIContext } from './types';
 
 const createCLI = async (argv: string[], command = new Command()) => {
+  await loadChalk();
+
   // Initial program setup
   command.storeOptionsAsProperties(false).allowUnknownOption(true);
 

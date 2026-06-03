@@ -24,7 +24,10 @@ export interface VerifyOptions {
  * Main verify function that validates package.json and export files
  */
 export const verify = async ({ cwd, logger }: VerifyOptions) => {
+  const { loadChalk } = await import('../chalk-loader');
   const { loadOra } = await import('../ora-loader');
+
+  await loadChalk();
   const ora = await loadOra();
 
   /**

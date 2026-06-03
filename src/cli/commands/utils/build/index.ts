@@ -56,6 +56,9 @@ export interface BundleConfig {
  * Build a Strapi plugin using Vite.
  */
 export async function build(options: BuildOptions): Promise<void> {
+  const { loadChalk } = await import('../chalk-loader');
+  await loadChalk();
+
   const { cwd, logger, minify = false, sourcemap = false, silent = false } = options;
 
   warnIfPackupConfigExists(cwd, logger, silent);
