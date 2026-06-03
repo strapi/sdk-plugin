@@ -1,10 +1,11 @@
 /**
  * Verifies that all files referenced in package.json exports actually exist.
  */
-import chalk from 'chalk';
 import fs from 'fs/promises';
 import os from 'os';
 import { resolve } from 'path';
+
+import { getChalk } from '../chalk-loader';
 
 import type { Export } from './types';
 
@@ -105,7 +106,7 @@ export const checkExportFiles = async (
     throw new Error(
       [
         'Missing files for exports:',
-        ...missingExports.map((str) => `    ${chalk.blue(str)} -> ${resolve(cwd, str)}`),
+        ...missingExports.map((str) => `    ${getChalk().blue(str)} -> ${resolve(cwd, str)}`),
       ].join(os.EOL)
     );
   }

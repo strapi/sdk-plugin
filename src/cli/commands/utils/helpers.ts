@@ -1,6 +1,7 @@
-import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
+
+import { getChalk } from './chalk-loader';
 
 import type { CLIContext, CommonCLIOptions } from '../../../types';
 
@@ -11,7 +12,7 @@ import type { CLIContext, CommonCLIOptions } from '../../../types';
 export async function formatBoxedErrorStack(stack: string): Promise<string> {
   const { default: boxen } = await import('boxen');
 
-  return chalk.red(
+  return getChalk().red(
     boxen(stack, {
       padding: 1,
       align: 'left',
@@ -97,17 +98,17 @@ export const logInstructions = (
   const exportInstruction = language === 'js' ? 'module.exports =' : 'export default';
 
   return `
-You can now enable your plugin by adding the following in ${chalk.yellow(
+You can now enable your plugin by adding the following in ${getChalk().yellow(
     `./config/plugins.${language}`
   )}
 ${separator}
 ${exportInstruction} {
-  ${chalk.gray('// ...')}
-  ${chalk.green(`'${pluginName}'`)}: {
-    enabled: ${chalk.yellow(true)},
-    resolve: '${chalk.yellow(pluginPath)}'
+  ${getChalk().gray('// ...')}
+  ${getChalk().green(`'${pluginName}'`)}: {
+    enabled: ${getChalk().yellow(true)},
+    resolve: '${getChalk().yellow(pluginPath)}'
   },
-  ${chalk.gray('// ...')}
+  ${getChalk().gray('// ...')}
 }
 ${separator}
 `;

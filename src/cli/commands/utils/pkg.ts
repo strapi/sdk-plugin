@@ -1,8 +1,8 @@
-import chalk from 'chalk';
 import fs from 'fs/promises';
 import os from 'os';
 import * as yup from 'yup';
 
+import { getChalk } from './chalk-loader';
 import { findPackageJson } from './find-package-json';
 
 import type { Logger } from './logger';
@@ -102,7 +102,7 @@ const validatePkg = async ({ pkg }: { pkg: object }): Promise<PackageJson> => {
         case 'required':
           if (err.path) {
             throw new Error(
-              `'${err.path}' in 'package.json' is required as type '${chalk.magenta(
+              `'${err.path}' in 'package.json' is required as type '${getChalk().magenta(
                 getReachableSchemaType(packageJsonSchema, err.path)
               )}'`
             );
@@ -115,9 +115,9 @@ const validatePkg = async ({ pkg }: { pkg: object }): Promise<PackageJson> => {
         case 'noUnknown':
           if (err.path && err.params && 'unknown' in err.params) {
             throw new Error(
-              `'${err.path}' in 'package.json' contains the unknown key ${chalk.magenta(
+              `'${err.path}' in 'package.json' contains the unknown key ${getChalk().magenta(
                 err.params.unknown
-              )}, for compatability only the following keys are allowed: ${chalk.magenta(
+              )}, for compatability only the following keys are allowed: ${getChalk().magenta(
                 "['types', 'source', 'import', 'require', 'default']"
               )}`
             );
@@ -126,9 +126,9 @@ const validatePkg = async ({ pkg }: { pkg: object }): Promise<PackageJson> => {
         default:
           if (err.path && err.params && 'type' in err.params && 'value' in err.params) {
             throw new Error(
-              `'${err.path}' in 'package.json' must be of type '${chalk.magenta(
+              `'${err.path}' in 'package.json' must be of type '${getChalk().magenta(
                 err.params.type
-              )}' (recieved '${chalk.magenta(typeof err.params.value)}')`
+              )}' (recieved '${getChalk().magenta(typeof err.params.value)}')`
             );
           }
       }

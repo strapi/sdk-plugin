@@ -1,9 +1,9 @@
-import chalk from 'chalk';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import nodemon from 'nodemon';
 import { outdent } from 'outdent';
 
+import { getChalk } from '../utils/chalk-loader';
 import { formatBoxedErrorStack, runAction } from '../utils/helpers';
 import { loadPkg, validatePkg } from '../utils/pkg';
 
@@ -35,10 +35,10 @@ const action = async (_opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIC
           Then run one of the commands below based on the package manager used in that project:
 
           ## yarn
-          ${chalk.greenBright(`yarn dlx yalc add --link ${pkgJson.name} && yarn install`)}
+          ${getChalk().greenBright(`yarn dlx yalc add --link ${pkgJson.name} && yarn install`)}
 
           ## npm
-          ${chalk.greenBright(
+          ${getChalk().greenBright(
             `npx yalc add ${pkgJson.name} && npx yalc link ${pkgJson.name} && npm install`
           )}
         `.trimStart()
@@ -59,7 +59,7 @@ const action = async (_opts: ActionOptions, _cmd: unknown, { cwd, logger }: CLIC
         process.exit();
       })
       .on('restart', (files: unknown) => {
-        logger.info('Found changes in files:', chalk.magentaBright(files));
+        logger.info('Found changes in files:', getChalk().magentaBright(files));
         logger.info('Pushing new yalc package...');
       })
       .on('crash', () => {
