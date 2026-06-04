@@ -147,20 +147,25 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
       // Expected: dist/admin/src/index.d.ts or dist/server/src/index.d.ts
       const typesDir = path.dirname(bundle.output.types); // e.g., ./dist/admin/src
 
-      plugins.push(
-        dts({
-          tsconfigPath,
-          outDir: typesDir,
-          // Only emit declarations for the entry file
-          include: [path.join(path.dirname(bundle.source), '**/*')],
-          // Don't bundle types into a single file
-          rollupTypes: false,
-          // Clean output to ensure consistent structure
-          copyDtsFiles: false,
-          // Set entryRoot to match source directory structure
-          entryRoot: path.dirname(bundle.source),
-        })
-      );
+      const dtsResult = dts({
+        tsconfigPath,
+        outDirs: typesDir,
+        // Only emit declarations for the entry file
+        include: [path.join(path.dirname(bundle.source), '**/*')],
+        // Don't bundle types into a single file
+        bundleTypes: false,
+        // Clean output to ensure consistent structure
+        copyDtsFiles: false,
+        // Set entryRoot to match source directory structure
+        entryRoot: path.dirname(bundle.source),
+      });
+      const dtsPlugins = Array.isArray(dtsResult) ? dtsResult : [dtsResult];
+
+      for (const plugin of dtsPlugins) {
+        if (plugin) {
+          plugins.push(plugin as Plugin);
+        }
+      }
     }
   }
 
