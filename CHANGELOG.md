@@ -1,5 +1,47 @@
 # @strapi/sdk-plugin
 
+## 6.1.1
+
+### Patch Changes
+
+- [#148](https://github.com/strapi/sdk-plugin/pull/148) [`9627d89`](https://github.com/strapi/sdk-plugin/commit/9627d89fa11af1244acdbacf4b4183b66339f042) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump boxen from 5.1.2 to 8.0.1
+
+- [#152](https://github.com/strapi/sdk-plugin/pull/152) [`3ad7eb7`](https://github.com/strapi/sdk-plugin/commit/3ad7eb761cf849312d1f4490bd148bfef289eb30) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump yup from 0.32.9 to 1.7.1 and adapt internal package.json validation for yup v1.
+
+- [#168](https://github.com/strapi/sdk-plugin/pull/168) [`938189b`](https://github.com/strapi/sdk-plugin/commit/938189b99d313bc93b131a66c0cc745f7a87944a) Thanks [@innerdvations](https://github.com/innerdvations)! - Bump chalk from 4.1.2 to 5.6.2 and load it via a dynamic-import loader so the CJS `strapi-plugin` CLI entrypoint keeps working with ESM-only chalk 5.
+
+- [#137](https://github.com/strapi/sdk-plugin/pull/137) [`b1bf604`](https://github.com/strapi/sdk-plugin/commit/b1bf604a238fe90c1cc950ba4c272992428c2dfb) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump prettier and @types/prettier
+
+- [#141](https://github.com/strapi/sdk-plugin/pull/141) [`5fddaff`](https://github.com/strapi/sdk-plugin/commit/5fddaffbe9159c788f3c32f4c1ee6c582cb7585d) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump @types/node from 22.19.17 to 25.7.0
+
+- [#169](https://github.com/strapi/sdk-plugin/pull/169) [`113dfb8`](https://github.com/strapi/sdk-plugin/commit/113dfb81d30e1ba22b5c212d551590335fa02f4c) Thanks [@innerdvations](https://github.com/innerdvations)! - chore: remove pkg-up dependency
+
+- [#147](https://github.com/strapi/sdk-plugin/pull/147) [`8ecff34`](https://github.com/strapi/sdk-plugin/commit/8ecff34b883e1559285ddaa3b4e5dee51cd81b9f) Thanks [@innerdvations](https://github.com/innerdvations)! - Repository maintenance: add `.pnpm-store/` to `.gitignore` so local pnpm store directories are not tracked. No change to published package contents.
+
+- [#128](https://github.com/strapi/sdk-plugin/pull/128) [`25b7b53`](https://github.com/strapi/sdk-plugin/commit/25b7b53f693995cd1348d536c395fc6ab2a04852) Thanks [@innerdvations](https://github.com/innerdvations)! - Repository maintenance: add `.vscode/` to `.gitignore` alongside other IDE paths. No change to published package contents.
+
+- [#153](https://github.com/strapi/sdk-plugin/pull/153) [`f13dca6`](https://github.com/strapi/sdk-plugin/commit/f13dca6268b80266d14d3a2362ea9dccff7af47c) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump tsx from 4.21.0 to 4.22.1
+
+- [#155](https://github.com/strapi/sdk-plugin/pull/155) [`139cb21`](https://github.com/strapi/sdk-plugin/commit/139cb21d45a8ff0815a33dd09728c65904c4f771) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump get-latest-version from 5.1.0 to 6.0.1
+
+- [#107](https://github.com/strapi/sdk-plugin/pull/107) [`bd4d5a4`](https://github.com/strapi/sdk-plugin/commit/bd4d5a415e456b23148e70abb92532a5bfdbc365) Thanks [@Link2Twenty](https://github.com/Link2Twenty)! - Generated plugin admin templates now use default-export `App`, `Component: () => import('./pages/App')` (matching `addMenuLink` typings), and `permissions: []` on the JS admin entry for parity with TS.
+
+- [#135](https://github.com/strapi/sdk-plugin/pull/135) [`1d3067f`](https://github.com/strapi/sdk-plugin/commit/1d3067f83d9549dc3f4cda3a05c8a09be0773e86) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump commander from 12.1.0 to 14.0.3
+
+- [#139](https://github.com/strapi/sdk-plugin/pull/139) [`379aa6a`](https://github.com/strapi/sdk-plugin/commit/379aa6ad0e0d8ab67acf3c55b9d23537f51899a3) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump typescript from 5.4.4 to 5.9.3
+
+- [#143](https://github.com/strapi/sdk-plugin/pull/143) [`6593c9f`](https://github.com/strapi/sdk-plugin/commit/6593c9fa3f1055c3e84d6fc1bedf2f51ede4a934) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump lint-staged from 15.5.2 to 17.0.4
+
+- [#142](https://github.com/strapi/sdk-plugin/pull/142) [`ed008fd`](https://github.com/strapi/sdk-plugin/commit/ed008fd6ac42df7cd95475a972b8895fe55650b8) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump concurrently from 8.2.2 to 9.2.1
+
+- [#144](https://github.com/strapi/sdk-plugin/pull/144) [`da76c89`](https://github.com/strapi/sdk-plugin/commit/da76c891bad17f484579f7f5fda619539576f844) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump ora from 5.4.1 to 9.4.0
+
+- [#127](https://github.com/strapi/sdk-plugin/pull/127) [`4ffe062`](https://github.com/strapi/sdk-plugin/commit/4ffe0627a86b89730df6ffe8f1a335438e646867) Thanks [@boazpoolman](https://github.com/boazpoolman)! - fix: tsconfig discovery for custom exports
+
+- [#154](https://github.com/strapi/sdk-plugin/pull/154) [`bfc66e0`](https://github.com/strapi/sdk-plugin/commit/bfc66e0c799341c96132e3636988eedfa45bc60f) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump git-url-parse and @types/git-url-parse
+
+- [#170](https://github.com/strapi/sdk-plugin/pull/170) [`22a174b`](https://github.com/strapi/sdk-plugin/commit/22a174bbe03d465e295be4273d38b4dc3891aca6) Thanks [@unrevised6419](https://github.com/unrevised6419)! - chore: use isBuiltin from node:module
+
 ## 6.1.0
 
 ### Minor Changes
