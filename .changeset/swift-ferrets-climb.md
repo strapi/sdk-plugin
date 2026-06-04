@@ -1,5 +1,5 @@
 ---
-"@strapi/sdk-plugin": patch
+"@strapi/sdk-plugin": minor
 ---
 
 chore(deps): bump @vitejs/plugin-react from 4.7.0 to 5.2.0
