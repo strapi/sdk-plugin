@@ -6,6 +6,10 @@ jest.mock('vite', () => ({
   createFilter: jest.fn().mockReturnValue(() => true),
 }));
 
+jest.mock('../../cli/commands/utils/build/react-plugin-loader', () => ({
+  loadReactPlugins: jest.fn().mockResolvedValue([]),
+}));
+
 const fixturesRoot = path.join(__dirname, '..', 'fixtures');
 
 const createLogger = () => ({
