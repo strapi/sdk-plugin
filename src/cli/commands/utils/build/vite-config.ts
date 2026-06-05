@@ -2,8 +2,13 @@ import fs from 'node:fs';
 import { isBuiltin as isNodeBuiltin } from 'node:module';
 import path from 'node:path';
 
+import { resolveDefaultExport } from '../esm-interop';
+
+import { loadReactPlugins } from './react-plugin-loader';
+
 import type { BundleConfig } from './index';
 import type { InlineConfig, Plugin } from 'vite';
+import type dtsPlugin from 'vite-plugin-dts';
 
 export interface ViteConfigOptions {
   cwd: string;
@@ -83,15 +88,10 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
 
   // Add React plugin for admin builds
   if (isAdmin) {
-    // Dynamically import to avoid loading React plugin for server builds
-    const { default: reactPlugin } = await import('@vitejs/plugin-react');
-    const reactPluginResult = reactPlugin();
-    const reactPlugins = Array.isArray(reactPluginResult) ? reactPluginResult : [reactPluginResult];
+    const reactPlugins = await loadReactPlugins();
 
     for (const plugin of reactPlugins) {
-      if (plugin) {
-        plugins.unshift(plugin as Plugin);
-      }
+      plugins.unshift(plugin);
     }
   }
 
@@ -134,7 +134,8 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
     }
 
     if (tsconfigPath) {
-      const { default: dts } = await import('vite-plugin-dts');
+      const dtsMod = await import('vite-plugin-dts');
+      const dts = resolveDefaultExport<typeof dtsPlugin>(dtsMod);
 
       // Output types to the correct location
       // Expected: dist/admin/src/index.d.ts or dist/server/src/index.d.ts

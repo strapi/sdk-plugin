@@ -1,9 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { build } from '../../cli/commands/utils/build';
-import { createLogger } from '../../cli/commands/utils/logger';
-
 import { BUILD_TEST_TIMEOUT_MS, getFixturePath, invokeCLI, withMockedCLI } from './test-utils';
 
 describe('build command', () => {
@@ -72,6 +69,8 @@ describe('build command', () => {
     });
 
     it('should build custom exports defined in package.json', async () => {
+      const { build } = await import('../../cli/commands/utils/build');
+      const { createLogger } = await import('../../cli/commands/utils/logger');
       const logger = createLogger({ silent: true, debug: false, timestamp: false });
 
       await build({
@@ -85,6 +84,8 @@ describe('build command', () => {
     });
 
     it('should build ESM-only custom export when only import is specified', async () => {
+      const { build } = await import('../../cli/commands/utils/build');
+      const { createLogger } = await import('../../cli/commands/utils/logger');
       const logger = createLogger({ silent: true, debug: false, timestamp: false });
 
       await build({
@@ -100,6 +101,8 @@ describe('build command', () => {
     });
 
     it('should generate type declarations for custom exports with types field', async () => {
+      const { build } = await import('../../cli/commands/utils/build');
+      const { createLogger } = await import('../../cli/commands/utils/logger');
       const logger = createLogger({ silent: true, debug: false, timestamp: false });
 
       await build({
