@@ -3,4 +3,3 @@ coverage
 dist
 *.yaml
 .changeset
-src/__tests__/support

@@ -4,8 +4,7 @@
  * Watches source files and rebuilds on changes using Vite.
  * Used during local plugin development.
  */
-import { createCommand } from 'commander';
-
+import { createCommand } from '../utils/commander-loader';
 import { formatBoxedErrorStack, runAction } from '../utils/helpers';
 
 import type { StrapiCommand, CLIContext } from '../../../types';

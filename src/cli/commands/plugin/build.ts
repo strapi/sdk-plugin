@@ -4,8 +4,7 @@
  * Bundles the plugin for npm publishing using Vite.
  * Produces dual CommonJS/ESM output with TypeScript declarations.
  */
-import { createCommand } from 'commander';
-
+import { createCommand } from '../utils/commander-loader';
 import { formatBoxedErrorStack, runAction } from '../utils/helpers';
 
 import type { CLIContext, StrapiCommand } from '../../../types';
