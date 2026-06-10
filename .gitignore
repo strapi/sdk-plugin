@@ -95,3 +95,4 @@ package-lock.json
 ############################
 
 __tmp__/
+src/__tests__/support/

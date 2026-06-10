@@ -10,7 +10,8 @@ const pkg = JSON.parse(
   readFileSync(new URL('./package.json', import.meta.url), 'utf-8')
 ) as PackageJsonLike;
 
-const externals = Object.keys(pkg.dependencies ?? {});
+// commander 15 is ESM-only; bundle it so dist/cli.js stays require()-able on Node 22.
+const externals = Object.keys(pkg.dependencies ?? {}).filter((dep) => dep !== 'commander');
 
 export default defineConfig({
   build: {
