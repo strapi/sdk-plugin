@@ -67,4 +67,4 @@ jobs:
         name: Restore build output
         with:
           name: build-output-node-${{ matrix.node }}
-      - run: pnpm test:unit
+      - run: pnpm test:unit ${{ matrix.node == 22 && '--maxWorkers=8' || '' }}
