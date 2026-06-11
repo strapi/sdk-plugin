@@ -23,7 +23,7 @@ const resolveCommander = (mod: Record<string, unknown>): CommanderModule => {
   throw new TypeError('Failed to load commander');
 };
 
-export const loadCommander = async (): Promise<CommanderModule> => {
+export const getCommander = async (): Promise<CommanderModule> => {
   if (commanderModule) {
     return commanderModule;
   }
@@ -39,20 +39,14 @@ export const loadCommander = async (): Promise<CommanderModule> => {
   return commanderPromise;
 };
 
-export const getCommander = (): CommanderModule => {
-  if (!commanderModule) {
-    throw new Error(
-      'commander has not been loaded; call loadCommander() before using getCommander()'
-    );
-  }
+export const createCommand = async (name?: string): Promise<Command> => {
+  const commander = await getCommander();
 
-  return commanderModule;
+  return commander.createCommand(name);
 };
 
-export const createCommand = (name?: string): Command => getCommander().createCommand(name);
-
-export const createCommandInstance = (name?: string): Command => {
-  const { Command: CommanderCommand } = getCommander();
+export const createCommandInstance = async (name?: string): Promise<Command> => {
+  const { Command: CommanderCommand } = await getCommander();
 
   return new CommanderCommand(name);
 };

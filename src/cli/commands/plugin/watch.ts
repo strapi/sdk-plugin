@@ -37,8 +37,10 @@ const action = async (opts: WatchActionOptions, _cmd: unknown, { cwd, logger }: 
 /**
  * `$ strapi-plugin watch`
  */
-const command: StrapiCommand = ({ ctx }) => {
-  return createCommand('watch')
+const command: StrapiCommand = async ({ ctx }) => {
+  const watchCommand = await createCommand('watch');
+
+  return watchCommand
     .description('Watch & compile your strapi plugin for local development.')
     .option('-d, --debug', 'Enable debugging mode with verbose logs', false)
     .option('--silent', "Don't log anything", false)

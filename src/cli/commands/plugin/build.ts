@@ -48,8 +48,10 @@ const action = async (opts: BuildActionOptions, _cmd: unknown, { logger, cwd }: 
 /**
  * `$ strapi-plugin build`
  */
-const command: StrapiCommand = ({ ctx }) => {
-  return createCommand('build')
+const command: StrapiCommand = async ({ ctx }) => {
+  const buildCommand = await createCommand('build');
+
+  return buildCommand
     .description('Bundle your strapi plugin for publishing.')
     .option('-d, --debug', 'Enable debugging mode with verbose logs', false)
     .option('--silent', "Don't log anything", false)

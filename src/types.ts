@@ -21,4 +21,4 @@ export type StrapiCommand = (params: {
   command: Command;
   argv: string[];
   ctx: CLIContext;
-}) => void | Command;
+}) => void | Command | Promise<void | Command>;

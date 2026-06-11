@@ -1,6 +1,6 @@
 import { commands as strapiCommands } from './cli/commands';
 import { loadChalk } from './cli/commands/utils/chalk-loader';
-import { createCommandInstance, loadCommander } from './cli/commands/utils/commander-loader';
+import { createCommandInstance } from './cli/commands/utils/commander-loader';
 import { createLogger } from './cli/commands/utils/logger';
 import { loadTsConfig } from './cli/commands/utils/tsconfig';
 
@@ -8,10 +8,9 @@ import type { CLIContext } from './types';
 import type { Command } from 'commander';
 
 const createCLI = async (argv: string[], command?: Command) => {
-  await loadCommander();
   await loadChalk();
 
-  const program = command ?? createCommandInstance();
+  const program = command ?? (await createCommandInstance());
 
   // Initial program setup
   program.storeOptionsAsProperties(false).allowUnknownOption(true);
@@ -47,9 +46,9 @@ const createCLI = async (argv: string[], command?: Command) => {
   } satisfies CLIContext;
 
   // Load all commands
-  strapiCommands.forEach((commandFactory) => {
+  for (const commandFactory of strapiCommands) {
     try {
-      const subCommand = commandFactory({ command: program, argv, ctx });
+      const subCommand = await commandFactory({ command: program, argv, ctx });
 
       // Add this command to the Commander command object
       if (subCommand) {
@@ -58,7 +57,7 @@ const createCLI = async (argv: string[], command?: Command) => {
     } catch (e) {
       logger.error('Failed to load command', e);
     }
-  });
+  }
 
   return program;
 };
