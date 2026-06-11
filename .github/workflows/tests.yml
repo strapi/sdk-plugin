@@ -67,6 +67,12 @@ jobs:
         name: Restore build output
         with:
           name: build-output-node-${{ matrix.node }}
+      # On Node < 24.9, Jest can't load pure-ESM deps (commander 15) via its normal
+      # import, so we fall back to a native dynamic import that escapes Jest's per-file
+      # environment. If a worker is reused across test files, a later file's import hits
+      # the previous file's torn-down environment ("import after teardown"). Forcing one
+      # worker per suite (we have 8) prevents reuse. Node 24/26 load ESM natively and
+      # don't need this.
       - if: matrix.node == 22
         run: pnpm test:unit --maxWorkers=8
       - if: matrix.node != 22
