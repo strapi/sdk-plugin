@@ -1,31 +1,23 @@
+import { importEsm } from './esm-interop';
+
 import type * as Commander from 'commander';
 
 type CommanderModule = typeof Commander;
 type Command = Commander.Command;
 
-/**
- * Indirect dynamic import: keeps a native runtime `import()` that neither
- * @swc/jest nor rollup rewrites to `require()`. commander 15 is ESM-only, and
- * `require()`-ing it throws on Node < 24.9 (CJS bundle + Jest on Node 22).
- */
-// eslint-disable-next-line @typescript-eslint/no-implied-eval
-const importEsm = new Function('specifier', 'return import(specifier)') as (
-  specifier: string
-) => Promise<CommanderModule & { default?: CommanderModule }>;
-
 let commanderModule: CommanderModule | undefined;
 let commanderPromise: Promise<CommanderModule> | undefined;
 
-const resolveCommander = (
-  candidate: CommanderModule & { default?: CommanderModule }
-): CommanderModule => {
-  if (typeof candidate?.createCommand === 'function') {
-    return candidate;
+const resolveCommander = (mod: Record<string, unknown>): CommanderModule => {
+  const candidate = mod as Partial<CommanderModule> & { default?: Partial<CommanderModule> };
+
+  if (typeof candidate.createCommand === 'function') {
+    return candidate as CommanderModule;
   }
 
   // Jest/@swc interop: named exports can be re-wrapped under `default`.
-  if (typeof candidate?.default?.createCommand === 'function') {
-    return candidate.default;
+  if (typeof candidate.default?.createCommand === 'function') {
+    return candidate.default as CommanderModule;
   }
 
   throw new TypeError('Failed to load commander');
