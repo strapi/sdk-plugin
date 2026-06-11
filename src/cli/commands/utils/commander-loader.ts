@@ -8,16 +8,17 @@ type Command = Commander.Command;
 let commanderModule: CommanderModule | undefined;
 let commanderPromise: Promise<CommanderModule> | undefined;
 
-const resolveCommander = (mod: Record<string, unknown>): CommanderModule => {
-  const candidate = mod as Partial<CommanderModule> & { default?: Partial<CommanderModule> };
+const isCommanderModule = (value: unknown): value is CommanderModule =>
+  typeof (value as { createCommand?: unknown } | undefined)?.createCommand === 'function';
 
-  if (typeof candidate.createCommand === 'function') {
-    return candidate as CommanderModule;
+const resolveCommander = (mod: Record<string, unknown>): CommanderModule => {
+  if (isCommanderModule(mod)) {
+    return mod;
   }
 
   // Jest/@swc interop: named exports can be re-wrapped under `default`.
-  if (typeof candidate.default?.createCommand === 'function') {
-    return candidate.default as CommanderModule;
+  if (isCommanderModule(mod.default)) {
+    return mod.default;
   }
 
   throw new TypeError('Failed to load commander');
@@ -28,13 +29,11 @@ export const getCommander = async (): Promise<CommanderModule> => {
     return commanderModule;
   }
 
-  if (!commanderPromise) {
-    commanderPromise = importEsm('commander').then((mod) => {
-      commanderModule = resolveCommander(mod);
+  commanderPromise ??= importEsm('commander').then((mod) => {
+    commanderModule = resolveCommander(mod);
 
-      return commanderModule;
-    });
-  }
+    return commanderModule;
+  });
 
   return commanderPromise;
 };
