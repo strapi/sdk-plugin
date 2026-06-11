@@ -95,3 +95,22 @@ package-lock.json
 ############################
 
 __tmp__/
+
+############################
+# AI tools
+############################
+
+# cms-brain (symlinked skills/commands/context)
+.brain
+.brain.*
+
+# Claude
+CLAUDE.local.md
+.claude/
+
+# Cursor
+.cursor/
+!.cursor/worktrees.json
+
+# Codex
+.agents/
