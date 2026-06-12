@@ -1,5 +1,8 @@
-import { Command } from 'commander';
 import path from 'node:path';
+
+import { createCommandInstance } from '../../cli/commands/utils/commander-loader';
+
+import type { Command } from 'commander';
 
 /**
  * Shared test utilities for e2e CLI tests.
@@ -35,7 +38,7 @@ export async function withMockedCLI(fixtureName: string, testFn: TestCallback): 
   });
 
   try {
-    const command = new Command();
+    const command = await createCommandInstance();
     await testFn({ command, mockExit });
   } finally {
     process.cwd = originalCwd;
@@ -63,7 +66,7 @@ export async function ensureFixtureBuilt(fixtureName: string): Promise<void> {
  */
 export async function invokeCLI(args: string[], command?: Command): Promise<Command> {
   const { createCLI } = await import('../../index');
-  const cmd = command ?? new Command();
+  const cmd = command ?? (await createCommandInstance());
   await createCLI(['node', 'strapi-plugin', ...args], cmd);
   return cmd;
 }

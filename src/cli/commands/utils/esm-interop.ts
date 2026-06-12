@@ -1,10 +1,17 @@
 /**
- * Dynamic import that bypasses Jest's `import()` hook on Node < 24.9.
- * Jest 30 cannot load pure ESM packages via intercepted `import()` on those versions.
+ * Dynamic import for pure ESM dependencies used by the CommonJS CLI build.
  */
-export const importEsm = (specifier: string): Promise<Record<string, unknown>> =>
+export const importEsm = (specifier: string): Promise<Record<string, unknown>> => {
+  const [major = 0, minor = 0] = process.versions.node.split('.').map(Number);
+  const supportsJestEsmImport = major > 24 || (major === 24 && minor >= 9);
+
+  if (process.env.JEST_WORKER_ID === undefined || supportsJestEsmImport) {
+    return import(specifier);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-implied-eval -- use Node's native importer
-  new Function('specifier', 'return import(specifier)')(specifier);
+  return new Function('specifier', 'return import(specifier)')(specifier);
+};
 
 /**
  * Resolve the callable default export from a dynamic `import()` under Jest/@swc.
