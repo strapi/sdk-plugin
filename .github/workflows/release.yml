@@ -7,15 +7,15 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   release:
     name: Release
     if: github.repository == 'strapi/sdk-plugin'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write # Required for npm trusted publishing (OIDC)
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v6
@@ -24,6 +24,9 @@ jobs:
           cache: pnpm
           node-version: lts/*
       - run: pnpm --version
+      # npm trusted publishing (OIDC) requires npm CLI >= 11.5.1
+      - run: npm install -g npm@latest
+      - run: npm --version
       - run: pnpm install
       - run: pnpm build
 
@@ -37,4 +40,3 @@ jobs:
           title: 'chore: version packages for release'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
