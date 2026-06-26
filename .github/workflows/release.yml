@@ -23,6 +23,7 @@ jobs:
         with:
           cache: pnpm
           node-version: lts/*
+          registry-url: 'https://registry.npmjs.org' # Pin the publish registry for npm trusted publishing (OIDC)
       - run: pnpm --version
       # npm trusted publishing (OIDC) requires npm CLI >= 11.5.1
       - run: npm install -g npm@latest
