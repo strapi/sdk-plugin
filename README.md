@@ -77,3 +77,11 @@ Verifies the output of your plugin before publishing it
 ```sh
 yarn run verify
 ```
+
+### `generate`
+
+Starts an interactive CLI to generate boilerplate code for your plugin (controllers, services, content-types, etc.). Run this from inside a standalone plugin directory.
+
+```sh
+npx @strapi/sdk-plugin generate
+```
