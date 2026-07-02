@@ -14,14 +14,23 @@ export const runPluginGenerator = async (
 ): Promise<void> => {
   const { pluginRoot, pkg } = await loadPluginPkg({ cwd: ctx.cwd, logger: ctx.logger });
   const serverDir = path.resolve(getPluginServerDir(pluginRoot));
+  const previousCwd = process.cwd();
 
-  await generate(
-    generator,
-    {
-      destination: 'root',
-      plugin: pkg.strapi.name,
-      ...options,
-    },
-    { dir: serverDir }
-  );
+  try {
+    // @strapi/generators <5.50.1 picks TS/JS templates from process.cwd(), not the `dir`
+    // option. chdir into server/ (where tsconfig.json lives) until we can bump to 5.50.1+.
+    process.chdir(serverDir);
+
+    await generate(
+      generator,
+      {
+        destination: 'root',
+        plugin: pkg.strapi.name,
+        ...options,
+      },
+      { dir: '.' }
+    );
+  } finally {
+    process.chdir(previousCwd);
+  }
 };

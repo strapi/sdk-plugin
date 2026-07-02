@@ -58,7 +58,7 @@
     "watch": "vite build --watch"
   },
   "dependencies": {
-    "@strapi/generators": "5.50.1",
+    "@strapi/generators": "5.50.0",
     "@types/prompts": "2.4.9",
     "@vitejs/plugin-react": "^5.2.0",
     "boxen": "8.0.1",
