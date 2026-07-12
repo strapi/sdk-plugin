@@ -120,12 +120,12 @@ export const generateFiles = async (
               : {
                   '@strapi/design-system': '^2.0.0',
                   '@strapi/icons': '^2.0.0',
+                  'react-intl': '^6.0.0',
+                  react: '^18.0.0',
+                  'react-dom': '^18.0.0',
+                  'react-router-dom': '^6.0.0',
+                  'styled-components': '^6.0.0',
                 }),
-            'react-intl': '^6.0.0',
-            react: '^18.0.0',
-            'react-dom': '^18.0.0',
-            'react-router-dom': '^6.0.0',
-            'styled-components': '^6.0.0',
           };
 
           pkgJson.peerDependencies = {
@@ -168,8 +168,12 @@ export const generateFiles = async (
 
             pkgJson.devDependencies = {
               ...pkgJson.devDependencies,
-              '@types/react': '^18.0.0',
-              '@types/react-dom': '^18.0.0',
+              ...(isStrapiProject
+                ? {}
+                : {
+                    '@types/react': '^18.0.0',
+                    '@types/react-dom': '^18.0.0',
+                  }),
             };
 
             const { adminTsconfigFiles } = await import('../../plugin/init/files/typescript');
@@ -195,8 +199,12 @@ export const generateFiles = async (
 
           pkgJson.devDependencies = {
             ...pkgJson.devDependencies,
-            '@strapi/typescript-utils': '^5',
-            typescript: '^5',
+            ...(isStrapiProject
+              ? {}
+              : {
+                  '@strapi/typescript-utils': '^5',
+                  typescript: '^5',
+                }),
           };
         } else {
           if (isRecord(pkgJson.exports['./strapi-admin'])) {
