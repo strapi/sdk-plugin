@@ -32,6 +32,7 @@ export interface GitConfig {
 export interface InitOptions {
   cwd: string;
   path: string;
+  isStrapiProject?: boolean;
   silent?: boolean;
   debug?: boolean;
   logger: Logger;
