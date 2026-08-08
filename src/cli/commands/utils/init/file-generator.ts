@@ -15,7 +15,8 @@ import type { PromptAnswer, TemplateFile } from './types';
 export const generateFiles = async (
   answers: PromptAnswer[],
   packageFolder: string,
-  logger: Logger
+  logger: Logger,
+  isStrapiProject: boolean = false
 ): Promise<TemplateFile[]> => {
   const author: string[] = [];
   const files: TemplateFile[] = [];
@@ -47,7 +48,7 @@ export const generateFiles = async (
     },
     dependencies: {},
     devDependencies: {
-      '@strapi/strapi': '^5.0.0',
+      ...(isStrapiProject ? {} : { '@strapi/strapi': '^5.0.0' }),
       '@strapi/sdk-plugin': '^6.0.0',
       prettier: '*',
     },
@@ -114,8 +115,12 @@ export const generateFiles = async (
 
           pkgJson.devDependencies = {
             ...pkgJson.devDependencies,
-            '@strapi/design-system': '^2.0.0',
-            '@strapi/icons': '^2.0.0',
+            ...(isStrapiProject
+              ? {}
+              : {
+                  '@strapi/design-system': '^2.0.0',
+                  '@strapi/icons': '^2.0.0',
+                }),
             'react-intl': '^6.0.0',
             react: '^18.0.0',
             'react-dom': '^18.0.0',
