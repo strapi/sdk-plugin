@@ -1,5 +1,35 @@
 # @strapi/sdk-plugin
 
+## 6.2.0
+
+### Minor Changes
+
+- [#149](https://github.com/strapi/sdk-plugin/pull/149) [`80be995`](https://github.com/strapi/sdk-plugin/commit/80be9950317d8f83d1a4fbd57b2a785bef2117bb) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump @vitejs/plugin-react from 4.7.0 to 5.2.0
+
+  fix: resolve ESM default exports for `@vitejs/plugin-react` and dynamic `import()` usage so admin plugin builds and unit tests load the React Vite plugin correctly
+
+  chore: raise minimum Node.js version to `^20.19.0 || >=22.12.0` to match `@vitejs/plugin-react@5` requirements
+
+### Patch Changes
+
+- [#174](https://github.com/strapi/sdk-plugin/pull/174) [`757a69d`](https://github.com/strapi/sdk-plugin/commit/757a69d3f85f15df0340ad95baa09f9c3af8fe5b) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump commander from 14.0.3 to 15.0.0
+
+  fix: load ESM-only commander 15 via a dynamic `import()` so the CJS CLI bundle and Jest tests work across the Node 22/24/26 matrix
+
+- [#220](https://github.com/strapi/sdk-plugin/pull/220) [`c63e116`](https://github.com/strapi/sdk-plugin/commit/c63e11665dbd3abd5d1345e11ef923267834f836) Thanks [@innerdvations](https://github.com/innerdvations)! - chore(deps): bump execa from ^9.6.1 to ^10.0.0
+
+  Backfill for the major dependency bump in [#205](https://github.com/strapi/sdk-plugin/issues/205) (lockfile-only follow-up [#215](https://github.com/strapi/sdk-plugin/issues/215) stayed within ^10).
+
+- [#220](https://github.com/strapi/sdk-plugin/pull/220) [`c63e116`](https://github.com/strapi/sdk-plugin/commit/c63e11665dbd3abd5d1345e11ef923267834f836) Thanks [@innerdvations](https://github.com/innerdvations)! - chore(deps): bump ora from 9.4.0 to 9.4.1
+
+  Backfill for Dependabot bump [#191](https://github.com/strapi/sdk-plugin/issues/191) that landed without a changeset.
+
+- [#220](https://github.com/strapi/sdk-plugin/pull/220) [`c63e116`](https://github.com/strapi/sdk-plugin/commit/c63e11665dbd3abd5d1345e11ef923267834f836) Thanks [@innerdvations](https://github.com/innerdvations)! - chore(deps): bump prettier from 3.8.3 to 3.9.6
+
+  Backfill for Dependabot bumps that landed without a changeset ([#182](https://github.com/strapi/sdk-plugin/issues/182), [#196](https://github.com/strapi/sdk-plugin/issues/196), [#200](https://github.com/strapi/sdk-plugin/issues/200), [#210](https://github.com/strapi/sdk-plugin/issues/210)).
+
+- [#183](https://github.com/strapi/sdk-plugin/pull/183) [`a61ba36`](https://github.com/strapi/sdk-plugin/commit/a61ba369e485812bfa9ee731c71390d7c5d026bb) Thanks [@dependabot](https://github.com/apps/dependabot)! - chore(deps): bump @swc/core from 1.15.40 to 1.15.41
+
 ## 6.1.1
 
 ### Patch Changes
