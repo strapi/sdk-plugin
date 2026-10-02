@@ -1,0 +1,35 @@
+{
+  "name": "@strapi/plugin-esm-only-test",
+  "version": "1.0.0",
+  "description": "ESM-only test plugin (no require export) for E2E testing",
+  "type": "module",
+  "exports": {
+    "./strapi-server": {
+      "source": "./server/src/index.js",
+      "import": "./dist/server/index.js",
+      "default": "./dist/server/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "strapi-plugin build",
+    "watch": "strapi-plugin watch",
+    "verify": "strapi-plugin verify"
+  },
+  "devDependencies": {
+    "@strapi/strapi": "^5.0.0",
+    "@strapi/sdk-plugin": "^6.0.0"
+  },
+  "peerDependencies": {
+    "@strapi/strapi": "^5.0.0"
+  },
+  "strapi": {
+    "name": "@strapi/plugin-esm-only-test",
+    "displayName": "ESM Only Test Plugin",
+    "description": "ESM-only test plugin (no require export) for E2E testing",
+    "kind": "plugin"
+  }
+}

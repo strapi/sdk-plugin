@@ -111,6 +111,7 @@ export async function build(options: BuildOptions): Promise<void> {
       minify,
       sourcemap,
       silent,
+      logger,
     });
 
     const { build: viteBuild } = await import('vite');
