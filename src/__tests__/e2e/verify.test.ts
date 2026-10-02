@@ -1,4 +1,13 @@
-import { BUILD_TEST_TIMEOUT_MS, ensureFixtureBuilt, invokeCLI, withMockedCLI } from './test-utils';
+import fs from 'node:fs';
+import path from 'node:path';
+
+import {
+  BUILD_TEST_TIMEOUT_MS,
+  ensureFixtureBuilt,
+  getFixturePath,
+  invokeCLI,
+  withMockedCLI,
+} from './test-utils';
 
 describe('verify command', () => {
   it(
@@ -13,6 +22,29 @@ describe('verify command', () => {
 
         expect(mockExit).not.toHaveBeenCalled();
       });
+    },
+    BUILD_TEST_TIMEOUT_MS
+  );
+
+  it(
+    'should verify an ESM-only plugin with no require export',
+    async () => {
+      await ensureFixtureBuilt('esm-only-plugin');
+
+      try {
+        await withMockedCLI('esm-only-plugin', async ({ command, mockExit }) => {
+          const cli = await invokeCLI(['verify', '--silent'], command);
+
+          await cli.parseAsync(['node', 'strapi-plugin', 'verify', '--silent']);
+
+          expect(mockExit).not.toHaveBeenCalled();
+        });
+      } finally {
+        fs.rmSync(path.join(getFixturePath('esm-only-plugin'), 'dist'), {
+          recursive: true,
+          force: true,
+        });
+      }
     },
     BUILD_TEST_TIMEOUT_MS
   );
