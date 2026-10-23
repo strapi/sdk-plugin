@@ -46,13 +46,9 @@
     "check": "pnpm lint && pnpm test:ts && pnpm test:unit",
     "lint": "eslint .",
     "prepare": "husky",
-    "prerelease:enter": "changeset pre enter",
-    "prerelease:exit": "changeset pre exit",
+    "prepack": "pnpm prettier:check && pnpm check && pnpm build",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
-    "release:add": "changeset add",
-    "release:publish": "changeset publish",
-    "release:version": "changeset version && pnpm install",
     "test:ts": "tsc --noEmit",
     "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "watch": "vite build --watch"
@@ -79,9 +75,6 @@
     "yup": "1.7.1"
   },
   "devDependencies": {
-    "@changesets/changelog-git": "^0.2.1",
-    "@changesets/changelog-github": "^0.7.0",
-    "@changesets/cli": "^2.31.0",
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
     "@strapi/eslint-config": "^1.0.1",

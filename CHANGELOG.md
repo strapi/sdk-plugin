@@ -1,5 +1,7 @@
 # @strapi/sdk-plugin
 
+Versions through 6.1.1 were cut with Changesets. Later releases follow [CONTRIBUTING.md](./CONTRIBUTING.md) and use GitHub release notes.
+
 ## 6.1.1
 
 ### Patch Changes

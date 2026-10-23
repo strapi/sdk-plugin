@@ -1,9 +1,16 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'npm dist-tag to publish under'
+        required: true
+        default: 'latest'
+        type: choice
+        options:
+          - latest
+          - next
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -13,31 +20,137 @@ jobs:
     if: github.repository == 'strapi/sdk-plugin'
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
-      id-token: write # Required for npm trusted publishing (OIDC)
+      contents: read
+      id-token: write # required for npm trusted publishing (OIDC)
+    outputs:
+      package_version: ${{ steps.package_version.outputs.package_version }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v6
+      - name: Checkout repo
+        uses: actions/checkout@v7
         with:
-          cache: pnpm
-          node-version: lts/*
-          registry-url: 'https://registry.npmjs.org' # Pin the publish registry for npm trusted publishing (OIDC)
-      - run: pnpm --version
-      # npm trusted publishing (OIDC) requires npm CLI >= 11.5.1
-      - run: npm install -g npm@11.17.0
-      - run: npm --version
-      - run: pnpm install
-      - run: pnpm build
+          fetch-depth: 0
 
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
         with:
-          version: pnpm release:version
-          publish: pnpm release:publish
-          commit: 'chore: version packages for release'
-          title: 'chore: version packages for release'
+          version: 9.1.0
+
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Update npm for trusted publishing
+        run: npm install -g 'npm@^11.5.1' # OIDC trusted publishing requires npm >= 11.5.1
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Resolve package version
+        id: package_version
+        run: echo "package_version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public --tag ${{ inputs.tag }}
+
+  notify_slack:
+    name: 'Notify Slack'
+    needs: [release]
+    runs-on: ubuntu-latest
+    if: github.repository == 'strapi/sdk-plugin' && success()
+    permissions: {}
+    steps:
+      - name: send message to slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "@strapi/sdk-plugin ${{ needs.release.outputs.package_version }} has been successfully deployed :tada:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Check out the *<https://github.com/strapi/sdk-plugin/releases|release note>*"
+                  }
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "image",
+                      "image_url": "https://github.com/${{ github.triggering_actor }}.png",
+                      "alt_text": "${{ github.triggering_actor }} avatar"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "Triggered by *${{ github.triggering_actor }}*"
+                    }
+                  ]
+                }
+              ]
+            }
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_RELEASE_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+  notify_on_error:
+    needs: [release]
+    name: notify on error
+    runs-on: ubuntu-latest
+    if: failure()
+    permissions: {}
+    steps:
+      - name: send message to slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "blocks": [
+                  {
+                    "type": "header",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "Deployment failed or has been rejected :disappointed:",
+                      "emoji": true
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "mrkdwn",
+                        "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Click here to see the logs>"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "context",
+                    "elements": [
+                      {
+                        "type": "image",
+                        "image_url": "https://github.com/${{ github.triggering_actor }}.png",
+                        "alt_text": "${{ github.triggering_actor }} avatar"
+                      },
+                      {
+                        "type": "mrkdwn",
+                        "text": "Triggered by *${{ github.triggering_actor }}*"
+                      }
+                    ]
+                  }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_RELEASE_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
