@@ -51,7 +51,7 @@ export const init = async (options: InitOptions): Promise<PromptAnswer[]> => {
   }
 
   // Generate files based on answers
-  const files = await generateFiles(answers, packageFolder, logger);
+  const files = await generateFiles(answers, packageFolder, logger, options.isStrapiProject);
 
   if (debug) {
     logger.debug(`Generated ${files.length} files`);
