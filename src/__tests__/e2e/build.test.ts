@@ -100,6 +100,35 @@ describe('build command', () => {
       expect(fs.existsSync(path.join(distTypesDir, 'index.js'))).toBe(false);
     });
 
+    it('should build only the selected bundle', async () => {
+      const { build } = await import('../../cli/commands/utils/build');
+      const { createLogger } = await import('../../cli/commands/utils/logger');
+      const logger = createLogger({ silent: true, debug: false, timestamp: false });
+
+      await build({
+        cwd: fixturePath,
+        logger,
+        silent: true,
+        bundles: ['./types'],
+      });
+
+      expect(fs.existsSync(path.join(distTypesDir, 'index.mjs'))).toBe(true);
+      expect(fs.existsSync(path.join(distServerDir, 'index.mjs'))).toBe(false);
+      expect(fs.existsSync(path.join(distServerDir, 'index.js'))).toBe(false);
+    });
+
+    it('should reject an unknown bundle name', async () => {
+      const { build } = await import('../../cli/commands/utils/build');
+      const { createLogger } = await import('../../cli/commands/utils/logger');
+      const logger = createLogger({ silent: true, debug: false, timestamp: false });
+
+      await expect(
+        build({ cwd: fixturePath, logger, silent: true, bundles: ['./strapi-admin'] })
+      ).rejects.toThrow(
+        'Unknown bundle "./strapi-admin". Available bundles: ./strapi-server, ./types'
+      );
+    });
+
     it('should generate type declarations for custom exports with types field', async () => {
       const { build } = await import('../../cli/commands/utils/build');
       const { createLogger } = await import('../../cli/commands/utils/logger');
