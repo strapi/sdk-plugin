@@ -88,6 +88,7 @@ export async function watch(options: WatchOptions): Promise<void> {
       minify: false,
       sourcemap: true,
       silent,
+      logger,
     });
 
     // Enable watch mode

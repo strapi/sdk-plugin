@@ -6,6 +6,7 @@ import { resolveDefaultExport } from '../esm-interop';
 
 import { loadReactPlugins } from './react-plugin-loader';
 
+import type { Logger } from '../logger';
 import type { BundleConfig } from './index';
 import type { InlineConfig, Plugin } from 'vite';
 import type dtsPlugin from 'vite-plugin-dts';
@@ -18,6 +19,17 @@ export interface ViteConfigOptions {
   silent?: boolean;
   /** Build target. Defaults to 'es2020' for admin, 'node20' for server */
   target?: string;
+  logger?: Logger;
+}
+
+interface PluginPackageJson {
+  type?: string;
+  dependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+}
+
+function readPackageJson(cwd: string): PluginPackageJson {
+  return JSON.parse(fs.readFileSync(path.join(cwd, 'package.json'), 'utf-8'));
 }
 
 /**
@@ -25,10 +37,7 @@ export interface ViteConfigOptions {
  * Only dependencies and peerDependencies should be external.
  * devDependencies are BUNDLED (matches pack-up behavior).
  */
-function getExternals(cwd: string): string[] {
-  const pkgPath = path.join(cwd, 'package.json');
-  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-
+function getExternals(pkg: PluginPackageJson): string[] {
   const externals = new Set<string>();
 
   // Only externalize dependencies and peerDependencies
@@ -66,12 +75,70 @@ function externalizeDepsPlugin(externals: string[]): Plugin {
 }
 
 /**
+ * Resolve the file name Rollup should emit for a given output, relative to `outDir`.
+ * The name comes from the matching path in the package.json exports map, so the
+ * built files are exactly the ones `import` / `require` point at.
+ */
+function getOutputFileName(bundle: BundleConfig, outputPath: string, outDir: string): string {
+  const fileName = path.relative(outDir, outputPath);
+
+  if (fileName.startsWith('..') || path.isAbsolute(fileName)) {
+    throw new Error(
+      `Bundle ${bundle.type}: the "import" and "require" outputs must be in the same directory ` +
+        `(got "${bundle.output.esm}" and "${bundle.output.cjs}")`
+    );
+  }
+
+  return fileName.split(path.sep).join('/');
+}
+
+/**
+ * Warn when an output extension makes Node load the file in the wrong module format,
+ * e.g. CommonJS written to a `.js` file in a `"type": "module"` package.
+ */
+function warnOnModuleTypeMismatch(
+  bundle: BundleConfig,
+  pkg: PluginPackageJson,
+  logger: Logger | undefined
+): void {
+  if (!logger) {
+    return;
+  }
+
+  const isModulePackage = pkg.type === 'module';
+  const { cjs, esm } = bundle.output;
+
+  if (isModulePackage && cjs?.endsWith('.js')) {
+    logger.warn(
+      `Bundle ${bundle.type}: "require" points to "${cjs}" but package.json has "type": "module", ` +
+        'so Node will load this CommonJS output as ESM. Use a ".cjs" extension instead.'
+    );
+  }
+
+  if (!isModulePackage && esm?.endsWith('.js')) {
+    logger.warn(
+      `Bundle ${bundle.type}: "import" points to "${esm}" but package.json is not "type": "module", ` +
+        'so Node will load this ESM output as CommonJS. Use a ".mjs" extension instead.'
+    );
+  }
+}
+
+/**
  * Create Vite configuration for building a plugin bundle.
  */
 export async function createViteConfig(options: ViteConfigOptions): Promise<InlineConfig> {
-  const { cwd, bundle, minify = false, sourcemap = false, silent = false, target } = options;
+  const {
+    cwd,
+    bundle,
+    minify = false,
+    sourcemap = false,
+    silent = false,
+    target,
+    logger,
+  } = options;
 
-  const externals = getExternals(cwd);
+  const pkg = readPackageJson(cwd);
+  const externals = getExternals(pkg);
   const isAdmin = bundle.type === 'admin';
 
   // Determine output directory from whichever output is specified
@@ -80,6 +147,12 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
     throw new Error(`Bundle ${bundle.type} has no output paths specified`);
   }
   const outDir = path.dirname(outputPath);
+  const esmFileName = bundle.output.esm && getOutputFileName(bundle, bundle.output.esm, outDir);
+  const cjsFileName = bundle.output.cjs && getOutputFileName(bundle, bundle.output.cjs, outDir);
+
+  if (!silent) {
+    warnOnModuleTypeMismatch(bundle, pkg, logger);
+  }
 
   // Entry file absolute path
   const entry = path.resolve(cwd, bundle.source);
@@ -174,7 +247,8 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
           ...(bundle.output.esm ? (['es'] as const) : []),
           ...(bundle.output.cjs ? (['cjs'] as const) : []),
         ],
-        fileName: (format) => (format === 'es' ? 'index.mjs' : 'index.js'),
+        // File names come from the exports map so they match package.json#type
+        fileName: (format) => (format === 'es' ? esmFileName : cjsFileName) as string,
       },
       rollupOptions: {
         external(id) {
