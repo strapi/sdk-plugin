@@ -18,7 +18,7 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
     minify: false,
-    target: 'node20',
+    target: 'node22',
     lib: {
       entry: './src/index.ts',
       formats: ['es', 'cjs'],
