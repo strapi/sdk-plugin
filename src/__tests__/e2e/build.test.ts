@@ -1,7 +1,10 @@
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
 import { BUILD_TEST_TIMEOUT_MS, getFixturePath, invokeCLI, withMockedCLI } from './test-utils';
+
+import type { Logger } from '../../cli/commands/utils/logger';
 
 describe('build command', () => {
   it('should validate package.json before building', async () => {
@@ -113,6 +116,111 @@ describe('build command', () => {
 
       // Type declarations should be generated for the ./types custom export
       expect(fs.existsSync(path.join(distTypesDir, 'index.d.ts'))).toBe(true);
+    });
+  });
+
+  describe('"type": "module" plugin', () => {
+    jest.setTimeout(BUILD_TEST_TIMEOUT_MS);
+
+    const fixturePath = getFixturePath('esm-type-plugin');
+    const distDir = path.join(fixturePath, 'dist');
+    const distServerDir = path.join(distDir, 'server');
+
+    afterEach(() => {
+      fs.rmSync(distDir, { recursive: true, force: true });
+    });
+
+    it('should name output files after the exports map', async () => {
+      const { build } = await import('../../cli/commands/utils/build');
+      const { createLogger } = await import('../../cli/commands/utils/logger');
+      const logger = createLogger({ silent: true, debug: false, timestamp: false });
+
+      await build({
+        cwd: fixturePath,
+        logger,
+        silent: true,
+      });
+
+      expect(fs.readdirSync(distServerDir).sort()).toEqual(['index.cjs', 'index.js']);
+    });
+
+    it('should produce output that Node loads through require and import', async () => {
+      const { build } = await import('../../cli/commands/utils/build');
+      const { createLogger } = await import('../../cli/commands/utils/logger');
+      const logger = createLogger({ silent: true, debug: false, timestamp: false });
+
+      await build({
+        cwd: fixturePath,
+        logger,
+        silent: true,
+      });
+
+      const script = `
+        const assert = require('node:assert');
+        const cjs = require('./dist/server/index.cjs');
+        assert.strictEqual(typeof (cjs.default ?? cjs).register, 'function');
+        import('./dist/server/index.js').then((esm) => {
+          assert.strictEqual(typeof esm.default.register, 'function');
+        });
+      `;
+
+      // Run in a child process from the fixture so Node applies its "type": "module"
+      expect(() =>
+        execFileSync(process.execPath, ['--input-type=commonjs', '-e', script], {
+          cwd: fixturePath,
+          stdio: 'pipe',
+        })
+      ).not.toThrow();
+    });
+
+    it('should warn when require points to a .js file in a "type": "module" package', async () => {
+      const { createViteConfig } = await import('../../cli/commands/utils/build/vite-config');
+      const logger = { warn: jest.fn() } as unknown as Logger;
+
+      await createViteConfig({
+        cwd: fixturePath,
+        logger,
+        bundle: {
+          type: 'server',
+          source: './server/src/index.js',
+          output: { cjs: './dist/server/index.js' },
+        },
+      });
+
+      expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('Use a ".cjs" extension'));
+    });
+  });
+
+  describe('ESM-only "type": "module" plugin', () => {
+    jest.setTimeout(BUILD_TEST_TIMEOUT_MS);
+
+    const fixturePath = getFixturePath('esm-only-plugin');
+    const distDir = path.join(fixturePath, 'dist');
+
+    afterEach(() => {
+      fs.rmSync(distDir, { recursive: true, force: true });
+    });
+
+    it('should build only the ES output, to the import path', async () => {
+      const { build } = await import('../../cli/commands/utils/build');
+      const { createLogger } = await import('../../cli/commands/utils/logger');
+      const logger = createLogger({ silent: true, debug: false, timestamp: false });
+
+      await build({
+        cwd: fixturePath,
+        logger,
+        silent: true,
+      });
+
+      expect(fs.readdirSync(path.join(distDir, 'server'))).toEqual(['index.js']);
+
+      const script = `import('./dist/server/index.js').then((esm) => {
+        if (typeof esm.default.register !== 'function') process.exit(1);
+      });`;
+
+      expect(() =>
+        execFileSync(process.execPath, ['-e', script], { cwd: fixturePath, stdio: 'pipe' })
+      ).not.toThrow();
     });
   });
 });

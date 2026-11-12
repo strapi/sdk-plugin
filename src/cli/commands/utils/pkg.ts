@@ -33,18 +33,23 @@ const packageJsonSchema = yup.object({
           ? Object.entries(value).reduce(
               (acc, [key, keyValue]) => {
                 if (typeof keyValue === 'object') {
-                  // Standard exports require both import and require
+                  // Standard exports need at least one build output: import (ESM) or require (CJS)
                   const isStandardExport = key === './strapi-admin' || key === './strapi-server';
                   acc[key] = yup
                     .object({
                       types: yup.string().optional(),
                       source: yup.string().required(),
                       module: yup.string().optional(),
-                      import: isStandardExport ? yup.string().required() : yup.string().optional(),
-                      require: isStandardExport ? yup.string().required() : yup.string().optional(),
+                      import: yup.string().optional(),
+                      require: yup.string().optional(),
                       default: yup.string().required(),
                     })
-                    .noUnknown(true);
+                    .noUnknown(true)
+                    .test(
+                      'import-or-require',
+                      `'exports["${key}"]' in 'package.json' requires an 'import' or 'require' property`,
+                      (exp) => !isStandardExport || Boolean(exp?.import || exp?.require)
+                    );
                 } else {
                   acc[key] = yup.string().required();
                 }

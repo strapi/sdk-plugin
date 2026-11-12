@@ -1,0 +1,36 @@
+{
+  "name": "@strapi/plugin-esm-type-test",
+  "version": "1.0.0",
+  "description": "Test plugin with \"type\": \"module\" for E2E testing",
+  "type": "module",
+  "exports": {
+    "./strapi-server": {
+      "source": "./server/src/index.js",
+      "import": "./dist/server/index.js",
+      "require": "./dist/server/index.cjs",
+      "default": "./dist/server/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "strapi-plugin build",
+    "watch": "strapi-plugin watch",
+    "verify": "strapi-plugin verify"
+  },
+  "devDependencies": {
+    "@strapi/strapi": "^5.0.0",
+    "@strapi/sdk-plugin": "^6.0.0"
+  },
+  "peerDependencies": {
+    "@strapi/strapi": "^5.0.0"
+  },
+  "strapi": {
+    "name": "@strapi/plugin-esm-type-test",
+    "displayName": "ESM Type Test Plugin",
+    "description": "Test plugin with \"type\": \"module\" for E2E testing",
+    "kind": "plugin"
+  }
+}
