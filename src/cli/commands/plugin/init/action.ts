@@ -28,6 +28,7 @@ export default async (
     const answers = await init({
       cwd,
       path: pluginPath,
+      isStrapiProject,
       silent,
       debug,
       logger,
