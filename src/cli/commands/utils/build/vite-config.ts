@@ -16,7 +16,7 @@ export interface ViteConfigOptions {
   minify?: boolean;
   sourcemap?: boolean;
   silent?: boolean;
-  /** Build target. Defaults to 'es2020' for admin, 'node20' for server */
+  /** Build target. Defaults to 'es2020' for the browser bundle, 'node20' otherwise */
   target?: string;
 }
 
@@ -72,12 +72,12 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
   const { cwd, bundle, minify = false, sourcemap = false, silent = false, target } = options;
 
   const externals = getExternals(cwd);
-  const isAdmin = bundle.type === 'admin';
+  const isBrowser = bundle.runtime === 'browser';
 
   // Determine output directory from whichever output is specified
   const outputPath = bundle.output.cjs ?? bundle.output.esm;
   if (!outputPath) {
-    throw new Error(`Bundle ${bundle.type} has no output paths specified`);
+    throw new Error(`Bundle ${bundle.name} has no output paths specified`);
   }
   const outDir = path.dirname(outputPath);
 
@@ -86,8 +86,8 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
 
   const plugins: Plugin[] = [externalizeDepsPlugin(externals)];
 
-  // Add React plugin for admin builds
-  if (isAdmin) {
+  // Add React plugin for the browser bundle
+  if (isBrowser) {
     const reactPlugins = await loadReactPlugins();
 
     for (const plugin of reactPlugins) {
@@ -196,7 +196,7 @@ export async function createViteConfig(options: ViteConfigOptions): Promise<Inli
         },
       },
       // Target appropriate platform
-      target: target ?? (isAdmin ? 'es2020' : 'node20'),
+      target: target ?? (isBrowser ? 'es2020' : 'node20'),
       // CommonJS options for proper interop
       commonjsOptions: {
         include: [/node_modules/],

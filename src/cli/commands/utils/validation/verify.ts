@@ -9,6 +9,8 @@
  */
 import os from 'os';
 
+import { filterExports } from '../bundles';
+
 import { validateExportsOrdering } from './exports-validator';
 import { checkExportFiles } from './file-checker';
 import { loadPkg, validatePkg } from './pkg-loader';
@@ -18,12 +20,13 @@ import type { Logger } from './pkg-loader';
 export interface VerifyOptions {
   cwd: string;
   logger: Logger;
+  bundles?: string[];
 }
 
 /**
  * Main verify function that validates package.json and export files
  */
-export const verify = async ({ cwd, logger }: VerifyOptions) => {
+export const verify = async ({ cwd, logger, bundles }: VerifyOptions) => {
   const { loadChalk } = await import('../chalk-loader');
   const { loadOra } = await import('../ora-loader');
 
@@ -78,6 +81,10 @@ export const verify = async ({ cwd, logger }: VerifyOptions) => {
    * Check that all exported files actually exist
    */
   if (packageJson.exports) {
-    await checkExportFiles(packageJson.exports, cwd);
+    const exportsToCheck = bundles
+      ? filterExports(packageJson.exports, bundles)
+      : packageJson.exports;
+
+    await checkExportFiles(exportsToCheck, cwd);
   }
 };

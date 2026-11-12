@@ -4,6 +4,7 @@
  * Bundles the plugin for npm publishing using Vite.
  * Produces dual CommonJS/ESM output with TypeScript declarations.
  */
+import { createBundleOption } from '../utils/bundles';
 import { createCommand } from '../utils/commander-loader';
 import { formatBoxedErrorStack, runAction } from '../utils/helpers';
 
@@ -12,6 +13,7 @@ import type { CLIContext, StrapiCommand } from '../../../types';
 interface BuildActionOptions {
   debug?: boolean;
   silent?: boolean;
+  bundle?: string[];
   sourcemap?: boolean;
   minify?: boolean;
 }
@@ -33,6 +35,7 @@ const action = async (opts: BuildActionOptions, _cmd: unknown, { logger, cwd }: 
       sourcemap: opts.sourcemap,
       silent: opts.silent,
       debug: opts.debug,
+      bundles: opts.bundle,
     });
   } catch (err) {
     logger.error(
@@ -57,6 +60,7 @@ const command: StrapiCommand = async ({ ctx }) => {
     .option('--silent', "Don't log anything", false)
     .option('--sourcemap', 'produce sourcemaps', false)
     .option('--minify', 'minify the output', false)
+    .addOption(await createBundleOption('build'))
     .action((...args) => runAction('build', action)(ctx, ...args));
 };
 

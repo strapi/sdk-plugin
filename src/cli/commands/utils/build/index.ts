@@ -4,8 +4,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { filterExports, toBundleRuntime, toSourceDirName } from '../bundles';
+
 import { createViteConfig } from './vite-config';
 
+import type { BundleRuntime } from '../bundles';
 import type { Logger } from '../logger';
 import type { Export } from '../pkg';
 
@@ -38,10 +41,12 @@ export interface BuildOptions {
   sourcemap?: boolean;
   silent?: boolean;
   debug?: boolean;
+  bundles?: string[];
 }
 
 export interface BundleConfig {
-  type: string;
+  name: string;
+  runtime: BundleRuntime;
   source: string;
   output: {
     cjs?: string;
@@ -58,7 +63,14 @@ export async function build(options: BuildOptions): Promise<void> {
   const { loadChalk } = await import('../chalk-loader');
   await loadChalk();
 
-  const { cwd, logger, minify = false, sourcemap = false, silent = false } = options;
+  const {
+    cwd,
+    logger,
+    minify = false,
+    sourcemap = false,
+    silent = false,
+    bundles: requestedBundles,
+  } = options;
 
   warnIfPackupConfigExists(cwd, logger, silent);
 
@@ -77,24 +89,29 @@ export async function build(options: BuildOptions): Promise<void> {
     );
   }
 
+  const exports = requestedBundles
+    ? filterExports(pkgJson.exports, requestedBundles)
+    : pkgJson.exports;
+
   const bundles: BundleConfig[] = [];
 
   // Iterate all object-type exports
-  for (const [exportKey, exp] of Object.entries(pkgJson.exports)) {
+  for (const [exportKey, exp] of Object.entries(exports)) {
     if (typeof exp !== 'string') {
       const typedExp = exp as Export;
-      const isAdmin = exportKey === './strapi-admin';
-      const name = exportKey.replace(/^\.\//, '').replace(/^strapi-/, '');
 
       bundles.push({
-        type: isAdmin ? 'admin' : name,
+        name: exportKey,
+        runtime: toBundleRuntime(exportKey),
         source: typedExp.source,
         output: {
           cjs: typedExp.require,
           esm: typedExp.import,
           types: typedExp.types,
         },
-        tsconfig: typedExp.types ? `./${name}/tsconfig.build.json` : undefined,
+        tsconfig: typedExp.types
+          ? `./${toSourceDirName(exportKey)}/tsconfig.build.json`
+          : undefined,
       });
     }
   }
@@ -102,7 +119,7 @@ export async function build(options: BuildOptions): Promise<void> {
   // Build each bundle sequentially (admin first, then server)
   for (const bundle of bundles) {
     if (!silent) {
-      logger.info(`Building ${bundle.type} bundle...`);
+      logger.info(`Building ${bundle.name} bundle...`);
     }
 
     const config = await createViteConfig({
@@ -117,7 +134,7 @@ export async function build(options: BuildOptions): Promise<void> {
     await viteBuild(config);
 
     if (!silent) {
-      logger.info(`${bundle.type} bundle built successfully`);
+      logger.info(`${bundle.name} bundle built successfully`);
     }
   }
 

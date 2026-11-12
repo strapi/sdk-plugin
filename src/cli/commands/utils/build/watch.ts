@@ -4,6 +4,8 @@
  * Uses Vite's built-in watch mode to rebuild on file changes.
  * Watches both admin and server bundles concurrently.
  */
+import { filterExports, toBundleRuntime, toSourceDirName } from '../bundles';
+
 import { createViteConfig } from './vite-config';
 
 import type { Logger } from '../logger';
@@ -29,13 +31,14 @@ export interface WatchOptions {
   logger: Logger;
   silent?: boolean;
   debug?: boolean;
+  bundles?: string[];
 }
 
 /**
  * Watch and rebuild a Strapi plugin using Vite's watch mode.
  */
 export async function watch(options: WatchOptions): Promise<void> {
-  const { cwd, logger, silent = false } = options;
+  const { cwd, logger, silent = false, bundles: requestedBundles } = options;
 
   if (!silent) {
     logger.info('Starting watch mode...');
@@ -52,24 +55,29 @@ export async function watch(options: WatchOptions): Promise<void> {
     );
   }
 
+  const exports = requestedBundles
+    ? filterExports(pkgJson.exports, requestedBundles)
+    : pkgJson.exports;
+
   const bundles: BundleConfig[] = [];
 
   // Iterate all object-type exports
-  for (const [exportKey, exp] of Object.entries(pkgJson.exports)) {
+  for (const [exportKey, exp] of Object.entries(exports)) {
     if (typeof exp !== 'string') {
       const typedExp = exp as Export;
-      const isAdmin = exportKey === './strapi-admin';
-      const name = exportKey.replace(/^\.\//, '').replace(/^strapi-/, '');
 
       bundles.push({
-        type: isAdmin ? 'admin' : name,
+        name: exportKey,
+        runtime: toBundleRuntime(exportKey),
         source: typedExp.source,
         output: {
           cjs: typedExp.require,
           esm: typedExp.import,
           types: typedExp.types,
         },
-        tsconfig: typedExp.types ? `./${name}/tsconfig.build.json` : undefined,
+        tsconfig: typedExp.types
+          ? `./${toSourceDirName(exportKey)}/tsconfig.build.json`
+          : undefined,
       });
     }
   }
@@ -79,7 +87,7 @@ export async function watch(options: WatchOptions): Promise<void> {
   // Start watching each bundle
   for (const bundle of bundles) {
     if (!silent) {
-      logger.info(`Watching ${bundle.type} bundle...`);
+      logger.info(`Watching ${bundle.name} bundle...`);
     }
 
     const config = await createViteConfig({
@@ -109,18 +117,18 @@ export async function watch(options: WatchOptions): Promise<void> {
     watcher.on('event', (event) => {
       if (event.code === 'BUNDLE_START') {
         if (!silent) {
-          logger.info(`Rebuilding ${bundle.type}...`);
+          logger.info(`Rebuilding ${bundle.name}...`);
         }
       } else if (event.code === 'BUNDLE_END') {
         if (!silent) {
-          logger.info(`${bundle.type} rebuilt in ${event.duration}ms`);
+          logger.info(`${bundle.name} rebuilt in ${event.duration}ms`);
         }
         // Close the build result to free resources
         if (event.result) {
           event.result.close();
         }
       } else if (event.code === 'ERROR') {
-        logger.error(`Error building ${bundle.type}:`, event.error?.message ?? 'Unknown error');
+        logger.error(`Error building ${bundle.name}:`, event.error?.message ?? 'Unknown error');
         if (event.result) {
           event.result.close();
         }

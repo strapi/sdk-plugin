@@ -49,14 +49,26 @@ Builds your current package based on the configuration in your `package.json`.
 
 - `--minify` – minifies the output (default `false`).
 - `--sourcemap` – generates sourcemaps for the output (default `true`).
+- `--bundle <name>` – only builds the named bundle(s). A name is a `package.json` export key, written exactly as it appears there, such as `./strapi-admin` or a custom `./shared` export. The flag can be repeated or given a comma-separated list. When omitted, every bundle is built. Names are matched exactly: an unknown, duplicated or empty selection fails instead of falling back to building everything.
 
 ```sh
 yarn run build
 ```
 
+Building a single bundle at a time is useful when a task runner caches each output directory separately:
+
+```sh
+strapi-plugin build --bundle ./strapi-admin
+strapi-plugin build --bundle ./strapi-server,./shared
+```
+
+`watch` and `verify` accept the same `--bundle` flag.
+
 ### `watch`
 
 Watch & compile your strapi plugin for local development.
+
+- `--bundle <name>` – only watches the named bundle(s), using the same names as [`build`](#build).
 
 ```sh
 yarn run watch
@@ -73,6 +85,8 @@ yarn run watch:link
 ### `verify`
 
 Verifies the output of your plugin before publishing it
+
+- `--bundle <name>` – only checks the files of the named bundle(s), using the same names as [`build`](#build). Useful to verify a plugin that was built one bundle at a time. The `package.json` checks themselves always run against every export.
 
 ```sh
 yarn run verify
