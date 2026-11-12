@@ -53,7 +53,7 @@ describe('init file generation', () => {
     expect(serverControllerFile.contents).toContain(`.plugin('${pluginId}')`);
   });
 
-  it('should put admin runtime deps in peerDependencies (and devDependencies), not dependencies', async () => {
+  it('should put admin runtime deps in peerDependencies (and devDependencies) for standalone plugins', async () => {
     const { generateFiles } = await import('../../cli/commands/utils/init/file-generator');
 
     const logger = {
@@ -90,6 +90,44 @@ describe('init file generation', () => {
     expect(pkgJson.devDependencies?.['@strapi/design-system']).toBeDefined();
     expect(pkgJson.devDependencies?.['@strapi/icons']).toBeDefined();
     expect(pkgJson.devDependencies?.['react-intl']).toBeDefined();
+  });
+
+  it('should NOT put admin runtime deps in devDependencies for local plugins', async () => {
+    const { generateFiles } = await import('../../cli/commands/utils/init/file-generator');
+
+    const logger = {
+      info: jest.fn(),
+      debug: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      log: jest.fn(),
+    };
+
+    const files = await generateFiles(
+      [
+        { name: 'pkgName', answer: 'my-plugin' },
+        { name: 'pluginId', answer: 'my-plugin' },
+        { name: 'client-code', answer: true },
+        { name: 'server-code', answer: false },
+        { name: 'typescript', answer: true },
+      ],
+      'my-plugin',
+      logger as any,
+      true // isStrapiProject = true
+    );
+
+    const pkgJsonFile = getFile(files, 'package.json');
+    const pkgJson = JSON.parse(pkgJsonFile.contents);
+
+    expect(pkgJson.dependencies?.['@strapi/design-system']).toBeUndefined();
+    expect(pkgJson.dependencies?.['@strapi/icons']).toBeUndefined();
+
+    expect(pkgJson.peerDependencies?.['@strapi/design-system']).toBeDefined();
+    expect(pkgJson.peerDependencies?.['@strapi/icons']).toBeDefined();
+
+    expect(pkgJson.devDependencies?.['@strapi/design-system']).toBeUndefined();
+    expect(pkgJson.devDependencies?.['@strapi/icons']).toBeUndefined();
+    expect(pkgJson.devDependencies?.['@strapi/strapi']).toBeUndefined();
   });
 
   it('should constrain react-intl to v6 range (compatible with React 18)', async () => {
