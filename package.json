@@ -62,7 +62,7 @@
     "@vitejs/plugin-react": "^5.2.0",
     "boxen": "9.0.0",
     "chalk": "6.0.1",
-    "commander": "15.0.0",
+    "commander": "15.1.0",
     "concurrently": "^10.0.0",
     "esbuild": "^0.28.0",
     "execa": "^10.0.0",
