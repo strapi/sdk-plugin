@@ -41,7 +41,7 @@ jobs:
       contents: read # the PAT (not GITHUB_TOKEN) does the writing
     steps:
       - name: Checkout main
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
           fetch-depth: 0
@@ -49,10 +49,10 @@ jobs:
 
       - name: Install pnpm
         # Reads the version from the `packageManager` field in package.json.
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version: '24'
           cache: 'pnpm'
@@ -71,7 +71,7 @@ jobs:
           echo "Open alerts: $(jq 'length' "${{ runner.temp }}/dependabot-alerts.json")"
 
       - name: Triage with Claude
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@acfe7992852970efb4fee683d63d628e3e52df67 # v1.0.286
         env:
           # Lets Claude's Bash run `gh` and `git push` as the PAT (so the PR triggers CI).
           GH_TOKEN: ${{ secrets.SECURITY_TRIAGE_TOKEN }}
